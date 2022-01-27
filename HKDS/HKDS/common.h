@@ -21,7 +21,7 @@
 #define HKDS_COMMON_H
 
 #include <assert.h>
-#include <intrin.h>
+//#include <intrin.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>

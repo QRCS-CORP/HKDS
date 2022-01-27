@@ -32,17 +32,17 @@ void hkds_queue_push(hkds_queue_message_queue* ctx, const uint8_t* output, size_
 	}
 }
 
-bool hkds_queue_isfull(hkds_queue_message_queue* ctx)
+bool hkds_queue_isfull(const hkds_queue_message_queue* ctx)
 {
 	return qsc_queue_isfull(&ctx->state);
 }
 
-bool hkds_queue_isempty(hkds_queue_message_queue* ctx)
+bool hkds_queue_isempty(const hkds_queue_message_queue* ctx)
 {
 	return qsc_queue_isempty(&ctx->state);
 }
 
-size_t hkds_queue_count(hkds_queue_message_queue* ctx)
+size_t hkds_queue_count(const hkds_queue_message_queue* ctx)
 {
 	return qsc_queue_items(&ctx->state);
 }
@@ -78,14 +78,14 @@ size_t hkds_queue_extract_block_x64(hkds_queue_message_queue* ctx, uint8_t outpu
 	{
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
-			for (j = 0; i < HKDS_CACHX8_DEPTH; ++j)
+			for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
 			{
 				qsc_queue_pop(&ctx->state, output[i][j], ctx->state.width);
 			}
 		}
 	}
 
-	return (size_t)(i * j);
+	return (i * j);
 }
 
 /* stream queue serialization */
@@ -100,7 +100,7 @@ size_t hkds_queue_extract_stream(hkds_queue_message_queue* ctx, uint8_t* stream,
 	{
 		for (i = 0; i < items; ++i)
 		{
-			qsc_queue_pop(&ctx->state, ((uint8_t*)stream + (i * ctx->state.width)), ctx->state.width);
+			qsc_queue_pop(&ctx->state, (stream + (i * ctx->state.width)), ctx->state.width);
 		}
 	}
 

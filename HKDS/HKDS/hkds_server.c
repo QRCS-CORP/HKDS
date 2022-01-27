@@ -21,7 +21,7 @@
 #include "../QSC/intutils.h"
 #include "../QSC/memutils.h"
 #include "../QSC/sha3.h"
-#include <omp.h>
+#include <omp.h> // gcc: -fopenmp
 
 static void hkds_server_generate_token(const uint8_t* stk, const uint8_t* ctok, uint8_t* token)
 {
@@ -50,16 +50,16 @@ static void hkds_server_get_ctok(hkds_server_state* state, uint8_t* ctok)
 	qsc_intutils_be32to8(ctok, tkc);
 
 	/* add the hkds_formal_name to customization string */
-	qsc_memutils_copy(((uint8_t*)ctok + HKDS_TKC_SIZE), hkds_formal_name, HKDS_NAME_SIZE);
+	qsc_memutils_copy((ctok + HKDS_TKC_SIZE), hkds_formal_name, HKDS_NAME_SIZE);
 	/* add the clients identity string to the cutomization */
-	qsc_memutils_copy(((uint8_t*)ctok + HKDS_TKC_SIZE + HKDS_NAME_SIZE), state->ksn, HKDS_DID_SIZE);
+	qsc_memutils_copy((ctok + HKDS_TKC_SIZE + HKDS_NAME_SIZE), state->ksn, HKDS_DID_SIZE);
 }
 
-static void hkds_server_get_tms(uint8_t* ksn, uint8_t* tms)
+static void hkds_server_get_tms(const uint8_t* ksn, uint8_t* tms)
 {
 	/* copy the ksn and mac name to the token mac string */
 	qsc_memutils_copy(tms, ksn, HKDS_KSN_SIZE);
-	qsc_memutils_copy(((uint8_t*)tms + HKDS_KSN_SIZE), hkds_mac_name, HKDS_NAME_SIZE);
+	qsc_memutils_copy((tms + HKDS_KSN_SIZE), hkds_mac_name, HKDS_NAME_SIZE);
 }
 
 static void hkds_server_generate_transaction_key(hkds_server_state* state, uint8_t* tkey, size_t tkeylen)
@@ -99,18 +99,18 @@ static void hkds_server_generate_transaction_key(hkds_server_state* state, uint8
 #if defined(HKDS_SHAKE_128)
 	nblocks = ((index * HKDS_MESSAGE_SIZE) + tkeylen) / QSC_KECCAK_128_RATE;
 	nblocks = (nblocks * QSC_KECCAK_128_RATE) < ((index * HKDS_MESSAGE_SIZE) + tkeylen) ? nblocks + 1 : nblocks;
-	qsc_shake_initialize(&ks, keccak_rate_128, tmpk, sizeof(tmpk));
-	qsc_shake_squeezeblocks(&ks, keccak_rate_128, skey, nblocks);
+	qsc_shake_initialize(&ks, qsc_keccak_rate_128, tmpk, sizeof(tmpk));
+	qsc_shake_squeezeblocks(&ks, qsc_keccak_rate_128, skey, nblocks);
 #elif defined(HKDS_SHAKE_256)
 	nblocks = (((size_t)index * HKDS_MESSAGE_SIZE) + tkeylen) / QSC_KECCAK_256_RATE;
 	nblocks = (nblocks * QSC_KECCAK_256_RATE) < (((size_t)index * HKDS_MESSAGE_SIZE) + tkeylen) ? nblocks + 1 : nblocks;
-	qsc_shake_initialize(&ks, keccak_rate_256, tmpk, sizeof(tmpk));
-	qsc_shake_squeezeblocks(&ks, keccak_rate_256, skey, nblocks);
+	qsc_shake_initialize(&ks, qsc_keccak_rate_256, tmpk, sizeof(tmpk));
+	qsc_shake_squeezeblocks(&ks, qsc_keccak_rate_256, skey, nblocks);
 #else
-	nblocks = ((index * HKDS_MESSAGE_SIZE) + tkeylen) / QSC_KECCAK_512_RATE;
-	nblocks = (nblocks * QSC_KECCAK_512_RATE) < ((index * HKDS_MESSAGE_SIZE) + tkeylen) ? nblocks + 1 : nblocks;
-	qsc_shake_initialize(&ks, keccak_rate_512, tmpk, sizeof(tmpk));
-	qsc_shake_squeezeblocks(&ks, keccak_rate_512, skey, nblocks);
+	nblocks = (((size_t)index * HKDS_MESSAGE_SIZE) + tkeylen) / QSC_KECCAK_512_RATE;
+	nblocks = (nblocks * QSC_KECCAK_512_RATE) < (((size_t)index * HKDS_MESSAGE_SIZE) + tkeylen) ? nblocks + 1 : nblocks;
+	qsc_shake_initialize(&ks, qsc_keccak_rate_512, tmpk, sizeof(tmpk));
+	qsc_shake_squeezeblocks(&ks, qsc_keccak_rate_512, skey, nblocks);
 #endif
 
 	/* copy the cache key to the transaction key */
@@ -130,7 +130,6 @@ bool hkds_server_decrypt_verify_message(hkds_server_state* state, const uint8_t*
 {
 	uint8_t code[HKDS_TAG_SIZE] = { 0 };
 	uint8_t dkey[2 * HKDS_MESSAGE_SIZE] = { 0 };
-	size_t i;
 	bool res;
 
 	res = false;
@@ -148,10 +147,10 @@ bool hkds_server_decrypt_verify_message(hkds_server_state* state, const uint8_t*
 #endif
 
 	/* compare the MAC generated with the one appended to the message */
-	if (qsc_intutils_verify(code, ((uint8_t*)ciphertext + HKDS_MESSAGE_SIZE), HKDS_TAG_SIZE) == 0)
+	if (qsc_intutils_verify(code, (ciphertext + HKDS_MESSAGE_SIZE), HKDS_TAG_SIZE) == 0)
 	{
 		/* if the MAC check succeeds, decrypt the message */
-		for (i = 0; i < HKDS_MESSAGE_SIZE; ++i)
+		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
 		{
 			plaintext[i] = (uint8_t)(ciphertext[i] ^ dkey[i]);
 		}
@@ -230,7 +229,7 @@ void hkds_server_encrypt_token(hkds_server_state* state, uint8_t* etok)
 #endif
 }
 
-void hkds_server_generate_mdk(void (*rng_generate)(uint8_t*, size_t), hkds_master_key* mdk, const uint8_t* kid)
+void hkds_server_generate_mdk(bool (*rng_generate)(uint8_t*, size_t), hkds_master_key* mdk, const uint8_t* kid)
 {
 	uint8_t tmpr[HKDS_BDK_SIZE + HKDS_STK_SIZE] = { 0 };
 
@@ -244,20 +243,19 @@ void hkds_server_initialize_state(hkds_server_state* state, hkds_master_key* mdk
 {
 	qsc_memutils_copy(state->ksn, ksn, HKDS_KSN_SIZE);
 	state->mdk = mdk;
-	state->count = qsc_intutils_be8to32(((uint8_t*)ksn + HKDS_DID_SIZE));
+	state->count = qsc_intutils_be8to32(ksn + HKDS_DID_SIZE);
 	state->rate = HKDS_PRF_RATE;
 }
 
 /* parallel x8 */
 
-static void hkds_server_generate_token_x8(hkds_server_x8_state* state, 
+static void hkds_server_generate_token_x8(const hkds_server_x8_state* state, 
 	const uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE], 
 	uint8_t token[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE])
 {
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0 };
-	size_t i;
 
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		qsc_memutils_copy(tkey[i], ctok[i], HKDS_CTOK_SIZE);
 		qsc_memutils_copy(((uint8_t*)tkey[i] + HKDS_CTOK_SIZE), state->mdk->stk, HKDS_STK_SIZE);
@@ -279,10 +277,9 @@ static void hkds_server_get_ctok_x8(hkds_server_x8_state* state,
 	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE])
 {
 	uint32_t tkc[HKDS_CACHX8_DEPTH] = { 0 };
-	size_t i;
 
 	/* add the token counter to customization string (ksn-counter / key-store size) */
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		tkc[i] = qsc_intutils_be8to32(((uint8_t*)state->ksn[i] + HKDS_DID_SIZE)) / HKDS_CACHE_SIZE;
 		qsc_intutils_be32to8(ctok[i], tkc[i]);
@@ -405,13 +402,11 @@ void hkds_server_decrypt_message_x8(hkds_server_x8_state* state,
 	const uint8_t ciphertext[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE], 
 	uint8_t plaintext[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE])
 {
-	size_t i;
-
 	/* copy the key directly into the empty plaintext array */
 	hkds_server_generate_transaction_key_x8(state, plaintext);
 
 	/* XOR the key-stream and and cipher-text */
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		qsc_memutils_xor(plaintext[i], ciphertext[i], HKDS_MESSAGE_SIZE);
 	}
@@ -489,10 +484,6 @@ void hkds_server_decrypt_verify_message_x8(hkds_server_x8_state* state,
 {
 	uint8_t code[HKDS_CACHX8_DEPTH][HKDS_TAG_SIZE] = { 0 };
 	uint8_t dkey[HKDS_CACHX8_DEPTH][2 * HKDS_MESSAGE_SIZE] = { 0 };
-	size_t i;
-	bool res;
-
-	res = false;
 
 	/* derive the transaction key  */
 	hkds_server_generate_transaction_authkey_x8(state, dkey);
@@ -525,11 +516,11 @@ void hkds_server_decrypt_verify_message_x8(hkds_server_x8_state* state,
 #endif
 
 	/* compare the MAC generated with the one appended to the message */
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		valid[i] = false;
 
-		if (qsc_intutils_verify(code[i], ((uint8_t*)ciphertext[i] + HKDS_MESSAGE_SIZE), HKDS_TAG_SIZE) == 0)
+		if (qsc_intutils_verify(code[i], ((const uint8_t*)ciphertext[i] + HKDS_MESSAGE_SIZE), HKDS_TAG_SIZE) == 0)
 		{
 			/* if the MAC check succeeds, decrypt the message */
 			qsc_memutils_copy(plaintext[i], ciphertext[i], HKDS_MESSAGE_SIZE);
@@ -539,14 +530,13 @@ void hkds_server_decrypt_verify_message_x8(hkds_server_x8_state* state,
 	}
 }
 
-void hkds_server_generate_edk_x8(hkds_server_x8_state* state, 
-	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE], 
+void hkds_server_generate_edk_x8(hkds_server_x8_state* state,
+	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE])
 {
 	uint8_t dkey[HKDS_CACHX8_DEPTH][HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0 };
-	size_t i;
 
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		qsc_memutils_copy(dkey[i], did[i], HKDS_DID_SIZE);
 		qsc_memutils_copy(((uint8_t*)dkey[i] + HKDS_DID_SIZE), state->mdk->bdk, HKDS_BDK_SIZE);
@@ -568,11 +558,9 @@ void hkds_server_initialize_state_x8(hkds_server_x8_state* state,
 	hkds_master_key* mdk, const uint8_t 
 	ksn[HKDS_CACHX8_DEPTH][HKDS_KSN_SIZE])
 {
-	size_t i;
-
 	state->mdk = mdk;
 
-	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+	for (size_t i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
 		qsc_memutils_copy(state->ksn[i], ksn[i], HKDS_KSN_SIZE);
 	}
@@ -608,7 +596,8 @@ void hkds_server_decrypt_verify_message_x64(hkds_server_x8_state state[HKDS_PARA
 	}
 }
 
-void hkds_server_encrypt_token_x64(hkds_server_x8_state state[HKDS_PARALLEL_DEPTH], uint8_t etok[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_TAG_SIZE])
+void hkds_server_encrypt_token_x64(hkds_server_x8_state state[HKDS_PARALLEL_DEPTH],
+	uint8_t etok[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_TAG_SIZE])
 {
 	int32_t i;
 

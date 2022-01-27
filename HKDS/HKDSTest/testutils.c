@@ -1,26 +1,45 @@
 #include "testutils.h"
 #include <stdio.h>
 
-char hkdstest_get_char()
+char qsctest_get_char()
 {
 	char line[8] = { 0 };
-	fgets(line, sizeof(line), stdin);
+	char res;
 
-	return line[0];
+	res = '0';
+
+	if (fgets(line, sizeof(line), stdin) != NULL)
+	{
+		res = line[0];
+	}
+
+	return res;
 }
 
-void hkdstest_get_wait()
+#if defined(QSC_SYSTEM_SOCKETS_WINDOWS)
+char qsctest_get_wait()
 {
-	wint_t res;
+	char c;
 
-	res = getwchar();
+	c = (wint_t)getwchar();
+
+	return c;
 }
-
-void hkdstest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
+#else
+char qsctest_get_wait()
 {
-	size_t  pos;
-	uint8_t  idx0;
-	uint8_t  idx1;
+	char c;
+
+	c = getchar();
+
+	return c;
+}
+#endif
+
+void qsctest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
+{
+	uint8_t idx0;
+	uint8_t idx1;
 
 	const uint8_t hashmap[] =
 	{
@@ -32,7 +51,7 @@ void hkdstest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 
 	memset(output, 0, length);
 
-	for (pos = 0; pos < (length * 2); pos += 2)
+	for (size_t pos = 0; pos < (length * 2); pos += 2)
 	{
 		idx0 = ((uint8_t)hexstr[pos + 0] & 0x1FU) ^ 0x10U;
 		idx1 = ((uint8_t)hexstr[pos + 1] & 0x1FU) ^ 0x10U;
@@ -40,7 +59,7 @@ void hkdstest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 	}
 }
 
-void hkdstest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
+void qsctest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 {
 	size_t i;
 
@@ -57,7 +76,7 @@ void hkdstest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 
 		input += linelen;
 		inputlen -= linelen;
-		hkdstest_print_safe("\n");
+		qsctest_print_safe("\n");
 	}
 
 	if (inputlen != 0)
@@ -73,34 +92,34 @@ void hkdstest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 	}
 }
 
-void hkdstest_print_safe(const char* input)
+void qsctest_print_safe(const char* input)
 {
 	if (input != NULL)
 	{
 #if defined(_MSC_VER)
 		printf_s(input);
 #else
-		printf(input);
+		printf("%s", input);
 #endif
 	}
 }
 
-void hkdstest_print_line(const char* input)
+void qsctest_print_line(const char* input)
 {
-	hkdstest_print_safe(input);
-	hkdstest_print_safe("\n");
+	qsctest_print_safe(input);
+	qsctest_print_safe("\n");
 }
 
-void hkdstest_print_ulong(uint64_t digit)
+void qsctest_print_ulong(uint64_t digit)
 {
 #if defined(_MSC_VER)
 	printf_s("%llu", digit);
 #else
-	printf("%llu", digit);
+	printf("%llu", (unsigned long long)digit);
 #endif
 }
 
-void hkdstest_print_double(double digit)
+void qsctest_print_double(double digit)
 {
 #if defined(_MSC_VER)
 	printf_s("%.*lf", 3, digit);
@@ -109,15 +128,15 @@ void hkdstest_print_double(double digit)
 #endif
 }
 
-bool hkdstest_test_confirm(char* message)
+bool qsctest_test_confirm(const char* message)
 {
 	char ans;
 	bool res;
 
-	hkdstest_print_line(message);
+	qsctest_print_line(message);
 
 	res = false;
-	ans = hkdstest_get_char();
+	ans = qsctest_get_char();
 
 	if (ans == 'y' || ans == 'Y')
 	{

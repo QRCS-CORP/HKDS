@@ -1,6 +1,7 @@
 #include "hkds_selftest.h"
 #include "../QSC/intutils.h"
 #include "../QSC/sha3.h"
+#include "../QSC/consoleutils.h"
 #include "../QSC/csp.h"
 #include <stdio.h>
 
@@ -8,77 +9,9 @@
 #define MONTE_CARLO_CYCLES 10000
 #define HBA_TEST_CYCLES 100
 
-/*** Helper Functions ***/
-
-static void hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
-{
-	size_t  pos;
-	uint8_t  idx0;
-	uint8_t  idx1;
-
-	const uint8_t hashmap[] =
-	{
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-
-	memset(output, 0, length);
-
-	for (pos = 0; pos < (length * 2); pos += 2)
-	{
-		idx0 = ((uint8_t)hexstr[pos + 0] & 0x1FU) ^ 0x10U;
-		idx1 = ((uint8_t)hexstr[pos + 1] & 0x1FU) ^ 0x10U;
-		output[pos / 2] = (uint8_t)(hashmap[idx0] << 4) | hashmap[idx1];
-	}
-}
-
-void print_safe(const char* input)
-{
-	if (input != NULL)
-	{
-#if defined(_MSC_VER)
-		printf_s(input);
-#else
-		printf(input);
-#endif
-	}
-}
-
-static void print_array8(const uint8_t* a, size_t count, size_t line)
-{
-	size_t i;
-
-	for (i = 0; i < count; ++i)
-	{
-		if (i != 0 && i % line == 0)
-		{
-			printf("\n");
-		}
-
-		printf("0x%02X, ", a[i]);
-	}
-}
-
-static void print_array32(const uint32_t* a, size_t count, size_t line)
-{
-	size_t i;
-
-	for (i = 0; i < count; ++i)
-	{
-		if (i != 0 && i % line == 0)
-		{
-			printf("\n");
-		}
-
-		printf("%d ", a[i]);
-	}
-}
-
 /*** Keccak ***/
 
-static bool sha3_256_kat()
+static bool sha3_256_kat(void)
 {
 	uint8_t exp0[QSC_SHA3_256_HASH_SIZE] = { 0 };
 	uint8_t exp24[QSC_SHA3_256_HASH_SIZE] = { 0 };
@@ -93,15 +26,15 @@ static bool sha3_256_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A", exp0, sizeof(exp0));
-	hex_to_bin("3A985DA74FE225B2045C172D6BD390BD855F086E3E9D525B46BFE24511431532", exp24, sizeof(exp24));
-	hex_to_bin("41C0DBA2A9D6240849100376A8235E2C82E1B9998A999E21DB32DD97496D3376", exp448, sizeof(exp448));
-	hex_to_bin("79F38ADEC5C20307A98EF76E8324AFBFD46CFD81B22E3973C65FA1BD9DE31787", exp1600, sizeof(exp1600));
+	qsc_consoleutils_hex_to_bin("A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A", exp0, sizeof(exp0));
+	qsc_consoleutils_hex_to_bin("3A985DA74FE225B2045C172D6BD390BD855F086E3E9D525B46BFE24511431532", exp24, sizeof(exp24));
+	qsc_consoleutils_hex_to_bin("41C0DBA2A9D6240849100376A8235E2C82E1B9998A999E21DB32DD97496D3376", exp448, sizeof(exp448));
+	qsc_consoleutils_hex_to_bin("79F38ADEC5C20307A98EF76E8324AFBFD46CFD81B22E3973C65FA1BD9DE31787", exp1600, sizeof(exp1600));
 
-	hex_to_bin("616263", msg24, sizeof(msg24));
-	hex_to_bin("6162636462636465636465666465666765666768666768696768696A68696A6B"
+	qsc_consoleutils_hex_to_bin("616263", msg24, sizeof(msg24));
+	qsc_consoleutils_hex_to_bin("6162636462636465636465666465666765666768666768696768696A68696A6B"
 		"696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F7071", msg448, sizeof(msg448));
-	hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
+	qsc_consoleutils_hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
@@ -118,7 +51,7 @@ static bool sha3_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK1 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK1 \n");
 		status = false;
 	}
 
@@ -127,7 +60,7 @@ static bool sha3_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp24, sizeof(exp24)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK2 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK2 \n");
 		status = false;
 	}
 
@@ -136,7 +69,7 @@ static bool sha3_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp448, sizeof(exp448)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK3 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK3 \n");
 		status = false;
 	}
 
@@ -145,7 +78,7 @@ static bool sha3_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK4 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK4 \n");
 		status = false;
 	}
 
@@ -154,35 +87,35 @@ static bool sha3_256_kat()
 	qsc_intutils_clear8(hash, sizeof(hash));
 	/* initialize the SHA3 state structure */
 	qsc_sha3_initialize(&state);
-	qsc_sha3_update(&state, keccak_rate_256, msg0, 0);
-	qsc_sha3_finalize(&state, keccak_rate_256, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_256, msg0, 0);
+	qsc_sha3_finalize(&state, qsc_keccak_rate_256, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK5 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK5 \n");
 		status = false;
 	}
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_sha3_initialize(&state);
-	qsc_sha3_update(&state, keccak_rate_256, msg24, sizeof(msg24));
-	qsc_sha3_finalize(&state, keccak_rate_256, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_256, msg24, sizeof(msg24));
+	qsc_sha3_finalize(&state, qsc_keccak_rate_256, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp24, sizeof(exp24)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK6 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK6 \n");
 		status = false;
 	}
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_sha3_initialize(&state);
 	/* absorb the message */
-	qsc_sha3_update(&state, keccak_rate_256, msg448, sizeof(msg448));
-	qsc_sha3_finalize(&state, keccak_rate_256, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_256, msg448, sizeof(msg448));
+	qsc_sha3_finalize(&state, qsc_keccak_rate_256, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp448, sizeof(exp448)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK7 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK7 \n");
 		status = false;
 	}
 
@@ -190,20 +123,20 @@ static bool sha3_256_kat()
 	/* initialize the SHA3 state structure */
 	qsc_sha3_initialize(&state);
 	/* absorb the message */
-	qsc_sha3_update(&state, keccak_rate_256, msg1600, sizeof(msg1600));
+	qsc_sha3_update(&state, qsc_keccak_rate_256, msg1600, sizeof(msg1600));
 	/* finalize the message */
-	qsc_sha3_finalize(&state, keccak_rate_256, hash);
+	qsc_sha3_finalize(&state, qsc_keccak_rate_256, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! sha3_256_kat: output does not match the known answer -SK8 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_256_kat: output does not match the known answer -SK8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool sha3_512_kat()
+static bool sha3_512_kat(void)
 {
 	uint8_t exp0[QSC_SHA3_512_HASH_SIZE] = { 0 };
 	uint8_t exp24[QSC_SHA3_512_HASH_SIZE] = { 0 };
@@ -218,19 +151,19 @@ static bool sha3_512_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("A69F73CCA23A9AC5C8B567DC185A756E97C982164FE25859E0D1DCC1475C80A6"
+	qsc_consoleutils_hex_to_bin("A69F73CCA23A9AC5C8B567DC185A756E97C982164FE25859E0D1DCC1475C80A6"
 		"15B2123AF1F5F94C11E3E9402C3AC558F500199D95B6D3E301758586281DCD26", exp0, sizeof(exp0));
-	hex_to_bin("B751850B1A57168A5693CD924B6B096E08F621827444F70D884F5D0240D2712E"
+	qsc_consoleutils_hex_to_bin("B751850B1A57168A5693CD924B6B096E08F621827444F70D884F5D0240D2712E"
 		"10E116E9192AF3C91A7EC57647E3934057340B4CF408D5A56592F8274EEC53F0", exp24, sizeof(exp24));
-	hex_to_bin("04A371E84ECFB5B8B77CB48610FCA8182DD457CE6F326A0FD3D7EC2F1E91636D"
+	qsc_consoleutils_hex_to_bin("04A371E84ECFB5B8B77CB48610FCA8182DD457CE6F326A0FD3D7EC2F1E91636D"
 		"EE691FBE0C985302BA1B0D8DC78C086346B533B49C030D99A27DAF1139D6E75E", exp448, sizeof(exp448));
-	hex_to_bin("E76DFAD22084A8B1467FCF2FFA58361BEC7628EDF5F3FDC0E4805DC48CAEECA8"
+	qsc_consoleutils_hex_to_bin("E76DFAD22084A8B1467FCF2FFA58361BEC7628EDF5F3FDC0E4805DC48CAEECA8"
 		"1B7C13C30ADF52A3659584739A2DF46BE589C51CA1A4A8416DF6545A1CE8BA00", exp1600, sizeof(exp1600));
 
-	hex_to_bin("616263", msg24, sizeof(msg24));
-	hex_to_bin("6162636462636465636465666465666765666768666768696768696A68696A6B"
+	qsc_consoleutils_hex_to_bin("616263", msg24, sizeof(msg24));
+	qsc_consoleutils_hex_to_bin("6162636462636465636465666465666765666768666768696768696A68696A6B"
 		"696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F7071", msg448, sizeof(msg448));
-	hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
+	qsc_consoleutils_hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
@@ -247,7 +180,7 @@ static bool sha3_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK1 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK1 \n");
 		status = false;
 	}
 
@@ -256,7 +189,7 @@ static bool sha3_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp24, sizeof(exp24)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK2 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK2 \n");
 		status = false;
 	}
 
@@ -265,7 +198,7 @@ static bool sha3_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp448, sizeof(exp448)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK3 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK3 \n");
 		status = false;
 	}
 
@@ -274,7 +207,7 @@ static bool sha3_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK4 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK4 \n");
 		status = false;
 	}
 
@@ -283,34 +216,34 @@ static bool sha3_512_kat()
 	qsc_intutils_clear8(hash, sizeof(hash));
 	/* initialize the SHA3 state structure */
 	qsc_sha3_initialize(&state);
-	qsc_sha3_update(&state, keccak_rate_512, msg0, 0);
-	qsc_sha3_finalize(&state, keccak_rate_512, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_512, msg0, 0);
+	qsc_sha3_finalize(&state, qsc_keccak_rate_512, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK5 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK5 \n");
 		status = false;
 	}
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_sha3_initialize(&state);
-	qsc_sha3_update(&state, keccak_rate_512, msg24, sizeof(msg24));
-	qsc_sha3_finalize(&state, keccak_rate_512, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_512, msg24, sizeof(msg24));
+	qsc_sha3_finalize(&state, qsc_keccak_rate_512, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp24, sizeof(exp24)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK6 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK6 \n");
 		status = false;
 	}
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_sha3_initialize(&state);
-	qsc_sha3_update(&state, keccak_rate_512, msg448, sizeof(msg448));
-	qsc_sha3_finalize(&state, keccak_rate_512, hash);
+	qsc_sha3_update(&state, qsc_keccak_rate_512, msg448, sizeof(msg448));
+	qsc_sha3_finalize(&state, qsc_keccak_rate_512, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp448, sizeof(exp448)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK7 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK7 \n");
 		status = false;
 	}
 
@@ -318,31 +251,31 @@ static bool sha3_512_kat()
 	/* initialize the SHA3 state*/
 	qsc_sha3_initialize(&state);
 	/* absorb the message */
-	qsc_sha3_update(&state, keccak_rate_512, msg1600, sizeof(msg1600));
+	qsc_sha3_update(&state, qsc_keccak_rate_512, msg1600, sizeof(msg1600));
 	/* finalize the message */
-	qsc_sha3_finalize(&state, keccak_rate_512, hash);
+	qsc_sha3_finalize(&state, qsc_keccak_rate_512, hash);
 
 	if (qsc_intutils_are_equal8(hash, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! sha3_512_kat: output does not match the known answer -SK8 \n");
+		qsc_consoleutils_print_safe("Failure! sha3_512_kat: output does not match the known answer -SK8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake_128_kat()
+static bool shake_128_kat(void)
 {
 	uint8_t exp0[512] = { 0 };
 	uint8_t exp1600[512] = { 0 };
-	uint8_t hash[keccak_rate_128 * 4] = { 0 };
+	uint8_t hash[qsc_keccak_rate_128 * 4] = { 0 };
 	uint8_t msg0[1] = { 0 };
 	uint8_t msg1600[200] = { 0 };
 	uint8_t output[512] = { 0 };
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("7F9C2BA4E88F827D616045507605853ED73B8093F6EFBC88EB1A6EACFA66EF26"
+	qsc_consoleutils_hex_to_bin("7F9C2BA4E88F827D616045507605853ED73B8093F6EFBC88EB1A6EACFA66EF26"
 		"3CB1EEA988004B93103CFB0AEEFD2A686E01FA4A58E8A3639CA8A1E3F9AE57E2"
 		"35B8CC873C23DC62B8D260169AFA2F75AB916A58D974918835D25E6A435085B2"
 		"BADFD6DFAAC359A5EFBB7BCC4B59D538DF9A04302E10C8BC1CBF1A0B3A5120EA"
@@ -359,7 +292,7 @@ static bool shake_128_kat()
 		"5DB93CC936BEA323491CCB38A388F546A9FF00DD4E1300B9B2153D2041D205B4"
 		"43E41B45A653F2A5C4492C1ADD544512DDA2529833462B71A41A45BE97290B6F", exp0, sizeof(exp0));
 
-	hex_to_bin("131AB8D2B594946B9C81333F9BB6E0CE75C3B93104FA3469D3917457385DA037"
+	qsc_consoleutils_hex_to_bin("131AB8D2B594946B9C81333F9BB6E0CE75C3B93104FA3469D3917457385DA037"
 		"CF232EF7164A6D1EB448C8908186AD852D3F85A5CF28DA1AB6FE343817197846"
 		"7F1C05D58C7EF38C284C41F6C2221A76F12AB1C04082660250802294FB871802"
 		"13FDEF5B0ECB7DF50CA1F8555BE14D32E10F6EDCDE892C09424B29F597AFC270"
@@ -376,7 +309,7 @@ static bool shake_128_kat()
 		"63AA4435E0B69A9063E880795C3DC5EF3272E11C497A91ACF699FEFEE206227A"
 		"44C9FB359FD56AC0A9A75A743CFF6862F17D7259AB075216C0699511643B6439", exp1600, sizeof(exp1600));
 
-	hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
+	qsc_consoleutils_hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
@@ -393,7 +326,7 @@ static bool shake_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! shake_128_kat: output does not match the known answer -DK1 \n");
+		qsc_consoleutils_print_safe("Failure! shake_128_kat: output does not match the known answer -DK1 \n");
 		status = false;
 	}
 
@@ -402,7 +335,7 @@ static bool shake_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! shake_128_kat: output does not match the known answer -DK2 \n");
+		qsc_consoleutils_print_safe("Failure! shake_128_kat: output does not match the known answer -DK2 \n");
 		status = false;
 	}
 
@@ -410,30 +343,30 @@ static bool shake_128_kat()
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
-	qsc_shake_initialize(&state, keccak_rate_128, msg1600, sizeof(msg1600));
-	qsc_shake_squeezeblocks(&state, keccak_rate_128, hash, 4);
+	qsc_shake_initialize(&state, qsc_keccak_rate_128, msg1600, sizeof(msg1600));
+	qsc_shake_squeezeblocks(&state, qsc_keccak_rate_128, hash, 4);
 
 	if (qsc_intutils_are_equal8(hash, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! shake_128_kat: output does not match the known answer -DK3 \n");
+		qsc_consoleutils_print_safe("Failure! shake_128_kat: output does not match the known answer -DK3 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake_256_kat()
+static bool shake_256_kat(void)
 {
 	uint8_t exp0[512] = { 0 };
 	uint8_t exp1600[512] = { 0 };
-	uint8_t hash[keccak_rate_256 * 4] = { 0 };
+	uint8_t hash[qsc_keccak_rate_256 * 4] = { 0 };
 	uint8_t msg0[1] = { 0 };
 	uint8_t msg1600[200] = { 0 };
 	uint8_t output[512] = { 0 };
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("46B9DD2B0BA88D13233B3FEB743EEB243FCD52EA62B81B82B50C27646ED5762F"
+	qsc_consoleutils_hex_to_bin("46B9DD2B0BA88D13233B3FEB743EEB243FCD52EA62B81B82B50C27646ED5762F"
 		"D75DC4DDD8C0F200CB05019D67B592F6FC821C49479AB48640292EACB3B7C4BE"
 		"141E96616FB13957692CC7EDD0B45AE3DC07223C8E92937BEF84BC0EAB862853"
 		"349EC75546F58FB7C2775C38462C5010D846C185C15111E595522A6BCD16CF86"
@@ -450,7 +383,7 @@ static bool shake_256_kat()
 		"AE2FCC865F618ABE27C124CD8B074CCD516301B91875824D09958F341EF274BD"
 		"AB0BAE316339894304E35877B0C28A9B1FD166C796B9CC258A064A8F57E27F2A", exp0, sizeof(exp0));
 
-	hex_to_bin("CD8A920ED141AA0407A22D59288652E9D9F1A7EE0C1E7C1CA699424DA84A904D"
+	qsc_consoleutils_hex_to_bin("CD8A920ED141AA0407A22D59288652E9D9F1A7EE0C1E7C1CA699424DA84A904D"
 		"2D700CAAE7396ECE96604440577DA4F3AA22AEB8857F961C4CD8E06F0AE6610B"
 		"1048A7F64E1074CD629E85AD7566048EFC4FB500B486A3309A8F26724C0ED628"
 		"001A1099422468DE726F1061D99EB9E93604D5AA7467D4B1BD6484582A384317"
@@ -467,7 +400,7 @@ static bool shake_256_kat()
 		"2D4F1791BC689A0E9B799A37339C04275733740143EF5D2B58B96A363D4E0807"
 		"6A1A9D7846436E4DCA5728B6F760EEF0CA92BF0BE5615E96959D767197A0BEEB", exp1600, sizeof(exp1600));
 
-	hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
+	qsc_consoleutils_hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
@@ -484,7 +417,7 @@ static bool shake_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! shake_256_kat: output does not match the known answer -DK1 \n");
+		qsc_consoleutils_print_safe("Failure! shake_256_kat: output does not match the known answer -DK1 \n");
 		status = false;
 	}
 
@@ -493,7 +426,7 @@ static bool shake_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! shake_256_kat: output does not match the known answer -DK2 \n");
+		qsc_consoleutils_print_safe("Failure! shake_256_kat: output does not match the known answer -DK2 \n");
 		status = false;
 	}
 
@@ -501,30 +434,30 @@ static bool shake_256_kat()
 
 	qsc_intutils_clear8(hash, sizeof(hash));
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
-	qsc_shake_initialize(&state, keccak_rate_256, msg1600, sizeof(msg1600));
-	qsc_cshake_squeezeblocks(&state, keccak_rate_256, hash, 4);
+	qsc_shake_initialize(&state, qsc_keccak_rate_256, msg1600, sizeof(msg1600));
+	qsc_cshake_squeezeblocks(&state, qsc_keccak_rate_256, hash, 4);
 
 	if (qsc_intutils_are_equal8(hash, exp1600, sizeof(exp1600)) == false)
 	{
-		print_safe("Failure! shake_256_kat: output does not match the known answer -DK3 \n");
+		qsc_consoleutils_print_safe("Failure! shake_256_kat: output does not match the known answer -DK3 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake_512_kat()
+static bool shake_512_kat(void)
 {
 	uint8_t exp1[512] = { 0 };
 	uint8_t exp2[512] = { 0 };
-	uint8_t hash[keccak_rate_512 * 8] = { 0 };
+	uint8_t hash[qsc_keccak_rate_512 * 8] = { 0 };
 	uint8_t msg1[64] = { 0 };
 	uint8_t msg2[200] = { 0 };
 	uint8_t output[512] = { 0 };
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("D6DEAAF94A391E987698B17E0AE2D8C6C96BEAC5DD2FFCB20F45665EFE39CFFE"
+	qsc_consoleutils_hex_to_bin("D6DEAAF94A391E987698B17E0AE2D8C6C96BEAC5DD2FFCB20F45665EFE39CFFE"
 		"7ED119E38899BD3E8FD206A1A77B74F435D405BB837E61A62D97D5BAA203300A"
 		"E689BA5F3B6659355964FED145065B3B0371C6CA4E466942B81BBD47CB2AE373"
 		"8D630EFC00CBBBC0B11FF56C6AD16E1500980D94112F039003F9F36A3D05567B"
@@ -541,7 +474,7 @@ static bool shake_512_kat()
 		"F2A15CAA8880653B3746807CB83F52A6B2FBCFBA9E708702F5A8E68D79FCE865"
 		"898CB646F40CC3CBAC51CC94729EDFD1754298B3AAEAE94D090240A7BBFE3FBA", exp1, sizeof(exp1));
 
-	hex_to_bin("9701303D390F51968C25B6EEE54816D19AB149A1C06B0625940BB8E04A1CECCD"
+	qsc_consoleutils_hex_to_bin("9701303D390F51968C25B6EEE54816D19AB149A1C06B0625940BB8E04A1CECCD"
 		"D88010234F53ABBBAF181F49761A3ECEFAEE56DE7B59B5AAF0031E3C1552C9AC"
 		"40DFAF6AAC934FD644DBC4A3D753E1F3845A5901F415DFF2A88440F6A8F5688F"
 		"F26E68ECC6AD23ACF18E0A54BE745DB919FAB01F77A251D5F66B01E2426BF020"
@@ -558,10 +491,10 @@ static bool shake_512_kat()
 		"21AE714C2B47365DC44F608B97B5C5E0791EBE3C245CCCC1B537030EEDAA096F"
 		"EF24013B7D401C9C7470375D97A6A26066CFB7B88E72F6D6B635E9F09DB2C007", exp2, sizeof(exp2));
 
-	hex_to_bin("9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10"
+	qsc_consoleutils_hex_to_bin("9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10"
 		"9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10", msg1, sizeof(msg1));
 
-	hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
+	qsc_consoleutils_hex_to_bin("A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
 		"A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3"
@@ -578,7 +511,7 @@ static bool shake_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1, sizeof(exp1)) == false)
 	{
-		print_safe("Failure! shake_512_kat: output does not match the known answer -DK1 \n");
+		qsc_consoleutils_print_safe("Failure! shake_512_kat: output does not match the known answer -DK1 \n");
 		status = false;
 	}
 
@@ -587,7 +520,7 @@ static bool shake_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp2, sizeof(exp2)) == false)
 	{
-		print_safe("Failure! shake_512_kat: output does not match the known answer -DK2 \n");
+		qsc_consoleutils_print_safe("Failure! shake_512_kat: output does not match the known answer -DK2 \n");
 		status = false;
 	}
 
@@ -595,24 +528,24 @@ static bool shake_512_kat()
 
 	qsc_intutils_clear8(output, sizeof(output));
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
-	qsc_shake_initialize(&state, keccak_rate_512, msg1, sizeof(msg1));
-	qsc_shake_squeezeblocks(&state, keccak_rate_512, hash, 8);
+	qsc_shake_initialize(&state, qsc_keccak_rate_512, msg1, sizeof(msg1));
+	qsc_shake_squeezeblocks(&state, qsc_keccak_rate_512, hash, 8);
 
 	if (qsc_intutils_are_equal8(hash, exp1, sizeof(exp1)) == false)
 	{
-		print_safe("Failure! shake_512_kat: output does not match the known answer -DK3 \n");
+		qsc_consoleutils_print_safe("Failure! shake_512_kat: output does not match the known answer -DK3 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool cshake_128_kat()
+static bool cshake_128_kat(void)
 {
 	uint8_t cust[15] = { 0 };
 	uint8_t exp256a[32] = { 0 };
 	uint8_t exp256b[32] = { 0 };
-	uint8_t hashb[keccak_rate_128] = { 0 };
+	uint8_t hashb[qsc_keccak_rate_128] = { 0 };
 	uint8_t msg32[4] = { 0 };
 	uint8_t msg1600[200] = { 0 };
 	uint8_t name[1] = { 0 };
@@ -620,13 +553,13 @@ static bool cshake_128_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
+	qsc_consoleutils_hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
 
-	hex_to_bin("C1C36925B6409A04F1B504FCBCA9D82B4017277CB5ED2B2065FC1D3814D5AAF5", exp256a, sizeof(exp256a));
-	hex_to_bin("C5221D50E4F822D96A2E8881A961420F294B7B24FE3D2094BAED2C6524CC166B", exp256b, sizeof(exp256b));
+	qsc_consoleutils_hex_to_bin("C1C36925B6409A04F1B504FCBCA9D82B4017277CB5ED2B2065FC1D3814D5AAF5", exp256a, sizeof(exp256a));
+	qsc_consoleutils_hex_to_bin("C5221D50E4F822D96A2E8881A961420F294B7B24FE3D2094BAED2C6524CC166B", exp256b, sizeof(exp256b));
 
-	hex_to_bin("00010203", msg32, sizeof(msg32));
-	hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	qsc_consoleutils_hex_to_bin("00010203", msg32, sizeof(msg32));
+	qsc_consoleutils_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F"
 		"404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F"
 		"606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F"
@@ -642,7 +575,7 @@ static bool cshake_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256a, sizeof(exp256a)) == false)
 	{
-		print_safe("Failure! cshake_128_kat: output does not match the known answer -CK1 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_128_kat: output does not match the known answer -CK1 \n");
 		status = false;
 	}
 
@@ -651,31 +584,31 @@ static bool cshake_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256b, sizeof(exp256b)) == false)
 	{
-		print_safe("Failure! cshake_128_kat: output does not match the known answer -CK2 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_128_kat: output does not match the known answer -CK2 \n");
 		status = false;
 	}
 
 	/* test long-form api */
 
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
-	qsc_cshake_initialize(&state, keccak_rate_128, msg1600, sizeof(msg1600), name, 0, cust, sizeof(cust));
-	qsc_cshake_squeezeblocks(&state, keccak_rate_128, hashb, 1);
+	qsc_cshake_initialize(&state, qsc_keccak_rate_128, msg1600, sizeof(msg1600), name, 0, cust, sizeof(cust));
+	qsc_cshake_squeezeblocks(&state, qsc_keccak_rate_128, hashb, 1);
 
 	if (qsc_intutils_are_equal8(hashb, exp256b, sizeof(exp256b)) == false)
 	{
-		print_safe("Failure! cshake_128_kat: output does not match the known answer -CK3 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_128_kat: output does not match the known answer -CK3 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool cshake_256_kat()
+static bool cshake_256_kat(void)
 {
 	uint8_t cust[15] = { 0 };
 	uint8_t exp512a[64] = { 0 };
 	uint8_t exp512b[64] = { 0 };
-	uint8_t hashb[keccak_rate_256] = { 0 };
+	uint8_t hashb[qsc_keccak_rate_256] = { 0 };
 	uint8_t msg32[4] = { 0 };
 	uint8_t msg1600[200] = { 0 };
 	uint8_t name[1] = { 0 };
@@ -683,15 +616,15 @@ static bool cshake_256_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
+	qsc_consoleutils_hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
 
-	hex_to_bin("D008828E2B80AC9D2218FFEE1D070C48B8E4C87BFF32C9699D5B6896EEE0EDD1"
+	qsc_consoleutils_hex_to_bin("D008828E2B80AC9D2218FFEE1D070C48B8E4C87BFF32C9699D5B6896EEE0EDD1"
 		"64020E2BE0560858D9C00C037E34A96937C561A74C412BB4C746469527281C8C", exp512a, sizeof(exp512a));
-	hex_to_bin("07DC27B11E51FBAC75BC7B3C1D983E8B4B85FB1DEFAF218912AC864302730917"
+	qsc_consoleutils_hex_to_bin("07DC27B11E51FBAC75BC7B3C1D983E8B4B85FB1DEFAF218912AC864302730917"
 		"27F42B17ED1DF63E8EC118F04B23633C1DFB1574C8FB55CB45DA8E25AFB092BB", exp512b, sizeof(exp512b));
 
-	hex_to_bin("00010203", msg32, sizeof(msg32));
-	hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	qsc_consoleutils_hex_to_bin("00010203", msg32, sizeof(msg32));
+	qsc_consoleutils_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F"
 		"404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F"
 		"606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F"
@@ -707,7 +640,7 @@ static bool cshake_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp512a, sizeof(exp512a)) == false)
 	{
-		print_safe("Failure! cshake_256_kat: output does not match the known answer -CK1 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_256_kat: output does not match the known answer -CK1 \n");
 		status = false;
 	}
 
@@ -716,7 +649,7 @@ static bool cshake_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp512b, sizeof(exp512b)) == false)
 	{
-		print_safe("Failure! cshake_256_kat: output does not match the known answer -CK2 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_256_kat: output does not match the known answer -CK2 \n");
 		status = false;
 	}
 
@@ -724,34 +657,34 @@ static bool cshake_256_kat()
 
 
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
-	qsc_cshake_initialize(&state, keccak_rate_256, msg1600, sizeof(msg1600), name, 0, cust, sizeof(cust));
-	qsc_cshake_squeezeblocks(&state, keccak_rate_256, hashb, 1);
+	qsc_cshake_initialize(&state, qsc_keccak_rate_256, msg1600, sizeof(msg1600), name, 0, cust, sizeof(cust));
+	qsc_cshake_squeezeblocks(&state, qsc_keccak_rate_256, hashb, 1);
 
 	if (qsc_intutils_are_equal8(hashb, exp512b, sizeof(exp512b)) == false)
 	{
-		print_safe("Failure! cshake_256_kat: output does not match the known answer -CK3 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_256_kat: output does not match the known answer -CK3 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool cshake_512_kat()
+static bool cshake_512_kat(void)
 {
 	uint8_t exp512[64] = { 0 };
 	uint8_t cust[15] = { 0 };
-	uint8_t hashb[keccak_rate_512] = { 0 };
+	uint8_t hashb[qsc_keccak_rate_512] = { 0 };
 	uint8_t msg512[64] = { 0 };
 	uint8_t output[64] = { 0 };
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
+	qsc_consoleutils_hex_to_bin("456D61696C205369676E6174757265", cust, sizeof(cust));
 
-	hex_to_bin("EF4BDC1F2B91B44C51048C81F5499DAC46F38C6E9CD81CEA3CB85E3A1913F8C4"
+	qsc_consoleutils_hex_to_bin("EF4BDC1F2B91B44C51048C81F5499DAC46F38C6E9CD81CEA3CB85E3A1913F8C4"
 		"54CFE40F05370F7DE24E50FC49BBD188F42D2439F25DC2B3DB7CA2E38DC7E4A6", exp512, sizeof(exp512));
 
-	hex_to_bin("9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10"
+	qsc_consoleutils_hex_to_bin("9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10"
 		"9F2FCC7C90DE090D6B87CD7E9718C1EA6CB21118FC2D5DE9F97E5DB6AC1E9C10", msg512, sizeof(msg512));
 
 	status = true;
@@ -762,7 +695,7 @@ static bool cshake_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp512, sizeof(exp512)) == false)
 	{
-		print_safe("Failure! cshake_512_kat: output does not match the known answer -CK1 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_512_kat: output does not match the known answer -CK1 \n");
 		status = false;
 	}
 
@@ -771,19 +704,19 @@ static bool cshake_512_kat()
 	qsc_intutils_clear8(output, sizeof(output));
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
 
-	qsc_cshake_initialize(&state, keccak_rate_512, msg512, sizeof(msg512), NULL, 0, cust, sizeof(cust));
-	qsc_cshake_squeezeblocks(&state, keccak_rate_512, hashb, 1);
+	qsc_cshake_initialize(&state, qsc_keccak_rate_512, msg512, sizeof(msg512), NULL, 0, cust, sizeof(cust));
+	qsc_cshake_squeezeblocks(&state, qsc_keccak_rate_512, hashb, 1);
 
 	if (qsc_intutils_are_equal8(hashb, exp512, sizeof(exp512)) == false)
 	{
-		print_safe("Failure! cshake_512_kat: output does not match the known answer -CK2 \n");
+		qsc_consoleutils_print_safe("Failure! cshake_512_kat: output does not match the known answer -CK2 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac_128_kat()
+static bool kmac_128_kat(void)
 {
 	uint8_t cust0[1] = { 0 };
 	uint8_t cust168[21] = { 0 };
@@ -797,16 +730,16 @@ static bool kmac_128_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust168, sizeof(cust168));
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust168, sizeof(cust168));
 
-	hex_to_bin("E5780B0D3EA6F7D3A429C5706AA43A00FADBD7D49628839E3187243F456EE14E", exp256a, sizeof(exp256a));
-	hex_to_bin("3B1FBA963CD8B0B59E8C1A6D71888B7143651AF8BA0A7070C0979E2811324AA5", exp256b, sizeof(exp256b));
-	hex_to_bin("1F5B4E6CCA02209E0DCB5CA635B89A15E271ECC760071DFD805FAA38F9729230", exp256c, sizeof(exp256c));
+	qsc_consoleutils_hex_to_bin("E5780B0D3EA6F7D3A429C5706AA43A00FADBD7D49628839E3187243F456EE14E", exp256a, sizeof(exp256a));
+	qsc_consoleutils_hex_to_bin("3B1FBA963CD8B0B59E8C1A6D71888B7143651AF8BA0A7070C0979E2811324AA5", exp256b, sizeof(exp256b));
+	qsc_consoleutils_hex_to_bin("1F5B4E6CCA02209E0DCB5CA635B89A15E271ECC760071DFD805FAA38F9729230", exp256c, sizeof(exp256c));
 
-	hex_to_bin("404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F", key256, sizeof(key256));
+	qsc_consoleutils_hex_to_bin("404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F", key256, sizeof(key256));
 
-	hex_to_bin("00010203", msg32, sizeof(msg32));
-	hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	qsc_consoleutils_hex_to_bin("00010203", msg32, sizeof(msg32));
+	qsc_consoleutils_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F"
 		"404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F"
 		"606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F"
@@ -822,7 +755,7 @@ static bool kmac_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256a, sizeof(exp256a)) == false)
 	{
-		print_safe("Failure! kmac_128_kat: output does not match the known answer -KK1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_128_kat: output does not match the known answer -KK1 \n");
 		status = false;
 	}
 
@@ -831,7 +764,7 @@ static bool kmac_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256b, sizeof(exp256b)) == false)
 	{
-		print_safe("Failure! kmac_128_kat: output does not match the known answer -KK2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_128_kat: output does not match the known answer -KK2 \n");
 		status = false;
 	}
 
@@ -840,7 +773,7 @@ static bool kmac_128_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256c, sizeof(exp256c)) == false)
 	{
-		print_safe("Failure! kmac_128_kat: output does not match the known answer -KK3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_128_kat: output does not match the known answer -KK3 \n");
 		status = false;
 	}
 
@@ -849,20 +782,20 @@ static bool kmac_128_kat()
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
 	qsc_intutils_clear8(output, sizeof(output));
 
-	qsc_kmac_initialize(&state, keccak_rate_128, key256, sizeof(key256), cust168, sizeof(cust168));
-	qsc_kmac_update(&state, keccak_rate_128, msg1600, sizeof(msg1600));
-	qsc_kmac_finalize(&state, keccak_rate_128, output, sizeof(output));
+	qsc_kmac_initialize(&state, qsc_keccak_rate_128, key256, sizeof(key256), cust168, sizeof(cust168));
+	qsc_kmac_update(&state, qsc_keccak_rate_128, msg1600, sizeof(msg1600));
+	qsc_kmac_finalize(&state, qsc_keccak_rate_128, output, sizeof(output));
 
 	if (qsc_intutils_are_equal8(output, exp256c, sizeof(exp256c)) == false)
 	{
-		print_safe("Failure! kmac_128_kat: output does not match the known answer -KK4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_128_kat: output does not match the known answer -KK4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac_256_kat()
+static bool kmac_256_kat(void)
 {
 	uint8_t cust0[1] = { 0 };
 	uint8_t cust168[21] = { 0 };
@@ -876,19 +809,19 @@ static bool kmac_256_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust168, sizeof(cust168));
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust168, sizeof(cust168));
 
-	hex_to_bin("20C570C31346F703C9AC36C61C03CB64C3970D0CFC787E9B79599D273A68D2F7"
+	qsc_consoleutils_hex_to_bin("20C570C31346F703C9AC36C61C03CB64C3970D0CFC787E9B79599D273A68D2F7"
 		"F69D4CC3DE9D104A351689F27CF6F5951F0103F33F4F24871024D9C27773A8DD", exp256a, sizeof(exp256a));
-	hex_to_bin("75358CF39E41494E949707927CEE0AF20A3FF553904C86B08F21CC414BCFD691"
+	qsc_consoleutils_hex_to_bin("75358CF39E41494E949707927CEE0AF20A3FF553904C86B08F21CC414BCFD691"
 		"589D27CF5E15369CBBFF8B9A4C2EB17800855D0235FF635DA82533EC6B759B69", exp256b, sizeof(exp256b));
-	hex_to_bin("B58618F71F92E1D56C1B8C55DDD7CD188B97B4CA4D99831EB2699A837DA2E4D9"
+	qsc_consoleutils_hex_to_bin("B58618F71F92E1D56C1B8C55DDD7CD188B97B4CA4D99831EB2699A837DA2E4D9"
 		"70FBACFDE50033AEA585F1A2708510C32D07880801BD182898FE476876FC8965", exp256c, sizeof(exp256c));
 
-	hex_to_bin("404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F", key256, sizeof(key256));
+	qsc_consoleutils_hex_to_bin("404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F", key256, sizeof(key256));
 
-	hex_to_bin("00010203", msg32, sizeof(msg32));
-	hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	qsc_consoleutils_hex_to_bin("00010203", msg32, sizeof(msg32));
+	qsc_consoleutils_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F"
 		"404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F"
 		"606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F"
@@ -904,7 +837,7 @@ static bool kmac_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256a, sizeof(exp256a)) == false)
 	{
-		print_safe("Failure! kmac_256_kat: output does not match the known answer -KK1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_256_kat: output does not match the known answer -KK1 \n");
 		status = false;
 	}
 
@@ -913,7 +846,7 @@ static bool kmac_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256b, sizeof(exp256b)) == false)
 	{
-		print_safe("Failure! kmac_256_kat: output does not match the known answer -KK2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_256_kat: output does not match the known answer -KK2 \n");
 		status = false;
 	}
 
@@ -922,7 +855,7 @@ static bool kmac_256_kat()
 
 	if (qsc_intutils_are_equal8(output, exp256c, sizeof(exp256c)) == false)
 	{
-		print_safe("Failure! kmac_256_kat: output does not match the known answer -KK3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_256_kat: output does not match the known answer -KK3 \n");
 		status = false;
 	}
 
@@ -931,20 +864,20 @@ static bool kmac_256_kat()
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
 	qsc_intutils_clear8(output, sizeof(output));
 
-	qsc_kmac_initialize(&state, keccak_rate_256, key256, sizeof(key256), cust168, sizeof(cust168));
-	qsc_kmac_update(&state, keccak_rate_256, msg1600, sizeof(msg1600));
-	qsc_kmac_finalize(&state, keccak_rate_256, output, sizeof(output));
+	qsc_kmac_initialize(&state, qsc_keccak_rate_256, key256, sizeof(key256), cust168, sizeof(cust168));
+	qsc_kmac_update(&state, qsc_keccak_rate_256, msg1600, sizeof(msg1600));
+	qsc_kmac_finalize(&state, qsc_keccak_rate_256, output, sizeof(output));
 
 	if (qsc_intutils_are_equal8(output, exp256c, sizeof(exp256c)) == false)
 	{
-		print_safe("Failure! kmac_256_kat: output does not match the known answer -KK4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_256_kat: output does not match the known answer -KK4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac_512_kat()
+static bool kmac_512_kat(void)
 {
 	uint8_t cust0[21] = { 0 };
 	uint8_t cust1[42] = { 0 };
@@ -960,26 +893,26 @@ static bool kmac_512_kat()
 	qsc_keccak_state state;
 	bool status;
 
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust0, sizeof(cust0));
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E", cust0, sizeof(cust0));
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
 		"70706C69636174696F6E", cust1, sizeof(cust1));
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
 		"70706C69636174696F6E4D7920", cust2, sizeof(cust2));
 
-	hex_to_bin("C41F31CEE9851BAA915716C16F7670C7C137C1908BD9694DA80C679AA6EB5964"
+	qsc_consoleutils_hex_to_bin("C41F31CEE9851BAA915716C16F7670C7C137C1908BD9694DA80C679AA6EB5964"
 		"E76AD91F2018DE576524D84E0B0FC586C06B110ED6DB273A921FFC86D1C20CE8", exp0, sizeof(exp0));
-	hex_to_bin("6535FB96EAB4F831D801E6C3C6E71755F4A56E8E711D376DDC564F5C6DACB8B5"
+	qsc_consoleutils_hex_to_bin("6535FB96EAB4F831D801E6C3C6E71755F4A56E8E711D376DDC564F5C6DACB8B5"
 		"91EEF0503F433872B401FCEF8F05DA42FB950176C10FDB59395273FB9EDA39B8", exp1, sizeof(exp1));
-	hex_to_bin("7BA4F7EE765960E6DA15D2CB51775DBA3E7B9279E5740469EF9FFD04C5246091"
+	qsc_consoleutils_hex_to_bin("7BA4F7EE765960E6DA15D2CB51775DBA3E7B9279E5740469EF9FFD04C5246091"
 		"9A99BEE5BFDA27163E2729A8E3B663BD963EF067C7CCABDE6F6EFFF9093E2A2F", exp2, sizeof(exp2));
 
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E", key0, sizeof(key0));
-	hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E", key0, sizeof(key0));
+	qsc_consoleutils_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B", key1, sizeof(key1));
 
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
 		"70706C69636174696F6E", msg0, sizeof(msg0));
-	hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
+	qsc_consoleutils_hex_to_bin("4D7920546167676564204170706C69636174696F6E4D79205461676765642041"
 		"70706C69636174696F6E4D7920546167676564204170706C69636174696F6E4D"
 		"7920546167676564204170706C69636174696F6E", msg1, sizeof(msg1));
 	status = true;
@@ -990,7 +923,7 @@ static bool kmac_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp0, sizeof(exp0)) == false)
 	{
-		print_safe("Failure! kmac_512_kat: output does not match the known answer -KK1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_512_kat: output does not match the known answer -KK1 \n");
 		status = false;
 	}
 
@@ -999,7 +932,7 @@ static bool kmac_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp1, sizeof(exp1)) == false)
 	{
-		print_safe("Failure! kmac_512_kat: output does not match the known answer -KK2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_512_kat: output does not match the known answer -KK2 \n");
 		status = false;
 	}
 
@@ -1008,7 +941,7 @@ static bool kmac_512_kat()
 
 	if (qsc_intutils_are_equal8(output, exp2, sizeof(exp2)) == false)
 	{
-		print_safe("Failure! kmac_512_kat: output does not match the known answer -KK3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_512_kat: output does not match the known answer -KK3 \n");
 		status = false;
 	}
 
@@ -1017,13 +950,13 @@ static bool kmac_512_kat()
 	qsc_intutils_clear64(state.state, QSC_KECCAK_STATE_SIZE);
 	qsc_intutils_clear8(output, sizeof(output));
 
-	qsc_kmac_initialize(&state, keccak_rate_512, key0, sizeof(key0), cust1, sizeof(cust1));
-	qsc_kmac_update(&state, keccak_rate_512, msg1, sizeof(msg1));
-	qsc_kmac_finalize(&state, keccak_rate_512, output, sizeof(output));
+	qsc_kmac_initialize(&state, qsc_keccak_rate_512, key0, sizeof(key0), cust1, sizeof(cust1));
+	qsc_kmac_update(&state, qsc_keccak_rate_512, msg1, sizeof(msg1));
+	qsc_kmac_finalize(&state, qsc_keccak_rate_512, output, sizeof(output));
 
 	if (qsc_intutils_are_equal8(output, exp2, sizeof(exp2)) == false)
 	{
-		print_safe("Failure! kmac_512_kat: output does not match the known answer -KK4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac_512_kat: output does not match the known answer -KK4 \n");
 		status = false;
 	}
 
@@ -1031,7 +964,7 @@ static bool kmac_512_kat()
 }
 
 #if defined(QSC_SYSTEM_HAS_AVX2)
-static bool kmac128x4_equality()
+static bool kmac128x4_equality(void)
 {
 	uint8_t cst[4][16] = { 0 };
 	uint8_t key[4][18] = { 0 };
@@ -1075,7 +1008,7 @@ static bool kmac128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1083,7 +1016,7 @@ static bool kmac128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1091,7 +1024,7 @@ static bool kmac128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1099,14 +1032,14 @@ static bool kmac128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac256x4_equality()
+static bool kmac256x4_equality(void)
 {
 	uint8_t cst[4][32] = { 0 };
 	uint8_t key[4][34] = { 0 };
@@ -1150,7 +1083,7 @@ static bool kmac256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1158,7 +1091,7 @@ static bool kmac256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1166,7 +1099,7 @@ static bool kmac256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1174,14 +1107,14 @@ static bool kmac256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac512x4_equality()
+static bool kmac512x4_equality(void)
 {
 	uint8_t cst[4][64] = { 0 };
 	uint8_t key[4][66] = { 0 };
@@ -1225,7 +1158,7 @@ static bool kmac512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1233,7 +1166,7 @@ static bool kmac512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1241,7 +1174,7 @@ static bool kmac512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1249,24 +1182,23 @@ static bool kmac512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake128x4_equality()
+static bool shake128x4_equality(void)
 {
 	uint8_t key[4][18] = { 0 };
 	uint8_t otp[4][168] = { 0 };
 	uint8_t exp[4][168] = { 0 };
-	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 16; ++i)
+	for (size_t i = 0; i < 16; ++i)
 	{
 		key[0][i] = (uint8_t)i;
 		key[1][i] = (uint8_t)i;
@@ -1285,7 +1217,7 @@ static bool shake128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake128x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1293,7 +1225,7 @@ static bool shake128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake128x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1301,7 +1233,7 @@ static bool shake128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake128x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1309,24 +1241,23 @@ static bool shake128x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake128x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake256x4_equality()
+static bool shake256x4_equality(void)
 {
 	uint8_t key[4][34] = { 0 };
 	uint8_t otp[4][136] = { 0 };
 	uint8_t exp[4][136] = { 0 };
-	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 32; ++i)
+	for (size_t i = 0; i < 32; ++i)
 	{
 		key[0][i] = (uint8_t)i;
 		key[1][i] = (uint8_t)i;
@@ -1345,7 +1276,7 @@ static bool shake256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake256x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1353,7 +1284,7 @@ static bool shake256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake256x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1361,7 +1292,7 @@ static bool shake256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake256x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1369,24 +1300,23 @@ static bool shake256x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake256x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake512x4_equality()
+static bool shake512x4_equality(void)
 {
 	uint8_t key[4][66] = { 0 };
 	uint8_t otp[4][72] = { 0 };
 	uint8_t exp[4][72] = { 0 };
-	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 64; ++i)
+	for (size_t i = 0; i < 64; ++i)
 	{
 		key[0][i] = (uint8_t)i;
 		key[1][i] = (uint8_t)i;
@@ -1405,7 +1335,7 @@ static bool shake512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake512x4_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1413,7 +1343,7 @@ static bool shake512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake512x4_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1421,7 +1351,7 @@ static bool shake512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake512x4_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1429,7 +1359,7 @@ static bool shake512x4_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake512x4_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1438,7 +1368,7 @@ static bool shake512x4_equality()
 #endif
 
 #if defined(QSC_SYSTEM_HAS_AVX512)
-static bool kmac128x8_equality()
+static bool kmac128x8_equality(void)
 {
 	uint8_t cst[8][16] = { 0 };
 	uint8_t key[8][18] = { 0 };
@@ -1500,7 +1430,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1508,7 +1438,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1516,7 +1446,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1524,7 +1454,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1532,7 +1462,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -1540,7 +1470,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -1548,7 +1478,7 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -1556,14 +1486,14 @@ static bool kmac128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac256x8_equality()
+static bool kmac256x8_equality(void)
 {
 	uint8_t cst[8][32] = { 0 };
 	uint8_t key[8][34] = { 0 };
@@ -1625,7 +1555,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1633,7 +1563,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1641,7 +1571,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1649,7 +1579,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1657,7 +1587,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -1665,7 +1595,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -1673,7 +1603,7 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -1681,14 +1611,14 @@ static bool kmac256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool kmac512x8_equality()
+static bool kmac512x8_equality(void)
 {
 	uint8_t cst[8][64] = { 0 };
 	uint8_t key[8][66] = { 0 };
@@ -1750,7 +1680,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1758,7 +1688,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1766,7 +1696,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1774,7 +1704,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1782,7 +1712,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -1790,7 +1720,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -1798,7 +1728,7 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -1806,14 +1736,14 @@ static bool kmac512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake128x8_equality()
+static bool shake128x8_equality(void)
 {
 	uint8_t key[8][18] = { 0 };
 	uint8_t otp[8][168] = { 0 };
@@ -1851,7 +1781,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1859,7 +1789,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1867,7 +1797,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1875,7 +1805,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1883,7 +1813,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -1891,7 +1821,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -1899,7 +1829,7 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -1907,14 +1837,14 @@ static bool shake128x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! shake128x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake256x8_equality()
+static bool shake256x8_equality(void)
 {
 	uint8_t key[8][34] = { 0 };
 	uint8_t otp[8][136] = { 0 };
@@ -1952,7 +1882,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -1960,7 +1890,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -1968,7 +1898,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -1976,7 +1906,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -1984,7 +1914,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -1992,7 +1922,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -2000,7 +1930,7 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -2008,14 +1938,14 @@ static bool shake256x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! shake256x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
 	return status;
 }
 
-static bool shake512x8_equality()
+static bool shake512x8_equality(void)
 {
 	uint8_t key[8][66] = { 0 };
 	uint8_t otp[8][72] = { 0 };
@@ -2053,7 +1983,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[0], otp[0], sizeof(exp[0])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP1 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
@@ -2061,7 +1991,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[1], otp[1], sizeof(exp[1])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP2 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
@@ -2069,7 +1999,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[2], otp[2], sizeof(exp[2])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP3 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
@@ -2077,7 +2007,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[3], otp[3], sizeof(exp[3])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP4 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
@@ -2085,7 +2015,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[4], otp[4], sizeof(exp[4])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP5 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
@@ -2093,7 +2023,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[5], otp[5], sizeof(exp[5])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP6 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
@@ -2101,7 +2031,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[6], otp[6], sizeof(exp[6])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP7 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
@@ -2109,7 +2039,7 @@ static bool shake512x8_equality()
 
 	if (qsc_intutils_are_equal8(exp[7], otp[7], sizeof(exp[7])) == false)
 	{
-		print_safe("Failure! shake512x8_equality: output does not match the known answer -KP8 \n");
+		qsc_consoleutils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
 	}
 
@@ -2117,9 +2047,7 @@ static bool shake512x8_equality()
 }
 #endif
 
-/*** Public Tests ***/
-
-bool hkdstest_sha3_test()
+static bool hkds_selftest_sha3_test(void)
 {
 	bool res;
 
@@ -2232,11 +2160,13 @@ bool hkdstest_sha3_test()
 	return res;
 }
 
-bool hkdstest_symmetric_selftest_run()
+/*** Public Tests ***/
+
+bool hkds_selftest_symmetric_run(void)
 {
 	bool res;
 
-	res = hkdstest_sha3_test();
+	res = hkds_selftest_sha3_test();
 
 	return res;
 }

@@ -1,6 +1,6 @@
 #include "sha2.h"
-#include "intutils.h"
 #include "intrinsics.h"
+#include "intutils.h"
 #include "memutils.h"
 
 
@@ -30,6 +30,8 @@ static void sha256_increase(qsc_sha256_state* ctx, size_t msglen)
 QSC_SYSTEM_OPTIMIZE_IGNORE
 void qsc_sha256_dispose(qsc_sha256_state* ctx)
 {
+	assert(ctx != NULL);
+
 	if (ctx != NULL)
 	{
 		qsc_memutils_clear((uint8_t*)ctx->state, sizeof(ctx->state));
@@ -75,7 +77,7 @@ void qsc_sha256_finalize(qsc_sha256_state* ctx, uint8_t* output)
 	/* padding */
 	if (ctx->position < QSC_SHA2_256_RATE)
 	{
-		qsc_memutils_clear((uint8_t*)(pad + ctx->position), QSC_SHA2_256_RATE - ctx->position);
+		qsc_memutils_clear((pad + ctx->position), QSC_SHA2_256_RATE - ctx->position);
 	}
 
 	if (ctx->position > 56)
@@ -85,8 +87,8 @@ void qsc_sha256_finalize(qsc_sha256_state* ctx, uint8_t* output)
 	}
 
 	/* finalize state with counter and last compression */
-	qsc_intutils_be32to8((uint8_t*)(pad + 56), (uint32_t)(bitLen >> 32));
-	qsc_intutils_be32to8((uint8_t*)(pad + 60), (uint32_t)bitLen);
+	qsc_intutils_be32to8((pad + 56), (uint32_t)(bitLen >> 32));
+	qsc_intutils_be32to8((pad + 60), (uint32_t)bitLen);
 	qsc_sha256_permute(ctx->state, pad);
 
 #if defined(QSC_SYSTEM_IS_BIG_ENDIAN)
@@ -94,7 +96,7 @@ void qsc_sha256_finalize(qsc_sha256_state* ctx, uint8_t* output)
 #else
 	for (size_t i = 0; i < QSC_SHA2_256_HASH_SIZE; i += sizeof(uint32_t))
 	{
-		qsc_intutils_be32to8((uint8_t*)(output + i), ctx->state[i / sizeof(uint32_t)]);
+		qsc_intutils_be32to8((output + i), ctx->state[i / sizeof(uint32_t)]);
 	}
 #endif
 
@@ -105,7 +107,7 @@ void qsc_sha256_initialize(qsc_sha256_state* ctx)
 {
 	assert(ctx != NULL);
 
-	qsc_memutils_copy((uint8_t*)ctx->state, (uint8_t*)sha256_iv, sizeof(ctx->state));
+	qsc_memutils_copy((uint8_t*)ctx->state, (const uint8_t*)sha256_iv, sizeof(ctx->state));
 	qsc_memutils_clear(ctx->buffer, sizeof(ctx->buffer));
 	ctx->t = 0;
 	ctx->position = 0;
@@ -114,6 +116,9 @@ void qsc_sha256_initialize(qsc_sha256_state* ctx)
 #if defined(QSC_SHA2_SHANI_ENABLED)
 void qsc_sha256_permute(uint32_t* output, const uint8_t* message)
 {
+	assert(output != NULL);
+	assert(message != NULL);
+
 	__m128i s0;
 	__m128i s1;
 	__m128i t0;
@@ -127,8 +132,8 @@ void qsc_sha256_permute(uint32_t* output, const uint8_t* message)
 	__m128i ptmp;
 
 	/* load initial values */
-	ptmp = _mm_loadu_si128((__m128i*)output);
-	s1 = _mm_loadu_si128((__m128i*)(uint32_t*)(output + (4 * sizeof(uint32_t))));
+	ptmp = _mm_loadu_si128((const __m128i*)output);
+	s1 = _mm_loadu_si128((const __m128i*)(uint32_t*)(output + (4 * sizeof(uint32_t))));
 	mask = _mm_set_epi64x(0x0C0D0E0F08090A0BULL, 0x0405060700010203ULL);
 	ptmp = _mm_shuffle_epi32(ptmp, 0xB1);
 	s1 = _mm_shuffle_epi32(s1, 0x1B);
@@ -289,6 +294,9 @@ void qsc_sha256_permute(uint32_t* output, const uint8_t* message)
 #else
 void qsc_sha256_permute(uint32_t* output, const uint8_t* message)
 {
+	assert(output != NULL);
+	assert(message != NULL);
+
 	uint32_t a;
 	uint32_t b;
 	uint32_t c;
@@ -325,21 +333,21 @@ void qsc_sha256_permute(uint32_t* output, const uint8_t* message)
 	h = output[7];
 
 	w0 = qsc_intutils_be8to32(message);
-	w1 = qsc_intutils_be8to32((uint8_t*)(message + 4));
-	w2 = qsc_intutils_be8to32((uint8_t*)(message + 8));
-	w3 = qsc_intutils_be8to32((uint8_t*)(message + 12));
-	w4 = qsc_intutils_be8to32((uint8_t*)(message + 16));
-	w5 = qsc_intutils_be8to32((uint8_t*)(message + 20));
-	w6 = qsc_intutils_be8to32((uint8_t*)(message + 24));
-	w7 = qsc_intutils_be8to32((uint8_t*)(message + 28));
-	w8 = qsc_intutils_be8to32((uint8_t*)(message + 32));
-	w9 = qsc_intutils_be8to32((uint8_t*)(message + 36));
-	w10 = qsc_intutils_be8to32((uint8_t*)(message + 40));
-	w11 = qsc_intutils_be8to32((uint8_t*)(message + 44));
-	w12 = qsc_intutils_be8to32((uint8_t*)(message + 48));
-	w13 = qsc_intutils_be8to32((uint8_t*)(message + 52));
-	w14 = qsc_intutils_be8to32((uint8_t*)(message + 56));
-	w15 = qsc_intutils_be8to32((uint8_t*)(message + 60));
+	w1 = qsc_intutils_be8to32(message + 4);
+	w2 = qsc_intutils_be8to32(message + 8);
+	w3 = qsc_intutils_be8to32(message + 12);
+	w4 = qsc_intutils_be8to32(message + 16);
+	w5 = qsc_intutils_be8to32(message + 20);
+	w6 = qsc_intutils_be8to32(message + 24);
+	w7 = qsc_intutils_be8to32(message + 28);
+	w8 = qsc_intutils_be8to32(message + 32);
+	w9 = qsc_intutils_be8to32(message + 36);
+	w10 = qsc_intutils_be8to32(message + 40);
+	w11 = qsc_intutils_be8to32(message + 44);
+	w12 = qsc_intutils_be8to32(message + 48);
+	w13 = qsc_intutils_be8to32(message + 52);
+	w14 = qsc_intutils_be8to32(message + 56);
+	w15 = qsc_intutils_be8to32(message + 60);
 
 	r = h + (((e >> 6) | (e << 26)) ^ ((e >> 11) | (e << 21)) ^ ((e >> 25) | (e << 7))) + ((e & f) ^ (~e & g)) + w0 + 0x428a2f98UL;
 	d += r;
@@ -609,7 +617,7 @@ void qsc_sha256_update(qsc_sha256_state* ctx, const uint8_t* message, size_t msg
 
 			if (RMDLEN != 0)
 			{
-				qsc_memutils_copy((uint8_t*)(ctx->buffer + ctx->position), message, RMDLEN);
+				qsc_memutils_copy((ctx->buffer + ctx->position), message, RMDLEN);
 			}
 
 			qsc_sha256_permute(ctx->state, ctx->buffer);
@@ -631,7 +639,162 @@ void qsc_sha256_update(qsc_sha256_state* ctx, const uint8_t* message, size_t msg
 		/* store unaligned bytes */
 		if (msglen != 0)
 		{
-			qsc_memutils_copy((uint8_t*)(ctx->buffer + ctx->position), message, msglen);
+			qsc_memutils_copy((ctx->buffer + ctx->position), message, msglen);
+			ctx->position += msglen;
+		}
+	}
+}
+
+/* SHA2-384 */
+
+static const uint64_t sha384_iv[8] =
+{
+	0xCBBB9D5DC1059ED8ULL,
+	0x629A292A367CD507ULL,
+	0x9159015A3070DD17ULL,
+	0x152FECD8F70E5939ULL,
+	0x67332667FFC00B31ULL,
+	0x8EB44A8768581511ULL,
+	0xDB0C2E0D64F98FA7ULL,
+	0x47B5481DBEFA4FA4ULL
+};
+
+static void sha384_increase(qsc_sha384_state* ctx, size_t length)
+{
+	ctx->t[0] += length;
+
+	if (ctx->t[0] > 0x1FFFFFFFFFFFFFFFULL)
+	{
+		ctx->t[1] += (ctx->t[0] >> 61);
+		ctx->t[0] &= 0x1FFFFFFFFFFFFFFFULL;
+	}
+}
+
+void qsc_sha384_compute(uint8_t* output, const uint8_t* message, size_t msglen)
+{
+	assert(output != NULL);
+	assert(message != NULL);
+
+	qsc_sha384_state ctx;
+
+	qsc_sha384_initialize(&ctx);
+	qsc_sha384_update(&ctx, message, msglen);
+	qsc_sha384_finalize(&ctx, output);
+}
+
+QSC_SYSTEM_OPTIMIZE_IGNORE
+void qsc_sha384_dispose(qsc_sha384_state* ctx)
+{
+	assert(ctx != NULL);
+	
+	if (ctx != NULL)
+	{
+		qsc_memutils_clear((uint8_t*)ctx->state, sizeof(ctx->state));
+		qsc_memutils_clear(ctx->buffer, sizeof(ctx->buffer));
+		ctx->t[0] = 0;
+		ctx->t[1] = 0;
+		ctx->position = 0;
+	}
+}
+QSC_SYSTEM_OPTIMIZE_RESUME
+
+void qsc_sha384_finalize(qsc_sha384_state* ctx, uint8_t* output)
+{
+	assert(ctx != NULL);
+	assert(output != NULL);
+
+	uint8_t pad[QSC_SHA2_384_RATE] = { 0 };
+	uint64_t bitLen;
+
+	sha384_increase(ctx, ctx->position);
+	bitLen = (ctx->t[0] << 3);
+	qsc_memutils_copy(pad, ctx->buffer, ctx->position);
+
+	if (ctx->position == QSC_SHA2_384_RATE)
+	{
+		qsc_sha512_permute(ctx->state, pad);
+		ctx->position = 0;
+	}
+
+	pad[ctx->position] = 128;
+	++ctx->position;
+
+	/* padding */
+	if (ctx->position < QSC_SHA2_384_RATE)
+	{
+		qsc_memutils_clear((pad + ctx->position), QSC_SHA2_384_RATE - ctx->position);
+	}
+
+	if (ctx->position > 112)
+	{
+		qsc_sha512_permute(ctx->state, pad);
+		qsc_memutils_clear(pad, QSC_SHA2_384_RATE);
+	}
+
+	/* finalize state with counter and last compression */
+	qsc_intutils_be64to8((pad + 112), ctx->t[1]);
+	qsc_intutils_be64to8((pad + 120), bitLen);
+	qsc_sha512_permute(ctx->state, pad);
+
+#if defined(QSC_SYSTEM_IS_BIG_ENDIAN)
+	qsc_memutils_copy(output, (uint8_t*)ctx->state, QSC_SHA2_384_HASH_SIZE);
+#else
+	for (size_t i = 0; i < QSC_SHA2_384_HASH_SIZE; i += 8)
+	{
+		qsc_intutils_be64to8((output + i), ctx->state[i / 8]);
+	}
+#endif
+
+	qsc_sha384_dispose(ctx);
+}
+
+void qsc_sha384_initialize(qsc_sha384_state* ctx)
+{
+	assert(ctx != NULL);
+
+	qsc_memutils_copy((uint8_t*)ctx->state, sha384_iv, sizeof(ctx->state));
+	qsc_memutils_clear(ctx->buffer, sizeof(ctx->buffer));
+	ctx->t[0] = 0;
+	ctx->t[1] = 0;
+	ctx->position = 0;
+}
+
+void qsc_sha384_update(qsc_sha384_state* ctx, const uint8_t* message, size_t msglen)
+{
+	assert(ctx != NULL);
+	assert(message != NULL);
+
+	if (msglen != 0)
+	{
+		if (ctx->position != 0 && (ctx->position + msglen >= QSC_SHA2_384_RATE))
+		{
+			const size_t RMDLEN = QSC_SHA2_384_RATE - ctx->position;
+
+			if (RMDLEN != 0)
+			{
+				qsc_memutils_copy((ctx->buffer + ctx->position), message, RMDLEN);
+			}
+
+			qsc_sha512_permute(ctx->state, ctx->buffer);
+			sha384_increase(ctx, QSC_SHA2_384_RATE);
+			ctx->position = 0;
+			message += RMDLEN;
+			msglen -= RMDLEN;
+		}
+
+		/* sequential loop through blocks */
+		while (msglen >= QSC_SHA2_384_RATE)
+		{
+			qsc_sha512_permute(ctx->state, message);
+			sha384_increase(ctx, QSC_SHA2_384_RATE);
+			message += QSC_SHA2_384_RATE;
+			msglen -= QSC_SHA2_384_RATE;
+		}
+
+		/* store unaligned bytes */
+		if (msglen != 0)
+		{
+			qsc_memutils_copy((ctx->buffer + ctx->position), message, msglen);
 			ctx->position += msglen;
 		}
 	}
@@ -657,7 +820,7 @@ static void sha512_increase(qsc_sha512_state* ctx, size_t length)
 
 	if (ctx->t[0] > 0x1FFFFFFFFFFFFFFFULL)
 	{
-		ctx->t[1] += (uint64_t)(ctx->t[0] >> 61);
+		ctx->t[1] += (ctx->t[0] >> 61);
 		ctx->t[0] &= 0x1FFFFFFFFFFFFFFFULL;
 	}
 }
@@ -677,6 +840,8 @@ void qsc_sha512_compute(uint8_t* output, const uint8_t* message, size_t msglen)
 QSC_SYSTEM_OPTIMIZE_IGNORE
 void qsc_sha512_dispose(qsc_sha512_state* ctx)
 {
+	assert(ctx != NULL);
+	
 	if (ctx != NULL)
 	{
 		qsc_memutils_clear((uint8_t*)ctx->state, sizeof(ctx->state));
@@ -712,7 +877,7 @@ void qsc_sha512_finalize(qsc_sha512_state* ctx, uint8_t* output)
 	/* padding */
 	if (ctx->position < QSC_SHA2_512_RATE)
 	{
-		qsc_memutils_clear((uint8_t*)(pad + ctx->position), QSC_SHA2_512_RATE - ctx->position);
+		qsc_memutils_clear((pad + ctx->position), QSC_SHA2_512_RATE - ctx->position);
 	}
 
 	if (ctx->position > 112)
@@ -722,8 +887,8 @@ void qsc_sha512_finalize(qsc_sha512_state* ctx, uint8_t* output)
 	}
 
 	/* finalize state with counter and last compression */
-	qsc_intutils_be64to8((uint8_t*)(pad + 112), ctx->t[1]);
-	qsc_intutils_be64to8((uint8_t*)(pad + 120), bitLen);
+	qsc_intutils_be64to8((pad + 112), ctx->t[1]);
+	qsc_intutils_be64to8((pad + 120), bitLen);
 	qsc_sha512_permute(ctx->state, pad);
 
 #if defined(QSC_SYSTEM_IS_BIG_ENDIAN)
@@ -731,7 +896,7 @@ void qsc_sha512_finalize(qsc_sha512_state* ctx, uint8_t* output)
 #else
 	for (size_t i = 0; i < QSC_SHA2_512_HASH_SIZE; i += 8)
 	{
-		qsc_intutils_be64to8((uint8_t*)(output + i), ctx->state[i / 8]);
+		qsc_intutils_be64to8((output + i), ctx->state[i / 8]);
 	}
 #endif
 
@@ -742,7 +907,7 @@ void qsc_sha512_initialize(qsc_sha512_state* ctx)
 {
 	assert(ctx != NULL);
 
-	qsc_memutils_copy((uint8_t*)ctx->state, (uint8_t*)sha512_iv, sizeof(ctx->state));
+	qsc_memutils_copy((uint8_t*)ctx->state, sha512_iv, sizeof(ctx->state));
 	qsc_memutils_clear(ctx->buffer, sizeof(ctx->buffer));
 	ctx->t[0] = 0;
 	ctx->t[1] = 0;
@@ -751,6 +916,9 @@ void qsc_sha512_initialize(qsc_sha512_state* ctx)
 
 void qsc_sha512_permute(uint64_t* output, const uint8_t* message)
 {
+	assert(output != NULL);
+	assert(message != NULL);
+
 	uint64_t a;
 	uint64_t b;
 	uint64_t c;
@@ -787,21 +955,21 @@ void qsc_sha512_permute(uint64_t* output, const uint8_t* message)
 	h = output[7];
 
 	w0 = qsc_intutils_be8to64(message);
-	w1 = qsc_intutils_be8to64((uint8_t*)(message + 8));
-	w2 = qsc_intutils_be8to64((uint8_t*)(message + 16));
-	w3 = qsc_intutils_be8to64((uint8_t*)(message + 24));
-	w4 = qsc_intutils_be8to64((uint8_t*)(message + 32));
-	w5 = qsc_intutils_be8to64((uint8_t*)(message + 40));
-	w6 = qsc_intutils_be8to64((uint8_t*)(message + 48));
-	w7 = qsc_intutils_be8to64((uint8_t*)(message + 56));
-	w8 = qsc_intutils_be8to64((uint8_t*)(message + 64));
-	w9 = qsc_intutils_be8to64((uint8_t*)(message + 72));
-	w10 = qsc_intutils_be8to64((uint8_t*)(message + 80));
-	w11 = qsc_intutils_be8to64((uint8_t*)(message + 88));
-	w12 = qsc_intutils_be8to64((uint8_t*)(message + 96));
-	w13 = qsc_intutils_be8to64((uint8_t*)(message + 104));
-	w14 = qsc_intutils_be8to64((uint8_t*)(message + 112));
-	w15 = qsc_intutils_be8to64((uint8_t*)(message + 120));
+	w1 = qsc_intutils_be8to64(message + 8);
+	w2 = qsc_intutils_be8to64(message + 16);
+	w3 = qsc_intutils_be8to64(message + 24);
+	w4 = qsc_intutils_be8to64(message + 32);
+	w5 = qsc_intutils_be8to64(message + 40);
+	w6 = qsc_intutils_be8to64(message + 48);
+	w7 = qsc_intutils_be8to64(message + 56);
+	w8 = qsc_intutils_be8to64(message + 64);
+	w9 = qsc_intutils_be8to64(message + 72);
+	w10 = qsc_intutils_be8to64(message + 80);
+	w11 = qsc_intutils_be8to64(message + 88);
+	w12 = qsc_intutils_be8to64(message + 96);
+	w13 = qsc_intutils_be8to64(message + 104);
+	w14 = qsc_intutils_be8to64(message + 112);
+	w15 = qsc_intutils_be8to64(message + 120);
 
 	r = h + (((e << 50) | (e >> 14)) ^ ((e << 46) | (e >> 18)) ^ ((e << 23) | (e >> 41))) + ((e & f) ^ (~e & g)) + w0 + 0x428a2f98d728ae22ULL;
 	d += r;
@@ -1135,7 +1303,7 @@ void qsc_sha512_update(qsc_sha512_state* ctx, const uint8_t* message, size_t msg
 
 			if (RMDLEN != 0)
 			{
-				qsc_memutils_copy((uint8_t*)(ctx->buffer + ctx->position), message, RMDLEN);
+				qsc_memutils_copy((ctx->buffer + ctx->position), message, RMDLEN);
 			}
 
 			qsc_sha512_permute(ctx->state, ctx->buffer);
@@ -1157,7 +1325,7 @@ void qsc_sha512_update(qsc_sha512_state* ctx, const uint8_t* message, size_t msg
 		/* store unaligned bytes */
 		if (msglen != 0)
 		{
-			qsc_memutils_copy((uint8_t*)(ctx->buffer + ctx->position), message, msglen);
+			qsc_memutils_copy((ctx->buffer + ctx->position), message, msglen);
 			ctx->position += msglen;
 		}
 	}
@@ -1181,6 +1349,8 @@ void qsc_hmac256_compute(uint8_t* output, const uint8_t* message, size_t msglen,
 QSC_SYSTEM_OPTIMIZE_IGNORE
 void qsc_hmac256_dispose(qsc_hmac256_state* ctx)
 {
+	assert(ctx != NULL);
+	
 	if (ctx != NULL)
 	{
 		qsc_memutils_clear(ctx->ipad, sizeof(ctx->ipad));
@@ -1260,6 +1430,8 @@ void qsc_hmac512_compute(uint8_t* output, const uint8_t* message, size_t msglen,
 QSC_SYSTEM_OPTIMIZE_IGNORE
 void qsc_hmac512_dispose(qsc_hmac512_state* ctx)
 {
+	assert(ctx != NULL);
+	
 	if (ctx != NULL)
 	{
 		qsc_memutils_clear(ctx->ipad, sizeof(ctx->ipad));
@@ -1363,20 +1535,23 @@ void qsc_hkdf256_extract(uint8_t* output, size_t outlen, const uint8_t* key, siz
 	assert(output != NULL);
 	assert(key != NULL);
 
-	qsc_hmac256_state ctx;
+	if (outlen >= 32)
+    {
+        qsc_hmac256_state ctx;
 
-	if (saltlen != 0)
-	{
-		qsc_hmac256_initialize(&ctx, salt, saltlen);
-	}
-	else
-	{
-		uint8_t tmp[QSC_HMAC_256_MAC_SIZE] = { 0 };
-		qsc_hmac256_initialize(&ctx, tmp, sizeof(tmp));
-	}
+        if (saltlen != 0)
+        {
+            qsc_hmac256_initialize(&ctx, salt, saltlen);
+        }
+        else
+        {
+            uint8_t tmp[QSC_HMAC_256_MAC_SIZE] = { 0 };
+            qsc_hmac256_initialize(&ctx, tmp, sizeof(tmp));
+        }
 
-	qsc_hmac256_update(&ctx, key, keylen);
-	qsc_hmac256_finalize(&ctx, output);
+        qsc_hmac256_update(&ctx, key, keylen);
+        qsc_hmac256_finalize(&ctx, output);
+    }
 }
 
 /* HKDF-512 */
@@ -1421,18 +1596,21 @@ void qsc_hkdf512_extract(uint8_t* output, size_t outlen, const uint8_t* key, siz
 	assert(output != NULL);
 	assert(key != NULL);
 
-	qsc_hmac512_state ctx;
+    if (outlen >= 64)
+    {
+        qsc_hmac512_state ctx;
 
-	if (saltlen != 0)
-	{
-		qsc_hmac512_initialize(&ctx, salt, saltlen);
-	}
-	else
-	{
-		uint8_t tmp[QSC_HMAC_512_MAC_SIZE] = { 0 };
-		qsc_hmac512_initialize(&ctx, tmp, sizeof(tmp));
-	}
+        if (saltlen != 0)
+        {
+            qsc_hmac512_initialize(&ctx, salt, saltlen);
+        }
+        else
+        {
+            uint8_t tmp[QSC_HMAC_512_MAC_SIZE] = { 0 };
+            qsc_hmac512_initialize(&ctx, tmp, sizeof(tmp));
+        }
 
-	qsc_hmac512_update(&ctx, key, keylen);
-	qsc_hmac512_finalize(&ctx, output);
+        qsc_hmac512_update(&ctx, key, keylen);
+        qsc_hmac512_finalize(&ctx, output);
+    }
 }

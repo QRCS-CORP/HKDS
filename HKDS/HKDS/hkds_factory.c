@@ -5,37 +5,37 @@
 
 void hkds_factory_serialize_packet_header(uint8_t* output, const hkds_packet_header* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_HEADER_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_HEADER_SIZE);
 }
 
 void hkds_factory_serialize_client_message(uint8_t* output, const hkds_client_message_request* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
 }
 
 void hkds_factory_serialize_client_token(uint8_t* output, const hkds_client_token_request* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
 }
 
 void hkds_factory_serialize_server_message(uint8_t* output, const hkds_server_message_response* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
 }
 
 void hkds_factory_serialize_server_token(uint8_t* output, const hkds_server_token_response* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
 }
 
 void hkds_factory_serialize_administrative_message(uint8_t* output, const hkds_administrative_message* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_ADMIN_MESSAGE_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_ADMIN_MESSAGE_SIZE);
 }
 
 void hkds_factory_serialize_error_message(uint8_t* output, const hkds_error_message* header)
 {
-	qsc_memutils_copy(output, (uint8_t*)header, HKDS_ERROR_MESSAGE_SIZE);
+	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_ERROR_MESSAGE_SIZE);
 }
 
 /* raw packet to header */
@@ -111,10 +111,10 @@ hkds_client_message_request hkds_factory_create_client_message_request(const uin
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = 0x01,
-		.packet_type = packet_message_request,
-		.packet_size = HKDS_CLIENT_MESSAGE_REQUEST_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = 0x01,
+		.flag = packet_message_request,
+		.length = HKDS_CLIENT_MESSAGE_REQUEST_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -135,10 +135,10 @@ hkds_client_token_request hkds_factory_create_client_token_request(const uint8_t
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = 0x01,
-		.packet_type = packet_token_request,
-		.packet_size = HKDS_CLIENT_TOKEN_REQUEST_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = 0x01,
+		.flag = packet_token_request,
+		.length = HKDS_CLIENT_TOKEN_REQUEST_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -153,10 +153,10 @@ hkds_server_message_response hkds_factory_create_server_message_response(const u
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = 0x02,
-		.packet_type = packet_message_response,
-		.packet_size = HKDS_SERVER_MESSAGE_RESPONSE_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = 0x02,
+		.flag = packet_message_response,
+		.length = HKDS_SERVER_MESSAGE_RESPONSE_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -171,10 +171,10 @@ hkds_server_token_response hkds_factory_create_server_token_reponse(const uint8_
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = 0x02,
-		.packet_type = packet_token_response,
-		.packet_size = HKDS_SERVER_TOKEN_RESPONSE_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = 0x02,
+		.flag = packet_token_response,
+		.length = HKDS_SERVER_TOKEN_RESPONSE_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -189,10 +189,10 @@ hkds_administrative_message hkds_factory_create_administrative_message(const uin
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = 0x01,
-		.packet_type = packet_administrative_message,
-		.packet_size = HKDS_ADMIN_MESSAGE_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = 0x01,
+		.flag = packet_administrative_message,
+		.length = HKDS_ADMIN_MESSAGE_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -207,10 +207,10 @@ hkds_error_message hkds_factory_create_error_message(const uint8_t* message, hkd
 
 	hkds_packet_header hdp =
 	{
-		.packet_sequence = (uint8_t)err,
-		.packet_type = packet_error_message,
-		.packet_size = HKDS_ERROR_MESSAGE_SIZE,
-		.protocol_id = HKDS_PROTOCOL_TYPE
+		.sequence = (uint8_t)err,
+		.flag = packet_error_message,
+		.length = HKDS_ERROR_MESSAGE_SIZE,
+		.protocol = HKDS_PROTOCOL_TYPE
 	};
 
 	hdr.header = hdp;
@@ -227,7 +227,7 @@ hkds_packet_type hkds_factory_extract_packet_type(const uint8_t* input)
 
 	hdr = hkds_factory_extract_packet_header(input);
 
-	return hdr.packet_type;
+	return hdr.flag;
 }
 
 hkds_protocol_id hkds_factory_extract_protocol_id(const uint8_t* input)
@@ -236,7 +236,7 @@ hkds_protocol_id hkds_factory_extract_protocol_id(const uint8_t* input)
 
 	hdr = hkds_factory_extract_packet_header(input);
 
-	return hdr.protocol_id;
+	return hdr.protocol;
 }
 
 size_t hkds_factory_extract_packet_size(const uint8_t* input)
@@ -245,7 +245,7 @@ size_t hkds_factory_extract_packet_size(const uint8_t* input)
 
 	hdr = hkds_factory_extract_packet_header(input);
 
-	return (size_t)hdr.packet_size;
+	return (size_t)hdr.length;
 }
 
 uint8_t hkds_factory_extract_packet_sequence(const uint8_t* input)
@@ -254,6 +254,6 @@ uint8_t hkds_factory_extract_packet_sequence(const uint8_t* input)
 
 	hdr = hkds_factory_extract_packet_header(input);
 
-	return hdr.packet_sequence;
+	return hdr.sequence;
 }
 

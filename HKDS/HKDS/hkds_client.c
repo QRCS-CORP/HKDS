@@ -26,7 +26,7 @@ static void hkds_client_generate_transactionkey(hkds_client_state* state, uint8_
 	size_t idx;
 
 	/* extract the index value */
-	idx = qsc_intutils_be8to32(((uint8_t*)state->ksn + HKDS_DID_SIZE)) % HKDS_CACHE_SIZE;
+	idx = (size_t)qsc_intutils_be8to32(((uint8_t*)state->ksn + HKDS_DID_SIZE)) % HKDS_CACHE_SIZE;
 	/* copy the key and erase from cache memory */
 	memcpy(tkey, state->tkc[idx], HKDS_MESSAGE_SIZE);
 	memset(state->tkc[idx], 0x00, HKDS_MESSAGE_SIZE);
@@ -39,11 +39,11 @@ static void hkds_client_generate_transactionkey(hkds_client_state* state, uint8_
 	}
 }
 
-static void hkds_client_get_tms(hkds_client_state* state, uint8_t* tms)
+static void hkds_client_get_tms(const hkds_client_state* state, uint8_t* tms)
 {
 	/* copy the ksn and mac name to the token mac string */
 	memcpy(tms, state->ksn, HKDS_KSN_SIZE);
-	memcpy(((uint8_t*)tms + HKDS_KSN_SIZE), hkds_mac_name, HKDS_NAME_SIZE);
+	memcpy((tms + HKDS_KSN_SIZE), hkds_mac_name, HKDS_NAME_SIZE);
 }
 
 bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, uint8_t* token)
@@ -52,7 +52,6 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 	uint8_t mtk[HKDS_TAG_SIZE] = { 0 };
 	uint8_t tms[HKDS_TMS_SIZE] = { 0 };
 	uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0 };
-	size_t i;
 	uint32_t tkc;
 	bool res;
 
@@ -102,7 +101,7 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 #endif
 
 		/* decrypt the token */
-		for (i = 0; i < HKDS_STK_SIZE; ++i)
+		for (size_t i = 0; i < HKDS_STK_SIZE; ++i)
 		{
 			token[i] ^= etok[i];
 		}
@@ -113,7 +112,6 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 
 bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaintext, uint8_t* ciphertext)
 {
-	size_t i;
 	bool res;
 
 	res = false;
@@ -124,7 +122,7 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 		hkds_client_generate_transactionkey(state, ciphertext);
 
 		/* encrypt the message */
-		for (i = 0; i < HKDS_MESSAGE_SIZE; ++i)
+		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
 		{
 			ciphertext[i] ^= plaintext[i];
 		}
@@ -140,7 +138,6 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 	uint8_t code[HKDS_TAG_SIZE] = { 0 };
 	uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0 };
 	uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0 };
-	size_t i;
 	bool res;
 
 	res = false;
@@ -152,7 +149,7 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 		hkds_client_generate_transactionkey(state, ctxt);
 
 		/* encrypt the message */
-		for (i = 0; i < HKDS_MESSAGE_SIZE; ++i)
+		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
 		{
 			ctxt[i] ^= plaintext[i];
 		}
@@ -174,7 +171,7 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 
 		/* copy cipher-text and MAC tag to cryptogram */
 		memcpy(ciphertext, ctxt, sizeof(ctxt));
-		memcpy(((uint8_t*)ciphertext + sizeof(ctxt)), code, sizeof(code));
+		memcpy((ciphertext + sizeof(ctxt)), code, sizeof(code));
 
 		res = true;
 	}
@@ -186,7 +183,6 @@ void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 {
 	uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0 };
 	uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0 };
-	size_t i;
 
 	/* combine the token and edk keys */
 	memcpy(tmpk, token, HKDS_STK_SIZE);
@@ -202,7 +198,7 @@ void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 #endif
 
 	/* copy keys to the queue */
-	for (i = 0; i < HKDS_CACHE_SIZE; ++i)
+	for (size_t i = 0; i < HKDS_CACHE_SIZE; ++i)
 	{
 		memcpy(state->tkc[i], ((uint8_t*)skey + (i * HKDS_MESSAGE_SIZE)), HKDS_MESSAGE_SIZE);
 	}
@@ -212,18 +208,15 @@ void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 
 void hkds_client_initialize_state(hkds_client_state* state, const uint8_t* edk, const uint8_t* did)
 {
-	size_t i;
-
 	/* copy the edk and ksn, and clear the key-cache members */
 	memcpy(state->edk, edk, HKDS_EDK_SIZE);
 	memcpy(state->ksn, did, HKDS_DID_SIZE);
 	memset(((uint8_t*)state->ksn + HKDS_DID_SIZE), 0x00, HKDS_TKC_SIZE);
 
-	for (i = 0; i < HKDS_CACHE_SIZE; ++i)
+	for (size_t i = 0; i < HKDS_CACHE_SIZE; ++i)
 	{
 		memset(state->tkc[i], 0x00, HKDS_MESSAGE_SIZE);
 	}
-
 
 	state->cache_empty = true;
 }

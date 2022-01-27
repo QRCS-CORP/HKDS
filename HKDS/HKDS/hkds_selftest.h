@@ -1,4 +1,4 @@
-/* 2020 Digital Freedom Defense Incorporated
+/* 2021 Digital Freedom Defense Incorporated
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
@@ -13,7 +13,7 @@
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on November 24, 2020
+ * Updated on December 9, 2021
  * Contact: develop@dfdef.com
  */
 
@@ -23,18 +23,11 @@
 #include "common.h"
 
 /**
-* \brief Tests the SHA3 digests, SHAKE, cSHAKE, and KMAC for correct operation.
-*
-* \return Returns true for success
-*/
-HKDS_EXPORT_API bool hkdstest_sha3_test();
-
-/**
 * \brief Runs the library self tests.
 * Tests the symmetric primitives with a set of known-answer tests.
 *
 * \return Returns true if all tests pass successfully
 */
-HKDS_EXPORT_API bool hkdstest_symmetric_selftest_run();
+HKDS_EXPORT_API bool hkds_selftest_symmetric_run(void);
 
 #endif

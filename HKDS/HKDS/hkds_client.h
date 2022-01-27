@@ -1,5 +1,5 @@
 
-/* 2020 Digital Freedom Defense Incorporated
+/* 2021 Digital Freedom Defense Incorporated
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
@@ -14,7 +14,7 @@
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on May 24, 2020
+ * Updated on December 9, 2021
  * Contact: develop@dfdef.com
  */
 
@@ -35,7 +35,7 @@ HKDS_EXPORT_API typedef struct
 } hkds_client_state;
 
 /**
-* \brief Decrypt an ecrypted token key sent by the server.
+* \brief Decrypt an encrypted token key sent by the server
 *
 * \param state [struct] The function state
 * \param etok [const][array] The encrypted token key
@@ -44,7 +44,7 @@ HKDS_EXPORT_API typedef struct
 HKDS_EXPORT_API bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, uint8_t* token);
 
 /**
-* \brief Encrypt a message to be sent to the server.
+* \brief Encrypt a message to be sent to the server
 *
 * \param state [struct] The function state
 * \param plaintext [const][array] The plaintext message
@@ -69,7 +69,7 @@ HKDS_EXPORT_API bool hkds_client_encrypt_message(hkds_client_state* state, const
 HKDS_EXPORT_API bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const uint8_t* plaintext, const uint8_t* data, size_t datalen, uint8_t* ciphertext);
 
 /**
-* \brief Initialize the state with the secret key and nonce.
+* \brief Initialize the state with the secret key and nonce
 *
 * \param state [struct] The function state
 * \param token [const][array] The secret token key array
@@ -77,7 +77,7 @@ HKDS_EXPORT_API bool hkds_client_encrypt_authenticate_message(hkds_client_state*
 HKDS_EXPORT_API void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token);
 
 /**
-* \brief Initialize the state with the embedded device key and device identity.
+* \brief Initialize the state with the embedded device key and device identity
 *
 * \param state [struct] The function state
 * \param edk [const][array] The embedded device key array

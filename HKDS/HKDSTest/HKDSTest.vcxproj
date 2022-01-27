@@ -176,9 +176,6 @@
     <ProjectReference Include="..\HKDS\HKDS.vcxproj">
       <Project>{e951e07c-a97e-4603-8656-beb4b18f532d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\QSC\QSC.vcxproj">
-      <Project>{7b7f8e47-0f7c-4273-a229-a7ab2a452ea9}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

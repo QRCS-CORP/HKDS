@@ -1,37 +1,33 @@
-/* The GPL version 3 License (GPLv3)
+/* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU General Public License as published by
+* it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-* GNU General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
 *
-* You should have received a copy of the GNU General Public License
+* You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the Rijndael Hash-based eXtension (RHX/RSX=eAES) symmetric block cipher.
-* Written by John G. Underhill
-* Updated on January 20, 2020
-* Contact: develop@vtdev.com */
+*/
+
+#ifndef QSC_POLY1305_H
+#define QSC_POLY1305_H
+
+#include "common.h"
 
 /**
 * \file poly1305.h
-* \brief <b>Poly1305 function definitions</b> \n
+* \brief Poly1305 function definitions \n
 * Contains the public api and documentation for the Poly1305 implementation.
 *
-* \author John Underhill
-* \date April 7, 2018
-*
-* <b>Poly1305 Examples</b> \n
+* Poly1305 Examples \n
 * \code
 *
 * uint8_t key[QSC_POLY1305_KEY_SIZE];
@@ -60,11 +56,6 @@
 * For usage examples, see poly1305_test.h
 */
 
-#ifndef QSC_POLY1305_H
-#define QSC_POLY1305_H
-
-#include "common.h"
-
 /*!
 * \def QSC_POLY1305_BLOCK_SIZE
 * \brief The natural block size of the message input in bytes
@@ -85,17 +76,17 @@
 
 /*! 
 * \struct qsc_poly1305_state
-* \brief Internal: contains the Poly1305 state
+* \brief Contains the Poly1305 internal state
 */
 QSC_EXPORT_API typedef struct qsc_poly1305_state
 {
-	uint32_t h[5];
-	uint32_t k[4];
-	uint32_t r[5];
-	uint32_t s[4];
-	uint8_t buf[QSC_POLY1305_BLOCK_SIZE];
-	size_t fnl;
-	size_t rmd;
+	uint32_t h[5];							/*!< The h parameter */
+	uint32_t k[4];							/*!< The k parameter */
+	uint32_t r[5];							/*!< The r parameter */
+	uint32_t s[4];							/*!< The s parameter */
+	uint8_t buf[QSC_POLY1305_BLOCK_SIZE];	/*!< The buffer parameter */
+	size_t fnl;								/*!< The fnl size */
+	size_t rmd;								/*!< The rmd size */
 } qsc_poly1305_state;
 
 
@@ -160,11 +151,11 @@ QSC_EXPORT_API void qsc_poly1305_update(qsc_poly1305_state* ctx, const uint8_t* 
 * \brief Verify a MAC code.
 * Tests the code against the message and returns MQC_STATUS_SUCCESS or MQC_STATUS_FAILURE.
 *
-* \param output: The output MAC code byte array to test
-* \param message: [const] The input message byte array
-* \param msglen: The number of input message bytes to process
+* \param code: [const] The MAC code byte array
+* \param message: [const] The message byte array
+* \param msglen: The number of message bytes to process
 * \param key: [const] The secret key byte array
 */
-QSC_EXPORT_API int qsc_poly1305_verify(const uint8_t* output, const uint8_t* message, size_t msglen, const uint8_t* key);
+QSC_EXPORT_API int32_t qsc_poly1305_verify(const uint8_t* code, const uint8_t* message, size_t msglen, const uint8_t* key);
 
 #endif

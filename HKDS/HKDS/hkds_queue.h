@@ -13,6 +13,7 @@
  *
  * Written by John G. Underhill
  * Written on November 20, 2020
+ * Updated on December 9, 2021
  * Contact: develop@dfdef.com
  */
 
@@ -43,68 +44,68 @@ typedef struct hkds_queue_message_queue
 hkds_queue_message_queue;
 
 /**
-* \brief Resets the queue context state.
+* \brief Resets the queue context state
 *
 * \param ctx [struct] The message queue state context
 */
 HKDS_EXPORT_API void hkds_queue_destroy(hkds_queue_message_queue* ctx);
 
 /**
-* \brief Flush the contents of the queue to a byte array.
+* \brief Flush the contents of the queue to a byte array
 *
 * \param ctx [struct] The message queue state context
 */
 HKDS_EXPORT_API void hkds_queue_flush(hkds_queue_message_queue* ctx, uint8_t* output);
 
 /**
-* \brief Initializes the queues stae context.
+* \brief Initializes the queues state context
 *
 * \param ctx [struct] The message queue state context
 */
 HKDS_EXPORT_API void hkds_queue_initialize(hkds_queue_message_queue* ctx, size_t depth, size_t width, uint8_t* tag);
 
 /**
-* \brief Removes an item from the queue and copies it to the output array.
+* \brief Removes an item from the queue and copies it to the output array
 *
 * \param ctx [struct] The message queue state context
 */
 HKDS_EXPORT_API void hkds_queue_pop(hkds_queue_message_queue* ctx, uint8_t* output, size_t outlen);
 
 /**
-* \brief Adds an item from the queue.
+* \brief Adds an item from the queue
 *
 * \param ctx [struct] The message queue state context
 */
 HKDS_EXPORT_API void hkds_queue_push(hkds_queue_message_queue* ctx, const uint8_t* output, size_t outlen);
 
 /**
-* \brief Returns true if the queue is full.
+* \brief Returns true if the queue is full
 *
 * \param ctx [struct] The message queue state context
 * \return [bool] The queue full status
 */
-HKDS_EXPORT_API bool hkds_queue_isfull(hkds_queue_message_queue* ctx);
+HKDS_EXPORT_API bool hkds_queue_isfull(const hkds_queue_message_queue* ctx);
 
 /**
-* \brief Returns true if the queue is empty.
+* \brief Returns true if the queue is empty
 *
 * \param ctx [struct] The message queue state context
 * \return [bool] The queue empty status
 */
-HKDS_EXPORT_API bool hkds_queue_isempty(hkds_queue_message_queue* ctx);
+HKDS_EXPORT_API bool hkds_queue_isempty(const hkds_queue_message_queue* ctx);
 
 /**
-* \brief Returns the number of items in the queue.
+* \brief Returns the number of items in the queue
 *
 * \param ctx [struct] The message queue state context
 * \return [size] The number of items
 */
-HKDS_EXPORT_API size_t hkds_queue_count(hkds_queue_message_queue* ctx);
+HKDS_EXPORT_API size_t hkds_queue_count(const hkds_queue_message_queue* ctx);
 
 /* block message export */
 
 /**
-* \brief Export a block of 8 messages to a 2-dimensional message queue.
+* \brief Export a block of 8 messages to a 2-dimensional message queue
 *
 * \param ctx [struct] The message queue state context
 * \param output [array2d] The 2d array receiving the messages; containing HKDS_CACHX8_DEPTH of items of array HKDS_MESSAGE_SIZE length
@@ -113,7 +114,7 @@ HKDS_EXPORT_API size_t hkds_queue_count(hkds_queue_message_queue* ctx);
 HKDS_EXPORT_API size_t hkds_queue_extract_block_x8(hkds_queue_message_queue* ctx, uint8_t output[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE]);
 
 /**
-* \brief Export 8 slots 8 blocks of messages (8x8) to a 3-dimensional message queue.
+* \brief Export 8 slots 8 blocks of messages (8x8) to a 3-dimensional message queue
 *
 * \param ctx [struct] The message queue state context
 * \param output [array3d] The 3d array receiving the messages; HKDS_PARALLEL_DEPTH slots, containing HKDS_CACHX64_DEPTH of items of array HKDS_MESSAGE_SIZE length
@@ -122,7 +123,7 @@ HKDS_EXPORT_API size_t hkds_queue_extract_block_x8(hkds_queue_message_queue* ctx
 HKDS_EXPORT_API size_t hkds_queue_extract_block_x64(hkds_queue_message_queue* ctx, uint8_t output[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE]);
 
 /**
-* \brief Serialize a set of messages to an array.
+* \brief Serialize a set of messages to an array
 *
 * \param ctx [struct] The message queue state context
 * \param stream [array] The array receiving the messages

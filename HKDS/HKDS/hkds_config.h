@@ -1,4 +1,4 @@
-/* 2020 Digital Freedom Defense Incorporated
+/* 2021 Digital Freedom Defense Incorporated
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
@@ -13,7 +13,7 @@
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on November 24, 2020
+ * Updated on December 9, 2021
  * Contact: develop@dfdef.com
  */
 
@@ -71,10 +71,10 @@ hkds_error_type;
 typedef enum hkds_message_type
 {
 	message_synchronize_token = 0x01,			/*!< Sent by the client INDICATING A token key received from the server failed an authentication check */
-	message_reinitialized_token	= 0x02,			/*!< The server’s [optional] response to the client token key rejection  */
+	message_reinitialized_token	= 0x02,			/*!< The serverï¿½s [optional] response to the client token key rejection  */
 	message_token_requests_exceeded = 0x03,		/*!< The server indicates the maximum number of token failures have occurred  */
 	message_remote_reset = 0x04,				/*!< The server sends a remote reset to the client terminal */
-	message_diagnostic = 0x05,					/*!< The server requests a diagnostic output from the terminal’s hardware components */
+	message_diagnostic = 0x05,					/*!< The server requests a diagnostic output from the terminalï¿½s hardware components */
 	message_reserved1 = 0x06,					/*!< Reseved message 1 */
 	message_reserved2 = 0x07,					/*!< Reseved message 2 */
 	message_reserved3 = 0x08,					/*!< Reseved message 3 */
@@ -402,16 +402,16 @@ hkds_message_type;
 */
 typedef struct
 {
-	hkds_packet_type packet_type;			/*!< The type of packet */
-	hkds_protocol_id protocol_id;			/*!< The protocol id */
-	uint8_t packet_sequence;				/*!< The packet sequence */
-	uint8_t packet_size;					/*!< The packet size including header */
+	hkds_packet_type flag;					/*!< The type of packet */
+	hkds_protocol_id protocol;				/*!< The protocol id */
+	uint8_t sequence;						/*!< The packet sequence */
+	uint8_t length;							/*!< The packet size including header */
 }
 hkds_packet_header;
 
 /*! \struct hkds_client_message_request
-* The client’s encrypted request message packet. 
-* This packet includes 16 bytes of encrypted message and the client’s key serial number, 
+* The clientï¿½s encrypted request message packet. 
+* This packet includes 16 bytes of encrypted message and the clientï¿½s key serial number, 
 * and may include the authentication tag as indicated by the Protocol ID flag.
 */
 typedef struct
@@ -435,7 +435,7 @@ typedef struct
 hkds_client_token_request;
 
 /*! \struct hkds_server_message_response
-* The server’s plaintext message response, typically a verification response sent to the client terminal 
+* The serverï¿½s plaintext message response, typically a verification response sent to the client terminal 
 * that indicates the success or failure of a transaction request.
 */
 typedef struct
@@ -446,7 +446,7 @@ typedef struct
 hkds_server_message_response;
 
 /*! \struct hkds_server_token_response
-* The server’s response to a token request. 
+* The serverï¿½s response to a token request. 
 * This packet contains an encrypted token (ETOK) sent from the server to the client device. 
 */
 typedef struct

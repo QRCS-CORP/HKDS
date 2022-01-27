@@ -1,37 +1,33 @@
-/* The GPL version 3 License (GPLv3)
+/* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU General Public License as published by
+* it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-* GNU General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
 *
-* You should have received a copy of the GNU General Public License
+* You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the Elliptic Curve Digital Signature Algorithm
-* Written by John G. Underhill
-* Updated on August 30, 2020
-* Contact: develop@vtdev.com 
 */
+
+#ifndef QSC_ECDSA_H
+#define QSC_ECDSA_H
+
+#include "common.h"
 
 /**
 * \file ecdsa.h
+* \brief Contains the primary public api for the ECDSA asymmetric signature scheme implementation
 * \date September 21, 2020
 *
-* \brief <b>The ECDSA API definitions</b> \n
-* Contains the primary public api for the ECDSA asymmetric signature scheme implementation.
-*
-* \para <b>Example</b> \n
+* \par Example
 * \code
 * // An example of key-pair creation, encryption, and decryption
 * #define MSGLEN 32
@@ -56,23 +52,13 @@
 * \endcode
 *
 * Reference implementations:
-* LibSodium by Frank Denis
-* https://github.com/jedisct1/libsodium
+* LibSodium by Frank Denis <a href="https://github.com/jedisct1/libsodium" /a>
+* curve25519-donna by Adam Langley <a href="https://github.com/agl/curve25519-donna" /a>
+* NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe <a href="https://nacl.cr.yp.to" /a>
 *
-* curve25519-donna by Adam Langley
-* https://github.com/agl/curve25519-donna
-*
-* NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe
-* https://nacl.cr.yp.to
-*
-* Rewritten for Misra compliance and optimizations by John G. Underhill
+* Rewritten for Misra compliance and library integration by John G. Underhill
 * September 21, 2020
 */
-
-#ifndef QSC_ECDSA_H
-#define QSC_ECDSA_H
-
-#include "common.h"
 
 #if defined(QSC_ECDSA_S1EC25519)
 
@@ -95,7 +81,7 @@
 #	define QSC_ECDSA_PUBLICKEY_SIZE 32
 
 #else
-#	error No ECDSA implementation is defined, check common.h!
+#	error "The ECDSA parameter set is invalid!"
 #endif
 
 /*!
@@ -117,9 +103,9 @@
 *
 * \param publickey: Pointer to the public verification-key array
 * \param privatekey: Pointer to the private signature-key array
-* \param seed: Pointer to the random 32-byte seed array
+* \param seed: [const] Pointer to the random 32-byte seed array
 */
-QSC_EXPORT_API void qsc_ecdsa_generate_seeded_keypair(uint8_t* publickey, uint8_t* privatekey, uint8_t* seed);
+QSC_EXPORT_API void qsc_ecdsa_generate_seeded_keypair(uint8_t* publickey, uint8_t* privatekey, const uint8_t* seed);
 
 /**
 * \brief Generates a ECDSA public/private key-pair.
@@ -130,7 +116,7 @@ QSC_EXPORT_API void qsc_ecdsa_generate_seeded_keypair(uint8_t* publickey, uint8_
 * \param privatekey: Pointer to the private signature-key array
 * \param rng_generate: Pointer to the random generator
 */
-QSC_EXPORT_API void qsc_ecdsa_generate_keypair(uint8_t* publickey, uint8_t* privatekey, void (*rng_generate)(uint8_t*, size_t));
+QSC_EXPORT_API void qsc_ecdsa_generate_keypair(uint8_t* publickey, uint8_t* privatekey, bool (*rng_generate)(uint8_t*, size_t));
 
 /**
 * \brief Takes the message as input and returns an array containing the signature followed by the message.
@@ -142,7 +128,6 @@ QSC_EXPORT_API void qsc_ecdsa_generate_keypair(uint8_t* publickey, uint8_t* priv
 * \param message: Pointer to the message array
 * \param msglen: The message length
 * \param privatekey: [const] Pointer to the private signature-key array
-* \param rng_generate: Pointer to the random generator
 */
 QSC_EXPORT_API void qsc_ecdsa_sign(uint8_t* signedmsg, size_t* smsglen, const uint8_t* message, size_t msglen, const uint8_t* privatekey);
 

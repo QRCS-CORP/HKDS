@@ -1,6 +1,6 @@
 #include "timer.h"
 
-clock_t hkdstest_timer_start()
+clock_t hkdstest_timer_start(void)
 {
 	clock_t start;
 
@@ -15,7 +15,7 @@ uint64_t hkdstest_timer_elapsed(clock_t start)
 	uint64_t msec;
 
 	diff = clock() - start;
-	msec = (diff * 1000) / CLOCKS_PER_SEC;
+	msec = ((uint64_t)diff * 1000) / CLOCKS_PER_SEC;
 
 	return msec;
 }

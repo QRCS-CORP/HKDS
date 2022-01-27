@@ -15,24 +15,24 @@
 * \brief Tests the HKDS server implementations performance.
 * Tests the server key generation, extraction, and decryption functions for performance timing.
 */
-void hkdstest_benchmark_hkds_server_run();
+void hkdstest_benchmark_hkds_server_run(void);
 
 /**
 * \brief Tests the HKDS client encryption performance.
 * Tests the clients encryption function for performance timing.
 */
-void hkdstest_benchmark_hkds_client_run();
+void hkdstest_benchmark_hkds_client_run(void);
 
 /**
 * \brief Tests the KMAC implementations performance.
 * Tests the Keccak MACs for performance timing.
 */
-void hkdstest_benchmark_kmac_run();
+void hkdstest_benchmark_kmac_run(void);
 
 /**
 * \brief Tests the SHAKE implementations performance.
 * Tests the various SHAKE implementations for performance timing.
 */
-void hkdstest_benchmark_shake_run();
+void hkdstest_benchmark_shake_run(void);
 
 #endif

@@ -1,39 +1,37 @@
-/* The GPL version 3 License (GPLv3)
+/* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU General Public License as published by
+* it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-* GNU General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
 *
-* You should have received a copy of the GNU General Public License
+* You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the Rijndael Hash-based eXtension (RHX/RSX=eAES) symmetric block cipher.
-* Written by John G. Underhill
-* Updated on January 20, 2020
-* Contact: develop@vtdev.com */
+*/
+
+#ifndef QSC_CHACHA20_H
+#define QSC_CHACHA20_H
+
+#include "common.h"
 
 /**
 * \file chacha.h
-* \brief <b>ChaCha20 header definition</b> \n
-* Contains the public api and documentation for the ChaChaP20 implementation.
+* \brief Contains the public api and documentation for the ChaChaPoly20 implementation
 * Key sizes are 128- and 256-bit (16 and 32 byte).
 * The nonce must be 64-bits in length (8 bytes).
 *
 * \author John Underhill
 * \date April 7, 2018
 *
-* <b>ChaCha encryption example</b> \n
+* ChaCha encryption example \n
 * \code
 *
 * size_t const MSG_LEN = 1024;
@@ -51,11 +49,6 @@
 * Implementation contains AVX, AVX2, and AVX512 intrinsics support.
 * \remarks For usage examples, see chacha_test.h
 */
-
-#ifndef QSC_CHACHA20_H
-#define QSC_CHACHA20_H
-
-#include "common.h"
 
 /*!
 * \def QSC_CHACHA_BLOCK_SIZE
@@ -93,7 +86,7 @@
 */
 QSC_EXPORT_API typedef struct
 {
-	uint32_t state[16];
+	uint32_t state[16];	/*!< The internal state array */
 } qsc_chacha_state;
 
 /*! 
@@ -128,9 +121,7 @@ QSC_EXPORT_API void qsc_chacha_dispose(qsc_chacha_state* ctx);
 * \warning The nonce array must be 8 bytes bytes in length
 *
 * \param ctx: [struct] The cipher state structure
-* \param key: [const][struct] The secret key and nonce structure
-* \param keylen: The length of the key array
-* \param key: The 16 byte secret nonce byte array
+* \param keyparams: [const][struct] The secret key and nonce structure
 */
 QSC_EXPORT_API void qsc_chacha_initialize(qsc_chacha_state* ctx, const qsc_chacha_keyparams* keyparams);
 
