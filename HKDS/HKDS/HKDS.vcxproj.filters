@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Support">
+      <UniqueIdentifier>{67036be3-ed51-4d33-b8e7-33a334ff8136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Support">
+      <UniqueIdentifier>{0f7aacc3-6c59-4be4-b7d8-a7d9e3d2e439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hkds_client.h">
@@ -36,6 +42,12 @@
     <ClInclude Include="hkds_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="keccak.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hkds_client.c">
@@ -52,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="hkds_selftest.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="keccak.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.c">
+      <Filter>Source Files\Support</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,20 +1,21 @@
-/* 2021 Digital Freedom Defense Incorporated
+
+/* 2024 Quantum Resistant Cryptographic Solutions Corporation
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
- * the property of Digital Freedom Defense Incorporated.
+ * the property of Quantum Resistant Cryptographic Solutions Incorporated.
  * The intellectual and technical concepts contained
- * herein are proprietary to Digital Freedom Defense Incorporated
+ * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
  * and its suppliers and may be covered by U.S. and Foreign Patents,
  * patents in process, and are protected by trade secret or copyright law.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from Digital Freedom Defense Incorporated.
+ * from Quantum Resistant Cryptographic Solutions Incorporated.
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on December 9, 2021
- * Contact: develop@dfdef.com
+ * Updated on May 30, 2024
+ * Contact: develop@qrcs.ca
  */
 
 #ifndef HKDS_SERVER_H
@@ -163,7 +164,7 @@ HKDS_EXPORT_API void hkds_server_encrypt_token_x8(hkds_server_x8_state* state,
 * \param did [array2d][const] A set of device unique identity strings
 * \param edk [array2d][output] A set of embedded device key output array
 */
-HKDS_EXPORT_API void hkds_server_generate_edk_x8(hkds_server_x8_state* state, 
+HKDS_EXPORT_API void hkds_server_generate_edk_x8(const hkds_server_x8_state* state, 
 	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE]);
 
@@ -177,6 +178,8 @@ HKDS_EXPORT_API void hkds_server_generate_edk_x8(hkds_server_x8_state* state,
 HKDS_EXPORT_API void hkds_server_initialize_state_x8(hkds_server_x8_state* state, 
 	hkds_master_key* mdk, 
 	const uint8_t ksn[HKDS_CACHX8_DEPTH][HKDS_KSN_SIZE]);
+
+#if defined(SYSTEM_OPENMP)
 
 /* Parallel and SIMD vectorized x64 api */
 
@@ -227,7 +230,7 @@ HKDS_EXPORT_API void hkds_server_encrypt_token_x64(hkds_server_x8_state state[HK
 * \param did [array3d][const] A set of device unique identity strings
 * \param edk [array3d][output] A set of embedded device key output array
 */
-HKDS_EXPORT_API void hkds_server_generate_edk_x64(hkds_server_x8_state state[HKDS_PARALLEL_DEPTH],
+HKDS_EXPORT_API void hkds_server_generate_edk_x64(const hkds_server_x8_state state[HKDS_PARALLEL_DEPTH],
 	const uint8_t did[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
 	uint8_t edk[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE]);
 
@@ -242,4 +245,5 @@ HKDS_EXPORT_API void hkds_server_initialize_state_x64(hkds_server_x8_state state
 	hkds_master_key mdk[HKDS_PARALLEL_DEPTH],
 	const uint8_t ksn[HKDS_PARALLEL_DEPTH][HKDS_CACHX8_DEPTH][HKDS_KSN_SIZE]);
 
+#endif
 #endif

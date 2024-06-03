@@ -1,20 +1,21 @@
-/* 2021 Digital Freedom Defense Incorporated
+
+/* 2024 Quantum Resistant Cryptographic Solutions Corporation
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
- * the property of Digital Freedom Defense Incorporated.
+ * the property of Quantum Resistant Cryptographic Solutions Incorporated.
  * The intellectual and technical concepts contained
- * herein are proprietary to Digital Freedom Defense Incorporated
+ * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
  * and its suppliers and may be covered by U.S. and Foreign Patents,
  * patents in process, and are protected by trade secret or copyright law.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from Digital Freedom Defense Incorporated.
+ * from Quantum Resistant Cryptographic Solutions Incorporated.
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on December 9, 2021
- * Contact: develop@dfdef.com
+ * Updated on May 30, 2024
+ * Contact: develop@qrcs.ca
  */
 
 #ifndef HKDS_CONFIG_H
@@ -84,6 +85,18 @@ hkds_message_type;
 /*** Modifiable values: ***/
 
 /*!
+\def HKDS_KECCAK_DOUBLE_ROUNDS
+* HKDS runs using Keccak with 48 rounds instead of the standard 24
+*/
+//#define HKDS_KECCAK_DOUBLE_ROUNDS
+
+/*!
+\def HKDS_KECCAK_HALF_ROUNDS
+* HKDS runs using Keccak with 12 rounds instead of the standard 24
+*/
+//#define HKDS_KECCAK_HALF_ROUNDS
+
+/*!
 \def HKDS_SHAKE_128
 * Implement the SHAKE-128 version of HKDS
 */
@@ -93,13 +106,13 @@ hkds_message_type;
 \def HKDS_SHAKE_256
 * Implement the SHAKE-256 version of HKDS
 */
-//#define HKDS_SHAKE_256
+#define HKDS_SHAKE_256
 
 /*!
 \def HKDS_SHAKE_512
 * Implement the SHAKE-512 version of HKDS
 */
-#define HKDS_SHAKE_512
+//#define HKDS_SHAKE_512
 
 /*!
 \def HKDS_CACHE_MULTIPLIER

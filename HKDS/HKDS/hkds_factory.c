@@ -1,41 +1,41 @@
 #include "hkds_factory.h"
-#include "../QSC/memutils.h"
+#include "utils.h"
 
 /* header to raw packet */
 
 void hkds_factory_serialize_packet_header(uint8_t* output, const hkds_packet_header* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_HEADER_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_HEADER_SIZE);
 }
 
 void hkds_factory_serialize_client_message(uint8_t* output, const hkds_client_message_request* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
 }
 
 void hkds_factory_serialize_client_token(uint8_t* output, const hkds_client_token_request* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
 }
 
 void hkds_factory_serialize_server_message(uint8_t* output, const hkds_server_message_response* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
 }
 
 void hkds_factory_serialize_server_token(uint8_t* output, const hkds_server_token_response* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
 }
 
 void hkds_factory_serialize_administrative_message(uint8_t* output, const hkds_administrative_message* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_ADMIN_MESSAGE_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_ADMIN_MESSAGE_SIZE);
 }
 
 void hkds_factory_serialize_error_message(uint8_t* output, const hkds_error_message* header)
 {
-	qsc_memutils_copy(output, (const uint8_t*)header, HKDS_ERROR_MESSAGE_SIZE);
+	utils_memory_copy(output, (const uint8_t*)header, HKDS_ERROR_MESSAGE_SIZE);
 }
 
 /* raw packet to header */
@@ -44,7 +44,7 @@ hkds_packet_header hkds_factory_extract_packet_header(const uint8_t* input)
 {
 	hkds_packet_header hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_HEADER_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_HEADER_SIZE);
 
 	return hdr;
 }
@@ -53,7 +53,7 @@ hkds_client_message_request hkds_factory_extract_client_message(const uint8_t* i
 {
 	hkds_client_message_request hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
 
 	return hdr;
 }
@@ -62,7 +62,7 @@ hkds_client_token_request hkds_factory_extract_client_token(const uint8_t* input
 {
 	hkds_client_token_request hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
 
 	return hdr;
 }
@@ -71,7 +71,7 @@ hkds_server_message_response hkds_factory_extract_server_message(const uint8_t* 
 {
 	hkds_server_message_response hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
 
 	return hdr;
 }
@@ -80,7 +80,7 @@ hkds_server_token_response hkds_factory_extract_server_token(const uint8_t* inpu
 {
 	hkds_server_token_response hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
 
 	return hdr;
 }
@@ -89,7 +89,7 @@ hkds_administrative_message hkds_factory_extract_administrative_message(const ui
 {
 	hkds_administrative_message hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_ADMIN_MESSAGE_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_ADMIN_MESSAGE_SIZE);
 
 	return hdr;
 }
@@ -98,7 +98,7 @@ hkds_error_message hkds_factory_extract_error_message(const uint8_t* input)
 {
 	hkds_error_message hdr = { 0 };
 
-	qsc_memutils_copy((uint8_t*)&hdr, input, HKDS_ERROR_MESSAGE_SIZE);
+	utils_memory_copy((uint8_t*)&hdr, input, HKDS_ERROR_MESSAGE_SIZE);
 
 	return hdr;
 }
@@ -118,12 +118,12 @@ hkds_client_message_request hkds_factory_create_client_message_request(const uin
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.ksn, ksn, sizeof(hdr.ksn));
-	qsc_memutils_copy(hdr.message, message, sizeof(hdr.message));
+	utils_memory_copy(hdr.ksn, ksn, sizeof(hdr.ksn));
+	utils_memory_copy(hdr.message, message, sizeof(hdr.message));
 
 	if (tag != NULL)
 	{
-		qsc_memutils_copy(hdr.tag, tag, sizeof(hdr.tag));
+		utils_memory_copy(hdr.tag, tag, sizeof(hdr.tag));
 	}
 
 	return hdr;
@@ -142,7 +142,7 @@ hkds_client_token_request hkds_factory_create_client_token_request(const uint8_t
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.ksn, ksn, sizeof(hdr.ksn));
+	utils_memory_copy(hdr.ksn, ksn, sizeof(hdr.ksn));
 
 	return hdr;
 }
@@ -160,7 +160,7 @@ hkds_server_message_response hkds_factory_create_server_message_response(const u
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.message, message, sizeof(hdr.message));
+	utils_memory_copy(hdr.message, message, sizeof(hdr.message));
 
 	return hdr;
 }
@@ -178,7 +178,7 @@ hkds_server_token_response hkds_factory_create_server_token_reponse(const uint8_
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.etok, etok, sizeof(hdr.etok));
+	utils_memory_copy(hdr.etok, etok, sizeof(hdr.etok));
 
 	return hdr;
 }
@@ -196,7 +196,7 @@ hkds_administrative_message hkds_factory_create_administrative_message(const uin
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.message, message, sizeof(hdr.message));
+	utils_memory_copy(hdr.message, message, sizeof(hdr.message));
 
 	return hdr;
 }
@@ -214,7 +214,7 @@ hkds_error_message hkds_factory_create_error_message(const uint8_t* message, hkd
 	};
 
 	hdr.header = hdp;
-	qsc_memutils_copy(hdr.message, message, sizeof(hdr.message));
+	utils_memory_copy(hdr.message, message, sizeof(hdr.message));
 
 	return hdr;
 }

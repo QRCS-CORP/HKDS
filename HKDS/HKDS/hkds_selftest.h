@@ -1,20 +1,21 @@
-/* 2021 Digital Freedom Defense Incorporated
+
+/* 2024 Quantum Resistant Cryptographic Solutions Corporation
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
- * the property of Digital Freedom Defense Incorporated.
+ * the property of Quantum Resistant Cryptographic Solutions Incorporated.
  * The intellectual and technical concepts contained
- * herein are proprietary to Digital Freedom Defense Incorporated
+ * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
  * and its suppliers and may be covered by U.S. and Foreign Patents,
  * patents in process, and are protected by trade secret or copyright law.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from Digital Freedom Defense Incorporated.
+ * from Quantum Resistant Cryptographic Solutions Incorporated.
  *
  * Written by John G. Underhill
  * Written on March 29, 2020
- * Updated on December 9, 2021
- * Contact: develop@dfdef.com
+ * Updated on May 30, 2024
+ * Contact: develop@qrcs.ca
  */
 
 #ifndef HKDS_SELFTEST_H

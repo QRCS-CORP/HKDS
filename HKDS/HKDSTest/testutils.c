@@ -16,7 +16,7 @@ char qsctest_get_char()
 	return res;
 }
 
-#if defined(QSC_SYSTEM_SOCKETS_WINDOWS)
+#if defined(SYSTEM_SOCKETS_WINDOWS)
 char qsctest_get_wait()
 {
 	char c;

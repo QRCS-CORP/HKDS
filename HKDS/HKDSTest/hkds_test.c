@@ -2,8 +2,7 @@
 #include "testutils.h"
 #include "../HKDS/hkds_client.h"
 #include "../HKDS/hkds_server.h"
-#include "../QSC/csp.h"
-#include "../QSC/intutils.h"
+#include "../HKDS/utils.h"
 
 #define HKDSTEST_CYCLES_COUNT 1000
 
@@ -41,7 +40,7 @@ bool hkdstest_cycle_test()
 
 	/* generate the master derivation key {BDK, BTK, MID} */
 	hkds_master_key mdk;
-	hkds_server_generate_mdk(&qsc_csp_generate, &mdk, kid);
+	hkds_server_generate_mdk(&utils_seed_generate, &mdk, kid);
 
 	/* generate the clients embedded key */
 	hkds_server_generate_edk(mdk.bdk, did, edk);
@@ -73,7 +72,7 @@ bool hkdstest_cycle_test()
 	/* server decrypts the message */
 	hkds_server_decrypt_message(&ss, cpt, dec);
 
-	if (qsc_intutils_are_equal8(msg, dec, sizeof(msg)) == false)
+	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
 		qsctest_print_line("hkds_cycle_test: decryption authentication failure! -HCT2");
 		res = false;
@@ -145,7 +144,7 @@ bool hkdstest_kat_test()
 	/* client requests the token key from server */
 	hkds_server_encrypt_token(&ss, toke);
 
-	if (qsc_intutils_are_equal8(toke, tokm, sizeof(toke)) == false)
+	if (utils_memory_are_equal(toke, tokm, sizeof(toke)) == false)
 	{
 		qsctest_print_line("hkds_kat_test: token does not match expected answer! -HKT1");
 		res = false;
@@ -164,7 +163,7 @@ bool hkdstest_kat_test()
 	/* client encrypts a message */
 	hkds_client_encrypt_message(&cs, msg, cpt);
 
-	if (qsc_intutils_are_equal8(cpt, exp, sizeof(cpt)) == false)
+	if (utils_memory_are_equal(cpt, exp, sizeof(cpt)) == false)
 	{
 		qsctest_print_line("hkds_kat_test: ciphertext does not match expected answer! -HKT3");
 		res = false;
@@ -173,7 +172,7 @@ bool hkdstest_kat_test()
 	/* server decrypts the message */
 	hkds_server_decrypt_message(&ss, cpt, dec);
 
-	if (qsc_intutils_are_equal8(msg, dec, sizeof(msg)) == false)
+	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
 		qsctest_print_line("hkds_kat_test: message decryption failure! -HKT4");
 		res = false;
@@ -252,7 +251,7 @@ bool hkdstest_katae_test()
 	/* client encrypts a message */
 	hkds_client_encrypt_authenticate_message(&cs, msg, ad, sizeof(ad), cpt);
 
-	if (qsc_intutils_are_equal8(cpt, exp, sizeof(cpt)) == false)
+	if (utils_memory_are_equal(cpt, exp, sizeof(cpt)) == false)
 	{
 		qsctest_print_line("hkds_katae_test: ciphertext does not match expected answer! -HKA2");
 		res = false;
@@ -265,7 +264,7 @@ bool hkdstest_katae_test()
 		res = false;
 	}
 
-	if (qsc_intutils_are_equal8(msg, dec, sizeof(msg)) == false)
+	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
 		qsctest_print_line("hkds_katae_test: decrypted output does not match expected answer! -HKA4");
 		res = false;
@@ -351,7 +350,7 @@ bool hkdstest_monte_carlo_test()
 		/* server decrypts the message */
 		hkds_server_decrypt_message(&ss, cpt, dec);
 
-		if (qsc_intutils_are_equal8(msg, dec, sizeof(msg)) == false)
+		if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 		{
 			qsctest_print_line("monte_carlo_test: decrypted output does not match expected answer! -HMC2");
 			res = false;
@@ -364,7 +363,7 @@ bool hkdstest_monte_carlo_test()
 		}
 	}
 
-	if (qsc_intutils_are_equal8(exp, mres, sizeof(exp)) == false)
+	if (utils_memory_are_equal(exp, mres, sizeof(exp)) == false)
 	{
 		qsctest_print_line("monte_carlo_test: monte carlo output does not match expected answer! -HMC3");
 		res = false;
@@ -396,7 +395,7 @@ bool hkdstest_stress_test()
 
 	/* generate the master derivation key {BDK, BTK, MID} */
 	hkds_master_key mdk;
-	hkds_server_generate_mdk(&qsc_csp_generate, &mdk, kid);
+	hkds_server_generate_mdk(&utils_seed_generate, &mdk, kid);
 
 	/* generate the clients embedded key */
 	hkds_server_generate_edk(mdk.bdk, did, edk);
@@ -435,7 +434,7 @@ bool hkdstest_stress_test()
 		/* server decrypts the message */
 		hkds_server_decrypt_message(&ss, cpt, dec);
 
-		if (qsc_intutils_are_equal8(msg, dec, sizeof(msg)) == false)
+		if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 		{
 			qsctest_print_line("hkds_stress_test: decrypted output does not match expected answer! -HST2");
 			res = false;
@@ -488,7 +487,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	/* generate a set of random messages */
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		qsc_csp_generate(msgp[i], HKDS_MESSAGE_SIZE);
+		utils_seed_generate(msgp[i], HKDS_MESSAGE_SIZE);
 	}
 
 	/* set a common master key */
@@ -538,7 +537,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
+		if (utils_memory_are_equal(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
 		{
 			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HSE1");
 			res = false;
@@ -572,7 +571,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HSE2");
 			res = false;
@@ -584,7 +583,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HSE3");
 			res = false;
@@ -595,6 +594,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	return res;
 }
 
+#if defined(SYSTEM_OPENMP)
 bool hkdstest_parallel_encrypt_equivalence_test()
 {
 	const uint8_t PID = 0x10;
@@ -641,7 +641,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	/* generate a set of random messages */
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		qsc_csp_generate(msgp[i], HKDS_MESSAGE_SIZE);
+		utils_seed_generate(msgp[i], HKDS_MESSAGE_SIZE);
 	}
 
 	/* set a common master key */
@@ -702,7 +702,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	{
 		for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
 		{
-			if (qsc_intutils_are_equal8(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
+			if (utils_memory_are_equal(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
 			{
 				qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HPE1");
 				res = false;
@@ -742,7 +742,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HPE3");
 			res = false;
@@ -764,7 +764,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	{
 		for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
 		{
-			if (qsc_intutils_are_equal8(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
+			if (utils_memory_are_equal(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
 			{
 				qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HPE4");
 				res = false;
@@ -775,6 +775,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 
 	return res;
 }
+#endif
 
 bool hkdstest_simd_authencrypt_equivalence_test()
 {
@@ -829,7 +830,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	/* generate a set of random messages */
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		qsc_csp_generate(msgp[i], HKDS_MESSAGE_SIZE);
+		utils_seed_generate(msgp[i], HKDS_MESSAGE_SIZE);
 	}
 
 	/* set a common master key */
@@ -879,7 +880,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
+		if (utils_memory_are_equal(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
 		{
 			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: parallel token encryption failure! -HSA1");
 			res = false;
@@ -918,7 +919,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: sequential message decryption failure! -HSA3");
 			res = false;
@@ -930,7 +931,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: parallel message decryption failure! -HSA4");
 			res = false;
@@ -948,6 +949,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	return res;
 }
 
+#if defined(SYSTEM_OPENMP)
 bool hkdstest_parallel_authencrypt_equivalence_test()
 {
 	const uint8_t PID = 0x10;
@@ -1003,7 +1005,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	/* generate a set of random messages */
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		qsc_csp_generate(msgp[i], HKDS_MESSAGE_SIZE);
+		utils_seed_generate(msgp[i], HKDS_MESSAGE_SIZE);
 	}
 
 	/* set a common master key */
@@ -1061,7 +1063,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	{
 		for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
 		{
-			if (qsc_intutils_are_equal8(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
+			if (utils_memory_are_equal(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
 			{
 				qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel token encryption failure! -HAE1");
 				res = false;
@@ -1101,7 +1103,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 
 	for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
 	{
-		if (qsc_intutils_are_equal8(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
+		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
 			qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: sequential message decryption failure! -HAE3");
 			res = false;
@@ -1126,7 +1128,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	{
 		for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
 		{
-			if (qsc_intutils_are_equal8(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
+			if (utils_memory_are_equal(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
 			{
 				qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel message decryption failure! -HAE4");
 				res = false;
@@ -1144,6 +1146,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 
 	return res;
 }
+#endif
 
 void hkdstest_test_run()
 {
@@ -1210,6 +1213,8 @@ void hkdstest_test_run()
 		qsctest_print_line("Failure! Failed the HKDS SIMD authentication and encryption equivalence test.");
 	}
 
+#if defined(SYSTEM_OPENMP)
+
 	if (hkdstest_parallel_encrypt_equivalence_test() == true)
 	{
 		qsctest_print_line("Success! Passed the HKDS parallel encryption equivalence test.");
@@ -1227,4 +1232,6 @@ void hkdstest_test_run()
 	{
 		qsctest_print_line("Failure! Failed the HKDS parallel authentication and encryption equivalence test.");
 	}
+
+#endif
 }
