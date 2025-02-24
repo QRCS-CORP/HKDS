@@ -6,9 +6,10 @@ It is faster, stronger, and more extendable, and could be applied to other simil
 A complete specification is provided.
 
 ## License
+Written by John G. Underhill, under the QRCS-PL license, see the included license file for details.
 This project's code is copyrighted, and the mechanism is patent pending.
 Not to be redistributed without the author's expressed written permission.
-All rights reserved by Digital Freedom Defense Inc. 2021.
+All rights reserved by QRCS Corp. 2025.
 
 ## Disclaimer
 This project contains strong cryptography, before downloading the source files, 
