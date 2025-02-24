@@ -1,5 +1,5 @@
 # HKDS
-##Heirarchal symmetric Key Distribution System
+## Heirarchal symmetric Key Distribution System
 
 An alternative to the DUKPT symmetric key system that uses Keccak.
 It is faster, stronger, and more extendable, and could be applied to other similar systems that require a distributed key system.
