@@ -48,6 +48,9 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files\Support</Filter>
     </ClInclude>
+    <ClInclude Include="doxymain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hkds_client.c">

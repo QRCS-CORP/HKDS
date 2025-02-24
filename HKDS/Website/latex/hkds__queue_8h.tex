@@ -1,0 +1,277 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/hkds\+\_\+queue.h File Reference}
+\hypertarget{hkds__queue_8h}{}\label{hkds__queue_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_queue.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_queue.h}}
+
+
+This file contains the HKDS queue definitions.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+{\ttfamily \#include "{}hkds\+\_\+config.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structhkds__queue__state}{hkds\+\_\+queue\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em Contains the queue context state. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em Contains the HKDS message queue context state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{hkds__queue_8h_ad5642a918b2736eddf2c10c9301f6ebf}{HKDS\+\_\+\+MESSAGE\+\_\+\+QUEUE\+\_\+\+TAG\+\_\+\+SIZE}}~16
+\item 
+\#define \mbox{\hyperlink{hkds__queue_8h_a31dc79f26211adc8ed9d987f0d7ee9ab}{HKDS\+\_\+\+QUEUE\+\_\+\+ALIGNMENT}}~64
+\item 
+\#define \mbox{\hyperlink{hkds__queue_8h_ad68393adc49f85e093da14fbdde2cd72}{HKDS\+\_\+\+QUEUE\+\_\+\+MAX\+\_\+\+DEPTH}}~64
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{hkds__queue_8h_aa8528f2439c371c2a9876431a5bb4e7d}\label{hkds__queue_8h_aa8528f2439c371c2a9876431a5bb4e7d} 
+typedef HKDS\+\_\+\+EXPORT\+\_\+\+API struct hkds\+\_\+queue\+\_\+state {\bfseries hkds\+\_\+queue\+\_\+state}
+\item 
+\Hypertarget{hkds__queue_8h_a53f9a48d5e270c9a70911247b9a04192}\label{hkds__queue_8h_a53f9a48d5e270c9a70911247b9a04192} 
+typedef struct hkds\+\_\+message\+\_\+queue\+\_\+state {\bfseries hkds\+\_\+message\+\_\+queue\+\_\+state}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{hkds__queue_8h_aa99b8ccfa0732d182c3a2aafa5fa5195}{hkds\+\_\+message\+\_\+queue\+\_\+destroy}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx)
+\begin{DoxyCompactList}\small\item\em Resets the queue context state. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{hkds__queue_8h_afbc3d254e35e2cf1aaca213e87df3bf2}{hkds\+\_\+message\+\_\+queue\+\_\+flush}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, uint8\+\_\+t \texorpdfstring{$\ast$}{*}output)
+\begin{DoxyCompactList}\small\item\em Flush the contents of the queue to a byte array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{hkds__queue_8h_a20658c9a7905355e125798eeb34d9e08}{hkds\+\_\+message\+\_\+queue\+\_\+initialize}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, size\+\_\+t depth, size\+\_\+t width, uint8\+\_\+t \texorpdfstring{$\ast$}{*}tag)
+\begin{DoxyCompactList}\small\item\em Initializes the queues state context. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{hkds__queue_8h_a1fbcd8156c28b7f615f74e5b32fbbbd5}{hkds\+\_\+message\+\_\+queue\+\_\+pop}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, size\+\_\+t outlen)
+\begin{DoxyCompactList}\small\item\em Removes an item from the queue and copies it to the output array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{hkds__queue_8h_a5d45cdea7d0ae157c1256667af8d1ed3}{hkds\+\_\+message\+\_\+queue\+\_\+push}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}inpput, size\+\_\+t inplen)
+\begin{DoxyCompactList}\small\item\em Adds an item from the queue. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{hkds__queue_8h_a4f14d041e6d0f2f4d5f6208be6984ca3}{hkds\+\_\+message\+\_\+queue\+\_\+full}} (const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx)
+\begin{DoxyCompactList}\small\item\em Returns true if the queue is full. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{hkds__queue_8h_a92c87210002384cd262730332869b39d}{hkds\+\_\+message\+\_\+queue\+\_\+empty}} (const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx)
+\begin{DoxyCompactList}\small\item\em Returns true if the queue is empty. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{hkds__queue_8h_a146d8272469a0466e7ad20ecc8ce9d6e}{hkds\+\_\+message\+\_\+queue\+\_\+count}} (const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx)
+\begin{DoxyCompactList}\small\item\em Returns the number of items in the queue. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{hkds__queue_8h_a6a38de3e171d2cb8a1ec46039038980e}{hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+block\+\_\+x8}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, uint8\+\_\+t output\mbox{[}\mbox{\hyperlink{hkds__config_8h_a8ff92ab9ce1b32682f248fd091258c7e}{HKDS\+\_\+\+CACHX8\+\_\+\+DEPTH}}\mbox{]}\mbox{[}\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Export a block of 8 messages to a 2-\/dimensional message queue. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{hkds__queue_8h_aa6061ed6f998701ee32c279b21afe3fb}{hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+block\+\_\+x64}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, uint8\+\_\+t output\mbox{[}\mbox{\hyperlink{hkds__config_8h_a27e614d5766833b4a1cd5572a598217c}{HKDS\+\_\+\+PARALLEL\+\_\+\+DEPTH}}\mbox{]}\mbox{[}\mbox{\hyperlink{hkds__config_8h_a8ff92ab9ce1b32682f248fd091258c7e}{HKDS\+\_\+\+CACHX8\+\_\+\+DEPTH}}\mbox{]}\mbox{[}\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Export 8 slots 8 blocks of messages (8x8) to a 3-\/dimensional message queue. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{hkds__queue_8h_ae81254671e5d205b6b37f9cfc617bd62}{hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+stream}} (\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, uint8\+\_\+t \texorpdfstring{$\ast$}{*}stream, size\+\_\+t items)
+\begin{DoxyCompactList}\small\item\em Serialize a set of messages to an array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains the HKDS queue definitions. 
+
+This header defines the constants, structures, and function prototypes for managing the HKDS message queue. The queue is used to store, manage, and export messages within the HKDS system. It provides functionality for initializing the queue, adding and removing items, checking the queue status, and exporting blocks or streams of messages.
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{hkds__queue_8h_ad5642a918b2736eddf2c10c9301f6ebf}\index{hkds\_queue.h@{hkds\_queue.h}!HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE@{HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE}}
+\index{HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE@{HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE}{HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_ad5642a918b2736eddf2c10c9301f6ebf} 
+\#define HKDS\+\_\+\+MESSAGE\+\_\+\+QUEUE\+\_\+\+TAG\+\_\+\+SIZE~16}
+
+The recommended queue tag size \Hypertarget{hkds__queue_8h_a31dc79f26211adc8ed9d987f0d7ee9ab}\index{hkds\_queue.h@{hkds\_queue.h}!HKDS\_QUEUE\_ALIGNMENT@{HKDS\_QUEUE\_ALIGNMENT}}
+\index{HKDS\_QUEUE\_ALIGNMENT@{HKDS\_QUEUE\_ALIGNMENT}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{HKDS\_QUEUE\_ALIGNMENT}{HKDS\_QUEUE\_ALIGNMENT}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a31dc79f26211adc8ed9d987f0d7ee9ab} 
+\#define HKDS\+\_\+\+QUEUE\+\_\+\+ALIGNMENT~64}
+
+The internal memory alignment constant \Hypertarget{hkds__queue_8h_ad68393adc49f85e093da14fbdde2cd72}\index{hkds\_queue.h@{hkds\_queue.h}!HKDS\_QUEUE\_MAX\_DEPTH@{HKDS\_QUEUE\_MAX\_DEPTH}}
+\index{HKDS\_QUEUE\_MAX\_DEPTH@{HKDS\_QUEUE\_MAX\_DEPTH}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{HKDS\_QUEUE\_MAX\_DEPTH}{HKDS\_QUEUE\_MAX\_DEPTH}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_ad68393adc49f85e093da14fbdde2cd72} 
+\#define HKDS\+\_\+\+QUEUE\+\_\+\+MAX\+\_\+\+DEPTH~64}
+
+The maximum queue depth 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{hkds__queue_8h_a146d8272469a0466e7ad20ecc8ce9d6e}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_count@{hkds\_message\_queue\_count}}
+\index{hkds\_message\_queue\_count@{hkds\_message\_queue\_count}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_count()}{hkds\_message\_queue\_count()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a146d8272469a0466e7ad20ecc8ce9d6e} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t hkds\+\_\+message\+\_\+queue\+\_\+count (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{}\end{DoxyParamCaption})}
+
+
+
+Returns the number of items in the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}size\mbox{]} The number of items 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_aa99b8ccfa0732d182c3a2aafa5fa5195}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_destroy@{hkds\_message\_queue\_destroy}}
+\index{hkds\_message\_queue\_destroy@{hkds\_message\_queue\_destroy}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_destroy()}{hkds\_message\_queue\_destroy()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_aa99b8ccfa0732d182c3a2aafa5fa5195} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void hkds\+\_\+message\+\_\+queue\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{}\end{DoxyParamCaption})}
+
+
+
+Resets the queue context state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\Hypertarget{hkds__queue_8h_a92c87210002384cd262730332869b39d}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_empty@{hkds\_message\_queue\_empty}}
+\index{hkds\_message\_queue\_empty@{hkds\_message\_queue\_empty}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_empty()}{hkds\_message\_queue\_empty()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a92c87210002384cd262730332869b39d} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool hkds\+\_\+message\+\_\+queue\+\_\+empty (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{}\end{DoxyParamCaption})}
+
+
+
+Returns true if the queue is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}bool\mbox{]} The queue empty status 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_aa6061ed6f998701ee32c279b21afe3fb}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_extract\_block\_x64@{hkds\_message\_queue\_extract\_block\_x64}}
+\index{hkds\_message\_queue\_extract\_block\_x64@{hkds\_message\_queue\_extract\_block\_x64}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_extract\_block\_x64()}{hkds\_message\_queue\_extract\_block\_x64()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_aa6061ed6f998701ee32c279b21afe3fb} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+block\+\_\+x64 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{uint8\+\_\+t}]{output}{\mbox{[}\+HKDS\+\_\+\+PARALLEL\+\_\+\+DEPTH\mbox{]}\mbox{[}\+HKDS\+\_\+\+CACHX8\+\_\+\+DEPTH\mbox{]}\mbox{[}\+HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Export 8 slots 8 blocks of messages (8x8) to a 3-\/dimensional message queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+{\em output} & \mbox{[}array3d\mbox{]} The 3d array receiving the messages; HKDS\+\_\+\+PARALLEL\+\_\+\+DEPTH slots, containing HKDS\+\_\+\+CACHX64\+\_\+\+DEPTH of items of array HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE length \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}size\mbox{]} The number of items exported 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_a6a38de3e171d2cb8a1ec46039038980e}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_extract\_block\_x8@{hkds\_message\_queue\_extract\_block\_x8}}
+\index{hkds\_message\_queue\_extract\_block\_x8@{hkds\_message\_queue\_extract\_block\_x8}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_extract\_block\_x8()}{hkds\_message\_queue\_extract\_block\_x8()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a6a38de3e171d2cb8a1ec46039038980e} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+block\+\_\+x8 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{uint8\+\_\+t}]{output}{\mbox{[}\+HKDS\+\_\+\+CACHX8\+\_\+\+DEPTH\mbox{]}\mbox{[}\+HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Export a block of 8 messages to a 2-\/dimensional message queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+{\em output} & \mbox{[}array2d\mbox{]} The 2d array receiving the messages; containing HKDS\+\_\+\+CACHX8\+\_\+\+DEPTH of items of array HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE length \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}size\mbox{]} The number of items exported 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_ae81254671e5d205b6b37f9cfc617bd62}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_extract\_stream@{hkds\_message\_queue\_extract\_stream}}
+\index{hkds\_message\_queue\_extract\_stream@{hkds\_message\_queue\_extract\_stream}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_extract\_stream()}{hkds\_message\_queue\_extract\_stream()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_ae81254671e5d205b6b37f9cfc617bd62} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t hkds\+\_\+message\+\_\+queue\+\_\+extract\+\_\+stream (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{stream}{, }\item[{size\+\_\+t}]{items}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a set of messages to an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+{\em stream} & \mbox{[}array\mbox{]} The array receiving the messages \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}size\mbox{]} The number of items exported 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_afbc3d254e35e2cf1aaca213e87df3bf2}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_flush@{hkds\_message\_queue\_flush}}
+\index{hkds\_message\_queue\_flush@{hkds\_message\_queue\_flush}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_flush()}{hkds\_message\_queue\_flush()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_afbc3d254e35e2cf1aaca213e87df3bf2} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void hkds\+\_\+message\+\_\+queue\+\_\+flush (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{}\end{DoxyParamCaption})}
+
+
+
+Flush the contents of the queue to a byte array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\Hypertarget{hkds__queue_8h_a4f14d041e6d0f2f4d5f6208be6984ca3}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_full@{hkds\_message\_queue\_full}}
+\index{hkds\_message\_queue\_full@{hkds\_message\_queue\_full}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_full()}{hkds\_message\_queue\_full()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a4f14d041e6d0f2f4d5f6208be6984ca3} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool hkds\+\_\+message\+\_\+queue\+\_\+full (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{}\end{DoxyParamCaption})}
+
+
+
+Returns true if the queue is full. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}bool\mbox{]} The queue full status 
+\end{DoxyReturn}
+\Hypertarget{hkds__queue_8h_a20658c9a7905355e125798eeb34d9e08}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_initialize@{hkds\_message\_queue\_initialize}}
+\index{hkds\_message\_queue\_initialize@{hkds\_message\_queue\_initialize}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_initialize()}{hkds\_message\_queue\_initialize()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a20658c9a7905355e125798eeb34d9e08} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void hkds\+\_\+message\+\_\+queue\+\_\+initialize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{size\+\_\+t}]{depth}{, }\item[{size\+\_\+t}]{width}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{tag}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the queues state context. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\Hypertarget{hkds__queue_8h_a1fbcd8156c28b7f615f74e5b32fbbbd5}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_pop@{hkds\_message\_queue\_pop}}
+\index{hkds\_message\_queue\_pop@{hkds\_message\_queue\_pop}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_pop()}{hkds\_message\_queue\_pop()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a1fbcd8156c28b7f615f74e5b32fbbbd5} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void hkds\+\_\+message\+\_\+queue\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{size\+\_\+t}]{outlen}{}\end{DoxyParamCaption})}
+
+
+
+Removes an item from the queue and copies it to the output array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}
+\Hypertarget{hkds__queue_8h_a5d45cdea7d0ae157c1256667af8d1ed3}\index{hkds\_queue.h@{hkds\_queue.h}!hkds\_message\_queue\_push@{hkds\_message\_queue\_push}}
+\index{hkds\_message\_queue\_push@{hkds\_message\_queue\_push}!hkds\_queue.h@{hkds\_queue.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_message\_queue\_push()}{hkds\_message\_queue\_push()}}
+{\footnotesize\ttfamily \label{hkds__queue_8h_a5d45cdea7d0ae157c1256667af8d1ed3} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void hkds\+\_\+message\+\_\+queue\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structhkds__message__queue__state}{hkds\+\_\+message\+\_\+queue\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{inpput}{, }\item[{size\+\_\+t}]{inplen}{}\end{DoxyParamCaption})}
+
+
+
+Adds an item from the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & \mbox{[}struct\mbox{]} The message queue state context \\
+\hline
+\end{DoxyParams}

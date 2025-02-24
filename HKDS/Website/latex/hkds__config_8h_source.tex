@@ -1,0 +1,266 @@
+\doxysection{hkds\+\_\+config.\+h}
+\hypertarget{hkds__config_8h_source}{}\label{hkds__config_8h_source}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_config.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_config.h}}
+\mbox{\hyperlink{hkds__config_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ 2025\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ NOTICE:\ This\ software\ and\ all\ accompanying\ materials\ are\ the\ exclusive\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ property\ of\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation\ (QRCS).}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ The\ intellectual\ and\ technical\ concepts\ contained\ within\ this\ implementation\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ are\ proprietary\ to\ QRCS\ and\ its\ authorized\ licensors\ and\ are\ protected\ under\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ applicable\ U.S.\ and\ international\ copyright,\ patent,\ and\ trade\ secret\ laws.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ CRYPTOGRAPHIC\ STANDARDS:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ -\/\ This\ software\ includes\ implementations\ of\ cryptographic\ algorithms\ such\ as\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ \ \ SHA3,\ AES,\ and\ others.\ These\ algorithms\ are\ public\ domain\ or\ standardized\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ \ \ by\ organizations\ such\ as\ NIST\ and\ are\ NOT\ the\ property\ of\ QRCS.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ -\/\ However,\ all\ source\ code,\ optimizations,\ and\ implementations\ in\ this\ library\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ are\ original\ works\ of\ QRCS\ and\ are\ protected\ under\ this\ license.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ RESTRICTIONS:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ -\/\ Redistribution,\ modification,\ or\ unauthorized\ distribution\ of\ this\ software,\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ in\ whole\ or\ in\ part,\ is\ strictly\ prohibited.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ -\/\ This\ software\ is\ provided\ for\ non-\/commercial,\ educational,\ and\ research\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ \ \ purposes\ only.\ Commercial\ use\ in\ any\ form\ is\ expressly\ forbidden.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ -\/\ Licensing\ and\ authorized\ distribution\ are\ solely\ at\ the\ discretion\ of\ QRCS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/\ Any\ use\ of\ this\ software\ implies\ acceptance\ of\ these\ restrictions.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ DISCLAIMER:}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ software\ is\ provided\ "{}as\ is,"{}\ without\ warranty\ of\ any\ kind,\ express\ or\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ implied,\ including\ but\ not\ limited\ to\ warranties\ of\ merchantability\ or\ fitness\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ a\ particular\ purpose.\ QRCS\ disclaims\ all\ liability\ for\ any\ direct,\ indirect,\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ incidental,\ or\ consequential\ damages\ resulting\ from\ the\ use\ or\ misuse\ of\ this\ software.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ FULL\ LICENSE:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ This\ software\ is\ subject\ to\ the\ **Quantum\ Resistant\ Cryptographic\ Solutions\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Proprietary\ License\ (QRCS-\/PL)**.\ The\ complete\ license\ terms\ are\ included\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ in\ the\ LICENSE.txt\ file\ distributed\ with\ this\ software.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Written\ by:\ John\ G.\ Underhill}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Contact:\ john.underhill@protonmail.com}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifndef\ HKDS\_CONFIG\_H}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ HKDS\_CONFIG\_H}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{/***\ Enumerations\ ***/}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00078\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8}{hkds\_packet\_type}}}
+\DoxyCodeLine{00079\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8a5765708fbf8447afe96d0d9e8246367f}{packet\_token\_request}}\ \ \ \ \ \ \ \ \ =\ 0x01,\ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8a5d73fb33218d9266218a9f1bef169cfa}{packet\_token\_response}}\ \ \ \ \ \ \ \ =\ 0x02,\ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8aec2da47b9b3ce673e91f34b9126656c7}{packet\_message\_request}}\ \ \ \ \ \ \ =\ 0x03,\ \ \ \ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8adc7798052fb6dbc87def02c316c403ec}{packet\_message\_response}}\ \ \ \ \ \ =\ 0x04,\ \ \ \ }
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8a08c12e9c4dbd95905d9807139e76637d}{packet\_administrative\_message}}=\ 0x05,\ \ \ \ }
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8a462a86d8c9a0bf243376016cf6476e03}{packet\_error\_message}}\ \ \ \ \ \ \ \ \ =\ 0x06\ \ \ \ \ }
+\DoxyCodeLine{00086\ \}\ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8}{hkds\_packet\_type}};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00097\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1}{hkds\_protocol\_id}}}
+\DoxyCodeLine{00098\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1a3a682f69356566a149cd92607bc4ee48}{protocol\_shake\_128}}\ =\ 0x09,\ \ \ \ }
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1a52bbc13feb74cc16d6a236ceafd89c74}{protocol\_shake\_256}}\ =\ 0x0A,\ \ \ \ }
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1af8510ed99cdbc2cde4c020d211386393}{protocol\_shake\_512}}\ =\ 0x0B\ \ \ \ \ }
+\DoxyCodeLine{00102\ \}\ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1}{hkds\_protocol\_id}};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856}{hkds\_error\_type}}}
+\DoxyCodeLine{00119\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856abebf74ca4f5f9721df914b698239ad38}{error\_general\_failure}}\ \ \ \ \ \ \ =\ 0x1F,\ \ \ \ }
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856a6b0aa18859a46335b33ad804c674da36}{error\_connection\_aborted}}\ \ \ \ =\ 0x21,\ \ \ \ }
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856a9c6b8415c4f5222d27f203baf35860be}{error\_disconnected}}\ \ \ \ \ \ \ \ \ \ =\ 0x22,\ \ \ \ }
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856a7f2f2e75d9e316cc4976c604b03f3a86}{error\_connection\_refused}}\ \ \ \ =\ 0x23,\ \ \ \ }
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856ae1177722b26bdcc23bfc6e27145ff6d1}{error\_invalid\_format}}\ \ \ \ \ \ \ \ =\ 0x24,\ \ \ \ }
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856afb4e38657dff3bf38dc1b48651f0504e}{error\_retries\_exceeded}}\ \ \ \ \ \ =\ 0x25,\ \ \ \ }
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856a7d56ede673feefc3a58b626d8e177413}{error\_connection\_failure}}\ \ \ \ =\ 0x26,\ \ \ \ }
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856a97acf8ff26a62f8d099b97e94e8644da}{error\_unkown\_failure}}\ \ \ \ \ \ \ \ =\ 0xFF\ \ \ \ \ }
+\DoxyCodeLine{00128\ \}\ \mbox{\hyperlink{hkds__config_8h_a5b1e49d0be04a3286d35d5a095ffd856}{hkds\_error\_type}};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4}{hkds\_message\_type}}}
+\DoxyCodeLine{00143\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4ae18d106b21710c4195e294f7fd3d68f6}{message\_synchronize\_token}}\ \ \ \ \ \ =\ 0x01,\ \ \ }
+\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4a7c7b358d17801676fa34fd252dc49c14}{message\_reinitialized\_token}}\ \ \ \ =\ 0x02,\ \ \ }
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4ae29b9e42dd908b8bb53fab752e0d8f3f}{message\_token\_requests\_exceeded}}=\ 0x03,\ \ \ }
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4af9dfec3b09e430acf917eee399cc005a}{message\_remote\_reset}}\ \ \ \ \ \ \ \ \ \ \ =\ 0x04,\ \ \ }
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4a4b5d9dbee30c7524886a82f0ec6e3869}{message\_diagnostic}}\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x05,\ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4a1941cea7734953f93a04bba4b881af46}{message\_reserved1}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x06,\ \ \ }
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4aad010c26d881cf27833e1579dc4128c2}{message\_reserved2}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x07,\ \ \ }
+\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4ac8a204b8f7376f02f76d7cce2d97a732}{message\_reserved3}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x08\ \ \ \ }
+\DoxyCodeLine{00152\ \}\ \mbox{\hyperlink{hkds__config_8h_adf2ed8534458bceca840cd55aa7c81d4}{hkds\_message\_type}};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{comment}{/***\ Modifiable\ Values\ ***/}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00163\ \textcolor{comment}{//\#define\ HKDS\_KECCAK\_DOUBLE\_ROUNDS}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00172\ \textcolor{comment}{//\#define\ HKDS\_KECCAK\_HALF\_ROUNDS}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00181\ \textcolor{comment}{//\#define\ HKDS\_SHAKE\_128}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#define\ HKDS\_SHAKE\_256}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00199\ \textcolor{comment}{//\#define\ HKDS\_SHAKE\_512}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00210\ \textcolor{preprocessor}{\#define\ HKDS\_CACHE\_MULTIPLIER\ 4}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{comment}{/***\ Static\ Values\ (Do\ Not\ Change)\ ***/}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#define\ HKDS\_ADMIN\_SIZE\ 2}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#define\ HKDS\_AUTHENTICATION\_KMAC\ 0x11}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00230\ \textcolor{preprocessor}{\#define\ HKDS\_AUTHENTICATION\_NONE\ 0x10}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00236\ \textcolor{preprocessor}{\#define\ HKDS\_AUTHENTICATION\_SHA3\ 0x12}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\#define\ HKDS\_PARALLEL\_DEPTH\ 8}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\#define\ HKDS\_CACHX8\_DEPTH\ 8}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00260\ \textcolor{preprocessor}{\#define\ HKDS\_CACHX64\_SIZE\ 64}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\#define\ HKDS\_CTOK\_SIZE\ 23}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00272\ \textcolor{preprocessor}{\#define\ HKDS\_DID\_SIZE\ 12}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00278\ \textcolor{preprocessor}{\#define\ HKDS\_ERROR\_SIZE\ 16}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00284\ \textcolor{preprocessor}{\#define\ HKDS\_HEADER\_SIZE\ 4}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00290\ \textcolor{preprocessor}{\#define\ HKDS\_KID\_SIZE\ 4}}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00296\ \textcolor{preprocessor}{\#define\ HKDS\_KSN\_SIZE\ 16}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00302\ \textcolor{preprocessor}{\#define\ HKDS\_MESSAGE\_SIZE\ 16}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00308\ \textcolor{preprocessor}{\#define\ HKDS\_NAME\_SIZE\ 7}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00314\ \textcolor{preprocessor}{\#define\ HKDS\_TAG\_SIZE\ 16}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00320\ \textcolor{preprocessor}{\#define\ HKDS\_TKC\_SIZE\ 4}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00329\ \textcolor{preprocessor}{\#define\ HKDS\_TMS\_SIZE\ (HKDS\_KSN\_SIZE\ +\ HKDS\_NAME\_SIZE)}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \textcolor{preprocessor}{\#if\ defined(HKDS\_SHAKE\_128)}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_BDK\_SIZE\ 16}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00343\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_EDK\_SIZE\ 16}}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00349\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_ETOK\_SIZE\ 32}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00355\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PRF\_RATE\ 168}}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00361\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PROTOCOL\_TYPE\ protocol\_shake\_128}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00367\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_STK\_SIZE\ 16}}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00372\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_formal\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x48,\ 0x4B,\ 0x44,\ 0x53,\ 0x31,\ 0x32,\ 0x38\ \};}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00377\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_mac\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x75,\ 0x4B,\ 0x77,\ 0x65,\ 0x31,\ 0x32,\ 0x38\ \};}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \textcolor{preprocessor}{\#elif\ defined(HKDS\_SHAKE\_256)}}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00385\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_BDK\_SIZE\ 32}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00391\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_EDK\_SIZE\ 32}}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00397\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_ETOK\_SIZE\ 48}}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00403\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PRF\_RATE\ 136}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00409\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PROTOCOL\_TYPE\ protocol\_shake\_256}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00415\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_STK\_SIZE\ 32}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00420\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_formal\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x48,\ 0x4B,\ 0x44,\ 0x53,\ 0x32,\ 0x35,\ 0x36\ \};}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00425\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_mac\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x75,\ 0x4B,\ 0x77,\ 0x65,\ 0x32,\ 0x35,\ 0x36\ \};}
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00427\ \textcolor{preprocessor}{\#elif\ defined(HKDS\_SHAKE\_512)}}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00433\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_BDK\_SIZE\ 64}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00439\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_EDK\_SIZE\ 64}}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00445\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_ETOK\_SIZE\ 80}}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00451\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PRF\_RATE\ 72}}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00457\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_PROTOCOL\_TYPE\ protocol\_shake\_512}}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00463\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_STK\_SIZE\ 64}}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00468\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_formal\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x48,\ 0x4B,\ 0x44,\ 0x53,\ 0x35,\ 0x31,\ 0x32\ \};}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00473\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ hkds\_mac\_name[\mbox{\hyperlink{hkds__config_8h_a057ebaf38c4dfdc983261b536cee061c}{HKDS\_NAME\_SIZE}}]\ =\ \{\ 0x75,\ 0x4B,\ 0x77,\ 0x65,\ 0x35,\ 0x31,\ 0x32\ \};}
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00484\ \textcolor{preprocessor}{\#define\ HKDS\_CACHE\_SIZE\ ((HKDS\_CACHE\_MULTIPLIER\ *\ HKDS\_PRF\_RATE)\ /\ HKDS\_MESSAGE\_SIZE)}}
+\DoxyCodeLine{00485\ }
+\DoxyCodeLine{00493\ \textcolor{preprocessor}{\#define\ HKDS\_CLIENT\_MESSAGE\_REQUEST\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_KSN\_SIZE\ +\ HKDS\_MESSAGE\_SIZE\ +\ HKDS\_TAG\_SIZE)}}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00502\ \textcolor{preprocessor}{\#define\ HKDS\_CLIENT\_TOKEN\_REQUEST\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_KSN\_SIZE)}}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00511\ \textcolor{preprocessor}{\#define\ HKDS\_SERVER\_MESSAGE\_RESPONSE\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_MESSAGE\_SIZE)}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00520\ \textcolor{preprocessor}{\#define\ HKDS\_SERVER\_TOKEN\_RESPONSE\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_ETOK\_SIZE)}}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00529\ \textcolor{preprocessor}{\#define\ HKDS\_ADMIN\_MESSAGE\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_ADMIN\_SIZE)}}
+\DoxyCodeLine{00530\ }
+\DoxyCodeLine{00538\ \textcolor{preprocessor}{\#define\ HKDS\_ERROR\_MESSAGE\_SIZE\ (HKDS\_HEADER\_SIZE\ +\ HKDS\_ERROR\_SIZE)}}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \textcolor{comment}{/***\ Packet\ Headers\ ***/}}
+\DoxyCodeLine{00541\ }
+\DoxyCodeLine{00553\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00554\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a6773b1a9af1c859d358060c9386aeaa8}{hkds\_packet\_type}}\ \mbox{\hyperlink{structhkds__packet__header_ae54ac7213df73a84437088a37b6f8c73}{flag}};\ \ \ \ \ \ }
+\DoxyCodeLine{00556\ \ \ \ \ \mbox{\hyperlink{hkds__config_8h_a7d5fbb1ffc2a24e52933e3fc25c458a1}{hkds\_protocol\_id}}\ \mbox{\hyperlink{structhkds__packet__header_acdd4a2183ff9b54f1802978ff2cfe205}{protocol}};\ \ }
+\DoxyCodeLine{00557\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__packet__header_acb5c8866a58116314f6c8eda9dc3544c}{sequence}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00558\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__packet__header_ab2b3adeb2a67e656ff030b56727fd0ac}{length}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00559\ \}\ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}};}
+\DoxyCodeLine{00560\ }
+\DoxyCodeLine{00572\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00573\ \{}
+\DoxyCodeLine{00574\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__client__message__request_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00575\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__client__message__request_a1df0dd08c6db9d4717d8c16c3b1901fd}{ksn}}[\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\_KSN\_SIZE}}];\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00576\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__client__message__request_a464ab783a5a53edea903174710a0316d}{message}}[\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\_MESSAGE\_SIZE}}];\ \ }
+\DoxyCodeLine{00577\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__client__message__request_a5d2efc69da64f6bffe6eca272bfcf234}{tag}}[\mbox{\hyperlink{hkds__config_8h_a151c93388d9100f226d94f468f49ddf1}{HKDS\_TAG\_SIZE}}];\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00578\ \}\ \mbox{\hyperlink{structhkds__client__message__request}{hkds\_client\_message\_request}};}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00590\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00591\ \{}
+\DoxyCodeLine{00592\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__client__token__request_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00593\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__client__token__request_a1df0dd08c6db9d4717d8c16c3b1901fd}{ksn}}[\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\_KSN\_SIZE}}];\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00594\ \}\ \mbox{\hyperlink{structhkds__client__token__request}{hkds\_client\_token\_request}};}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00606\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00607\ \{}
+\DoxyCodeLine{00608\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__server__message__response_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00609\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__server__message__response_a464ab783a5a53edea903174710a0316d}{message}}[\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\_MESSAGE\_SIZE}}];\ \ }
+\DoxyCodeLine{00610\ \}\ \mbox{\hyperlink{structhkds__server__message__response}{hkds\_server\_message\_response}};}
+\DoxyCodeLine{00611\ }
+\DoxyCodeLine{00622\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00623\ \{}
+\DoxyCodeLine{00624\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__server__token__response_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00625\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__server__token__response_a44c95167dd385f3b3a3d897600787c28}{etok}}[\mbox{\hyperlink{hkds__config_8h_adf998a8c8dfa9b2a343ffc09836886da}{HKDS\_ETOK\_SIZE}}];\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00626\ \}\ \mbox{\hyperlink{structhkds__server__token__response}{hkds\_server\_token\_response}};}
+\DoxyCodeLine{00627\ }
+\DoxyCodeLine{00638\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00639\ \{}
+\DoxyCodeLine{00640\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__administrative__message_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00641\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__administrative__message_a724d5c601984c45dc7832b068bab5fb4}{message}}[\mbox{\hyperlink{hkds__config_8h_aeae7e0d668f413433092fd80178d9bfd}{HKDS\_ADMIN\_SIZE}}];\ \ \ \ }
+\DoxyCodeLine{00642\ \}\ \mbox{\hyperlink{structhkds__administrative__message}{hkds\_administrative\_message}};}
+\DoxyCodeLine{00643\ }
+\DoxyCodeLine{00653\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00654\ \{}
+\DoxyCodeLine{00655\ \ \ \ \ \mbox{\hyperlink{structhkds__packet__header}{hkds\_packet\_header}}\ \mbox{\hyperlink{structhkds__error__message_a07457434e72feeb2cec29906645a116d}{header}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00656\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structhkds__error__message_a70e78dd0904682a82be3f88103bf9e75}{message}}[\mbox{\hyperlink{hkds__config_8h_a6f9bc32aa9292f453a5746d12bfa2d2c}{HKDS\_ERROR\_SIZE}}];\ \ \ \ }
+\DoxyCodeLine{00657\ \}\ \mbox{\hyperlink{structhkds__error__message}{hkds\_error\_message}};}
+\DoxyCodeLine{00658\ }
+\DoxyCodeLine{00659\ }
+\DoxyCodeLine{00660\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

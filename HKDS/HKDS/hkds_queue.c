@@ -241,3 +241,4 @@ size_t hkds_message_queue_extract_stream(hkds_message_queue_state* ctx, uint8_t*
 
 	return i;
 }
+

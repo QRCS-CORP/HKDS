@@ -1,0 +1,651 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/utils.h File Reference}
+\hypertarget{utils_8h}{}\label{utils_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/utils.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/utils.h}}
+
+
+This file contains utility definitions.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \#include $<$limits.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structutils__cpu__features}{utils\+\_\+cpu\+\_\+features}}
+\begin{DoxyCompactList}\small\item\em Contains the CPU feature availability. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{utils_8h_a2e375ab32c7ef4581b026be28e4cc116}\label{utils_8h_a2e375ab32c7ef4581b026be28e4cc116} 
+\#define {\bfseries O\+\_\+\+NOCTTY}~0
+\item 
+\Hypertarget{utils_8h_a89bbe433eb3a9ac3b5f2e28e69c98cb9}\label{utils_8h_a89bbe433eb3a9ac3b5f2e28e69c98cb9} 
+\#define {\bfseries UTILS\+\_\+\+TOKEN\+\_\+\+NOT\+\_\+\+FOUND}~-\/1
+\item 
+\Hypertarget{utils_8h_a29b113234f1ab4cdfa767852400b1070}\label{utils_8h_a29b113234f1ab4cdfa767852400b1070} 
+\#define {\bfseries UTILS\+\_\+\+STRING\+\_\+\+MAX\+\_\+\+LEN}~4096
+\begin{DoxyCompactList}\small\item\em The string maximum length. \end{DoxyCompactList}\item 
+\Hypertarget{utils_8h_a5a00e4c029281cb7d4909d46f950dd6a}\label{utils_8h_a5a00e4c029281cb7d4909d46f950dd6a} 
+\#define {\bfseries UTILS\+\_\+\+CPUIDEX\+\_\+\+SERIAL\+\_\+\+SIZE}~12
+\begin{DoxyCompactList}\small\item\em The CPU serial number length. \end{DoxyCompactList}\item 
+\Hypertarget{utils_8h_aecd313af481fa2460c13901324e1ecba}\label{utils_8h_aecd313af481fa2460c13901324e1ecba} 
+\#define {\bfseries UTILS\+\_\+\+CPUIDEX\+\_\+\+VENDOR\+\_\+\+SIZE}~12
+\begin{DoxyCompactList}\small\item\em The CPU vendor name length. \end{DoxyCompactList}\item 
+\Hypertarget{utils_8h_ac5631cbbc9c6598a84bba3c5ad8286e6}\label{utils_8h_ac5631cbbc9c6598a84bba3c5ad8286e6} 
+\#define {\bfseries UTILS\+\_\+\+SEED\+\_\+\+MAX}~1024000
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{utils_8h_ab939e0f684cd17a0c4cf7a4d2867bd3c}\label{utils_8h_ab939e0f684cd17a0c4cf7a4d2867bd3c} 
+typedef enum \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0}{utils\+\_\+cpu\+\_\+maker}} {\bfseries utils\+\_\+cpu\+\_\+maker}
+\item 
+\Hypertarget{utils_8h_aaaa2b7fda3e8a18fcbfc8893b97db2ec}\label{utils_8h_aaaa2b7fda3e8a18fcbfc8893b97db2ec} 
+typedef HKDS\+\_\+\+EXPORT\+\_\+\+API struct utils\+\_\+cpu\+\_\+features {\bfseries utils\+\_\+cpu\+\_\+features}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0}{utils\+\_\+cpu\+\_\+maker}} \{ \newline
+\mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aaeeb4a852de3e8310f9e69644e4f2c46}{hkds\+\_\+cpuid\+\_\+unknown}} = 0
+, \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aa543b40d4eec335fbfc6d980e8363d66}{hkds\+\_\+cpuid\+\_\+amd}} = 1
+, \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a73856e6cf99c949bd811b388ee9c154f}{hkds\+\_\+cpuid\+\_\+intel}} = 2
+, \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aad72f36bd8e11bb41d2b48f44e1e202b}{hkds\+\_\+cpuid\+\_\+via}} = 3
+, \newline
+\mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a823f18ba92e8fd9d14df522b069a5e3f}{hkds\+\_\+cpuid\+\_\+hygion}} = 4
+ \}
+\begin{DoxyCompactList}\small\item\em The detectable CPU architectures. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a6419b34f8b806a3c66887d79a8763d03}{utils\+\_\+seed\+\_\+generate}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Get an array of pseudo-\/random bytes from the system entropy provider. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_aab2167bf7fccf4e2f223dfe4fcde8d84}{utils\+\_\+cpu\+\_\+features\+\_\+set}} (\mbox{\hyperlink{structutils__cpu__features}{utils\+\_\+cpu\+\_\+features}} \texorpdfstring{$\ast$}{*}const features)
+\begin{DoxyCompactList}\small\item\em Get a list of supported CPU features. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a58df0b93f48e2ddf1e447b58fbe28724}{utils\+\_\+hex\+\_\+to\+\_\+bin}} (const char \texorpdfstring{$\ast$}{*}hexstr, uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Convert a hexadecimal character string to a character byte array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_aa3021ea310ea1943ed220fb0904f1232}{utils\+\_\+print\+\_\+safe}} (const char \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Print an array of characters to the console. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_aa007be3f2d44d5e6a0192e9efcb80a4a}{utils\+\_\+print\+\_\+line}} (const char \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Print an array of characters to the console with a line break. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t \mbox{\hyperlink{utils_8h_ab3c96366cb62be8c75cc25ea4f6bc5dd}{utils\+\_\+stopwatch\+\_\+start}} ()
+\begin{DoxyCompactList}\small\item\em Returns the clock time at the start of a timed operation. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t \mbox{\hyperlink{utils_8h_ae083d9bcaa1ad6dab6aad22a8adcbce9}{utils\+\_\+stopwatch\+\_\+elapsed}} (uint64\+\_\+t start)
+\begin{DoxyCompactList}\small\item\em Returns the time difference between the start and current time in milliseconds. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API int64\+\_\+t \mbox{\hyperlink{utils_8h_af023770b1cda22f5388c10e68fab18e0}{utils\+\_\+find\+\_\+string}} (const char \texorpdfstring{$\ast$}{*}source, const char \texorpdfstring{$\ast$}{*}token)
+\begin{DoxyCompactList}\small\item\em Find a substrings position within a string. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a2f234fb5cc9367dd77bd51b00099aae2}{utils\+\_\+string\+\_\+contains}} (const char \texorpdfstring{$\ast$}{*}source, const char \texorpdfstring{$\ast$}{*}token)
+\begin{DoxyCompactList}\small\item\em Test if the string contains a substring. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{utils_8h_ad9b9f2d491907005a4e0caabce74128d}{utils\+\_\+string\+\_\+size}} (const char \texorpdfstring{$\ast$}{*}source)
+\begin{DoxyCompactList}\small\item\em Get the character length of a string. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a7b2904cde9f3834398423f09656b0792}{utils\+\_\+string\+\_\+to\+\_\+lowercase}} (char \texorpdfstring{$\ast$}{*}source)
+\begin{DoxyCompactList}\small\item\em Convert a string to all lower-\/case characters. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a569bd23e1ba834bdf6602aca6d4f68c2}{utils\+\_\+memory\+\_\+clear}} (void \texorpdfstring{$\ast$}{*}output, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Erase a block of memory. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a2bb7285604e9c0616e91f18d5d93facc}{utils\+\_\+memory\+\_\+aligned\+\_\+free}} (void \texorpdfstring{$\ast$}{*}block)
+\begin{DoxyCompactList}\small\item\em Free an aligned memory block. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{utils_8h_aa8ade31ac89041391e269c5f3f5f6a80}{utils\+\_\+memory\+\_\+aligned\+\_\+alloc}} (int32\+\_\+t align, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Allocate an aligned 8-\/bit integer array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a8d153e520350ad893aac31f8d124ead4}{utils\+\_\+memory\+\_\+are\+\_\+equal}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}a, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}b, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Compare two byte arrays for equality. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a7ab8d7ca8cc41fe56a9941fc736946fc}{utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+128}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}a, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Compare two 16 byte arrays for equality. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a2897c77f65f46c643e90b29b224cbd51}{utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+256}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}a, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Compare two 32 byte arrays for equality. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{utils_8h_a183feab93e83fc8e23b6150b970173b2}{utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+512}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}a, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Compare two 64 byte arrays for equality. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_ae33a2dbe24b3524383f579ffd28dac75}{utils\+\_\+memory\+\_\+copy}} (void \texorpdfstring{$\ast$}{*}output, const void \texorpdfstring{$\ast$}{*}input, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Copy a block of memory. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a6a3877ea2184446689cde42098da4f2c}{utils\+\_\+memory\+\_\+xor}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}input, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Bitwise XOR two blocks of memory. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint32\+\_\+t \mbox{\hyperlink{utils_8h_a696de7b0f84c0df102eea8cd3370bc1f}{utils\+\_\+integer\+\_\+be8to32}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Convert an 8-\/bit integer array to a 32-\/bit big-\/endian integer. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a915034f14f36d752a4a37616a02d9e47}{utils\+\_\+integer\+\_\+be32to8}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, uint32\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Convert a 32-\/bit integer to a big-\/endian 8-\/bit integer array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t \mbox{\hyperlink{utils_8h_a490718bf11503c1b2ce815a8be9bfa9a}{utils\+\_\+integer\+\_\+le8to64}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Convert an 8-\/bit integer array to a 64-\/bit little-\/endian integer. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_acd882da28399e555c12610956a51e11c}{utils\+\_\+integer\+\_\+le64to8}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, uint64\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Convert a 64-\/bit integer to a little-\/endian 8-\/bit integer array. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{utils_8h_a31131090daba973a258a8a9c470e7528}{utils\+\_\+integer\+\_\+be8increment}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}output, size\+\_\+t otplen)
+\begin{DoxyCompactList}\small\item\em Increment an 8-\/bit integer array as a segmented big-\/endian integer. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t \mbox{\hyperlink{utils_8h_a9fde663a09daf9295f1326bbb62aed8e}{utils\+\_\+integer\+\_\+rotl64}} (uint64\+\_\+t value, size\+\_\+t shift)
+\begin{DoxyCompactList}\small\item\em Rotate an unsigned 64-\/bit integer to the left. \end{DoxyCompactList}\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API int32\+\_\+t \mbox{\hyperlink{utils_8h_a69d99eb143d1796cf12a2c478d9d400a}{utils\+\_\+integer\+\_\+verify}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}a, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}b, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Constant time comparison of two arrays of unsigned 8-\/bit integers. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains utility definitions. 
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0}\index{utils.h@{utils.h}!utils\_cpu\_maker@{utils\_cpu\_maker}}
+\index{utils\_cpu\_maker@{utils\_cpu\_maker}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_cpu\_maker}{utils\_cpu\_maker}}
+{\footnotesize\ttfamily \label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0} 
+enum \mbox{\hyperlink{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0}{utils\+\_\+cpu\+\_\+maker}}}
+
+
+
+The detectable CPU architectures. 
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{hkds\_cpuid\_unknown@{hkds\_cpuid\_unknown}!utils.h@{utils.h}}\index{utils.h@{utils.h}!hkds\_cpuid\_unknown@{hkds\_cpuid\_unknown}}}\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aaeeb4a852de3e8310f9e69644e4f2c46}\label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aaeeb4a852de3e8310f9e69644e4f2c46} 
+hkds\+\_\+cpuid\+\_\+unknown&The CPU type is unknown \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{hkds\_cpuid\_amd@{hkds\_cpuid\_amd}!utils.h@{utils.h}}\index{utils.h@{utils.h}!hkds\_cpuid\_amd@{hkds\_cpuid\_amd}}}\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aa543b40d4eec335fbfc6d980e8363d66}\label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aa543b40d4eec335fbfc6d980e8363d66} 
+hkds\+\_\+cpuid\+\_\+amd&The CPU type is AMD \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{hkds\_cpuid\_intel@{hkds\_cpuid\_intel}!utils.h@{utils.h}}\index{utils.h@{utils.h}!hkds\_cpuid\_intel@{hkds\_cpuid\_intel}}}\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a73856e6cf99c949bd811b388ee9c154f}\label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a73856e6cf99c949bd811b388ee9c154f} 
+hkds\+\_\+cpuid\+\_\+intel&The CPU type is Intel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{hkds\_cpuid\_via@{hkds\_cpuid\_via}!utils.h@{utils.h}}\index{utils.h@{utils.h}!hkds\_cpuid\_via@{hkds\_cpuid\_via}}}\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aad72f36bd8e11bb41d2b48f44e1e202b}\label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0aad72f36bd8e11bb41d2b48f44e1e202b} 
+hkds\+\_\+cpuid\+\_\+via&The CPU type is VIA \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{hkds\_cpuid\_hygion@{hkds\_cpuid\_hygion}!utils.h@{utils.h}}\index{utils.h@{utils.h}!hkds\_cpuid\_hygion@{hkds\_cpuid\_hygion}}}\Hypertarget{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a823f18ba92e8fd9d14df522b069a5e3f}\label{utils_8h_a05bc1e492bca1ab93769c3ad4edc0cd0a823f18ba92e8fd9d14df522b069a5e3f} 
+hkds\+\_\+cpuid\+\_\+hygion&The CPU type is Hygion \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{utils_8h_aab2167bf7fccf4e2f223dfe4fcde8d84}\index{utils.h@{utils.h}!utils\_cpu\_features\_set@{utils\_cpu\_features\_set}}
+\index{utils\_cpu\_features\_set@{utils\_cpu\_features\_set}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_cpu\_features\_set()}{utils\_cpu\_features\_set()}}
+{\footnotesize\ttfamily \label{utils_8h_aab2167bf7fccf4e2f223dfe4fcde8d84} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+cpu\+\_\+features\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structutils__cpu__features}{utils\+\_\+cpu\+\_\+features}} \texorpdfstring{$\ast$}{*}const}]{features}{}\end{DoxyParamCaption})}
+
+
+
+Get a list of supported CPU features. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em features} & A \doxylink{structutils__cpu__features}{utils\+\_\+cpu\+\_\+features} structure \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true for success, false if CPU is not recognized 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_af023770b1cda22f5388c10e68fab18e0}\index{utils.h@{utils.h}!utils\_find\_string@{utils\_find\_string}}
+\index{utils\_find\_string@{utils\_find\_string}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_find\_string()}{utils\_find\_string()}}
+{\footnotesize\ttfamily \label{utils_8h_af023770b1cda22f5388c10e68fab18e0} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API int64\+\_\+t utils\+\_\+find\+\_\+string (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{source}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{token}{}\end{DoxyParamCaption})}
+
+
+
+Find a substrings position within a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & \mbox{[}const\mbox{]} The string to check for the substring \\
+\hline
+{\em token} & \mbox{[}const\mbox{]} The substring to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the character position within the string, or HKDS\+\_\+\+STRINGUTILS\+\_\+\+TOKEN\+\_\+\+NOT\+\_\+\+FOUND if the string is not found 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a58df0b93f48e2ddf1e447b58fbe28724}\index{utils.h@{utils.h}!utils\_hex\_to\_bin@{utils\_hex\_to\_bin}}
+\index{utils\_hex\_to\_bin@{utils\_hex\_to\_bin}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_hex\_to\_bin()}{utils\_hex\_to\_bin()}}
+{\footnotesize\ttfamily \label{utils_8h_a58df0b93f48e2ddf1e447b58fbe28724} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+hex\+\_\+to\+\_\+bin (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{hexstr}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Convert a hexadecimal character string to a character byte array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hexstr} & \mbox{[}const\mbox{]} The string to convert \\
+\hline
+{\em output} & The character output array \\
+\hline
+{\em length} & The number of characters to convert \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a915034f14f36d752a4a37616a02d9e47}\index{utils.h@{utils.h}!utils\_integer\_be32to8@{utils\_integer\_be32to8}}
+\index{utils\_integer\_be32to8@{utils\_integer\_be32to8}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_be32to8()}{utils\_integer\_be32to8()}}
+{\footnotesize\ttfamily \label{utils_8h_a915034f14f36d752a4a37616a02d9e47} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+integer\+\_\+be32to8 (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{uint32\+\_\+t}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Convert a 32-\/bit integer to a big-\/endian 8-\/bit integer array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The destination 8-\/bit integer array \\
+\hline
+{\em value} & The 32-\/bit integer \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a31131090daba973a258a8a9c470e7528}\index{utils.h@{utils.h}!utils\_integer\_be8increment@{utils\_integer\_be8increment}}
+\index{utils\_integer\_be8increment@{utils\_integer\_be8increment}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_be8increment()}{utils\_integer\_be8increment()}}
+{\footnotesize\ttfamily \label{utils_8h_a31131090daba973a258a8a9c470e7528} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+integer\+\_\+be8increment (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{size\+\_\+t}]{otplen}{}\end{DoxyParamCaption})}
+
+
+
+Increment an 8-\/bit integer array as a segmented big-\/endian integer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The destination integer 8-\/bit array \\
+\hline
+{\em otplen} & The length of the output counter array \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a696de7b0f84c0df102eea8cd3370bc1f}\index{utils.h@{utils.h}!utils\_integer\_be8to32@{utils\_integer\_be8to32}}
+\index{utils\_integer\_be8to32@{utils\_integer\_be8to32}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_be8to32()}{utils\_integer\_be8to32()}}
+{\footnotesize\ttfamily \label{utils_8h_a696de7b0f84c0df102eea8cd3370bc1f} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint32\+\_\+t utils\+\_\+integer\+\_\+be8to32 (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Convert an 8-\/bit integer array to a 32-\/bit big-\/endian integer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & \mbox{[}const\mbox{]} The source integer 8-\/bit array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the 32-\/bit big endian integer 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_acd882da28399e555c12610956a51e11c}\index{utils.h@{utils.h}!utils\_integer\_le64to8@{utils\_integer\_le64to8}}
+\index{utils\_integer\_le64to8@{utils\_integer\_le64to8}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_le64to8()}{utils\_integer\_le64to8()}}
+{\footnotesize\ttfamily \label{utils_8h_acd882da28399e555c12610956a51e11c} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+integer\+\_\+le64to8 (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{uint64\+\_\+t}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Convert a 64-\/bit integer to a little-\/endian 8-\/bit integer array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The 8-\/bit integer array \\
+\hline
+{\em value} & The 64-\/bit integer \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a490718bf11503c1b2ce815a8be9bfa9a}\index{utils.h@{utils.h}!utils\_integer\_le8to64@{utils\_integer\_le8to64}}
+\index{utils\_integer\_le8to64@{utils\_integer\_le8to64}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_le8to64()}{utils\_integer\_le8to64()}}
+{\footnotesize\ttfamily \label{utils_8h_a490718bf11503c1b2ce815a8be9bfa9a} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t utils\+\_\+integer\+\_\+le8to64 (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Convert an 8-\/bit integer array to a 64-\/bit little-\/endian integer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & \mbox{[}const\mbox{]} The source integer 8-\/bit array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the 64-\/bit little endian integer 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a9fde663a09daf9295f1326bbb62aed8e}\index{utils.h@{utils.h}!utils\_integer\_rotl64@{utils\_integer\_rotl64}}
+\index{utils\_integer\_rotl64@{utils\_integer\_rotl64}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_rotl64()}{utils\_integer\_rotl64()}}
+{\footnotesize\ttfamily \label{utils_8h_a9fde663a09daf9295f1326bbb62aed8e} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t utils\+\_\+integer\+\_\+rotl64 (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{value}{, }\item[{size\+\_\+t}]{shift}{}\end{DoxyParamCaption})}
+
+
+
+Rotate an unsigned 64-\/bit integer to the left. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to rotate \\
+\hline
+{\em shift} & The bit shift register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the rotated integer 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a69d99eb143d1796cf12a2c478d9d400a}\index{utils.h@{utils.h}!utils\_integer\_verify@{utils\_integer\_verify}}
+\index{utils\_integer\_verify@{utils\_integer\_verify}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_integer\_verify()}{utils\_integer\_verify()}}
+{\footnotesize\ttfamily \label{utils_8h_a69d99eb143d1796cf12a2c478d9d400a} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API int32\+\_\+t utils\+\_\+integer\+\_\+verify (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Constant time comparison of two arrays of unsigned 8-\/bit integers. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \mbox{[}const\mbox{]} The first 8-\/bit integer array \\
+\hline
+{\em b} & \mbox{[}const\mbox{]} The second 8-\/bit integer array \\
+\hline
+{\em length} & The number of bytes to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns zero if the arrays are equivalent 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_aa8ade31ac89041391e269c5f3f5f6a80}\index{utils.h@{utils.h}!utils\_memory\_aligned\_alloc@{utils\_memory\_aligned\_alloc}}
+\index{utils\_memory\_aligned\_alloc@{utils\_memory\_aligned\_alloc}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_aligned\_alloc()}{utils\_memory\_aligned\_alloc()}}
+{\footnotesize\ttfamily \label{utils_8h_aa8ade31ac89041391e269c5f3f5f6a80} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void \texorpdfstring{$\ast$}{*} utils\+\_\+memory\+\_\+aligned\+\_\+alloc (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{align}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Allocate an aligned 8-\/bit integer array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em align} & The memory alignment boundary \\
+\hline
+{\em length} & The length of the requested block\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the aligned array of bytes, or NULL on failure 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a2bb7285604e9c0616e91f18d5d93facc}\index{utils.h@{utils.h}!utils\_memory\_aligned\_free@{utils\_memory\_aligned\_free}}
+\index{utils\_memory\_aligned\_free@{utils\_memory\_aligned\_free}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_aligned\_free()}{utils\_memory\_aligned\_free()}}
+{\footnotesize\ttfamily \label{utils_8h_a2bb7285604e9c0616e91f18d5d93facc} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+memory\+\_\+aligned\+\_\+free (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{block}{}\end{DoxyParamCaption})}
+
+
+
+Free an aligned memory block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em block} & A pointer to the memory block to release \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a8d153e520350ad893aac31f8d124ead4}\index{utils.h@{utils.h}!utils\_memory\_are\_equal@{utils\_memory\_are\_equal}}
+\index{utils\_memory\_are\_equal@{utils\_memory\_are\_equal}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_are\_equal()}{utils\_memory\_are\_equal()}}
+{\footnotesize\ttfamily \label{utils_8h_a8d153e520350ad893aac31f8d124ead4} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+memory\+\_\+are\+\_\+equal (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Compare two byte arrays for equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & A pointer to the first array \\
+\hline
+{\em b} & A pointer to the second array \\
+\hline
+{\em length} & The number of bytes to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns if the arrays are equivalent 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a7ab8d7ca8cc41fe56a9941fc736946fc}\index{utils.h@{utils.h}!utils\_memory\_are\_equal\_128@{utils\_memory\_are\_equal\_128}}
+\index{utils\_memory\_are\_equal\_128@{utils\_memory\_are\_equal\_128}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_are\_equal\_128()}{utils\_memory\_are\_equal\_128()}}
+{\footnotesize\ttfamily \label{utils_8h_a7ab8d7ca8cc41fe56a9941fc736946fc} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+128 (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b}{}\end{DoxyParamCaption})}
+
+
+
+Compare two 16 byte arrays for equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & A pointer to the first array \\
+\hline
+{\em b} & A pointer to the second array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true if the arrays are equivalent 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a2897c77f65f46c643e90b29b224cbd51}\index{utils.h@{utils.h}!utils\_memory\_are\_equal\_256@{utils\_memory\_are\_equal\_256}}
+\index{utils\_memory\_are\_equal\_256@{utils\_memory\_are\_equal\_256}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_are\_equal\_256()}{utils\_memory\_are\_equal\_256()}}
+{\footnotesize\ttfamily \label{utils_8h_a2897c77f65f46c643e90b29b224cbd51} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+256 (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b}{}\end{DoxyParamCaption})}
+
+
+
+Compare two 32 byte arrays for equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & A pointer to the first array \\
+\hline
+{\em b} & A pointer to the second array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true if the arrays are equivalent 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a183feab93e83fc8e23b6150b970173b2}\index{utils.h@{utils.h}!utils\_memory\_are\_equal\_512@{utils\_memory\_are\_equal\_512}}
+\index{utils\_memory\_are\_equal\_512@{utils\_memory\_are\_equal\_512}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_are\_equal\_512()}{utils\_memory\_are\_equal\_512()}}
+{\footnotesize\ttfamily \label{utils_8h_a183feab93e83fc8e23b6150b970173b2} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+memory\+\_\+are\+\_\+equal\+\_\+512 (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b}{}\end{DoxyParamCaption})}
+
+
+
+Compare two 64 byte arrays for equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & A pointer to the first array \\
+\hline
+{\em b} & A pointer to the second array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true if the arrays are equivalent 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a569bd23e1ba834bdf6602aca6d4f68c2}\index{utils.h@{utils.h}!utils\_memory\_clear@{utils\_memory\_clear}}
+\index{utils\_memory\_clear@{utils\_memory\_clear}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_clear()}{utils\_memory\_clear()}}
+{\footnotesize\ttfamily \label{utils_8h_a569bd23e1ba834bdf6602aca6d4f68c2} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+memory\+\_\+clear (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Erase a block of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & A pointer to the memory block to erase \\
+\hline
+{\em length} & The number of bytes to erase \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_ae33a2dbe24b3524383f579ffd28dac75}\index{utils.h@{utils.h}!utils\_memory\_copy@{utils\_memory\_copy}}
+\index{utils\_memory\_copy@{utils\_memory\_copy}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_copy()}{utils\_memory\_copy()}}
+{\footnotesize\ttfamily \label{utils_8h_ae33a2dbe24b3524383f579ffd28dac75} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+memory\+\_\+copy (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{const void \texorpdfstring{$\ast$}{*}}]{input}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Copy a block of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & A pointer to the destination array \\
+\hline
+{\em input} & A pointer to the source array \\
+\hline
+{\em length} & The number of bytes to copy \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a6a3877ea2184446689cde42098da4f2c}\index{utils.h@{utils.h}!utils\_memory\_xor@{utils\_memory\_xor}}
+\index{utils\_memory\_xor@{utils\_memory\_xor}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_memory\_xor()}{utils\_memory\_xor()}}
+{\footnotesize\ttfamily \label{utils_8h_a6a3877ea2184446689cde42098da4f2c} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+memory\+\_\+xor (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{input}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Bitwise XOR two blocks of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & A pointer to the destination array \\
+\hline
+{\em input} & A pointer to the source array \\
+\hline
+{\em length} & The number of bytes to XOR \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_aa007be3f2d44d5e6a0192e9efcb80a4a}\index{utils.h@{utils.h}!utils\_print\_line@{utils\_print\_line}}
+\index{utils\_print\_line@{utils\_print\_line}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_print\_line()}{utils\_print\_line()}}
+{\footnotesize\ttfamily \label{utils_8h_aa007be3f2d44d5e6a0192e9efcb80a4a} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+print\+\_\+line (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Print an array of characters to the console with a line break. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & \mbox{[}const\mbox{]} The character array to print \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_aa3021ea310ea1943ed220fb0904f1232}\index{utils.h@{utils.h}!utils\_print\_safe@{utils\_print\_safe}}
+\index{utils\_print\_safe@{utils\_print\_safe}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_print\_safe()}{utils\_print\_safe()}}
+{\footnotesize\ttfamily \label{utils_8h_aa3021ea310ea1943ed220fb0904f1232} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+print\+\_\+safe (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Print an array of characters to the console. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & \mbox{[}const\mbox{]} The character array to print \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a6419b34f8b806a3c66887d79a8763d03}\index{utils.h@{utils.h}!utils\_seed\_generate@{utils\_seed\_generate}}
+\index{utils\_seed\_generate@{utils\_seed\_generate}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_seed\_generate()}{utils\_seed\_generate()}}
+{\footnotesize\ttfamily \label{utils_8h_a6419b34f8b806a3c66887d79a8763d03} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+seed\+\_\+generate (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{size\+\_\+t}]{length}{}\end{DoxyParamCaption})}
+
+
+
+Get an array of pseudo-\/random bytes from the system entropy provider. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Pointer to the output byte array \\
+\hline
+{\em length} & The number of bytes to copy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true for success 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_ae083d9bcaa1ad6dab6aad22a8adcbce9}\index{utils.h@{utils.h}!utils\_stopwatch\_elapsed@{utils\_stopwatch\_elapsed}}
+\index{utils\_stopwatch\_elapsed@{utils\_stopwatch\_elapsed}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_stopwatch\_elapsed()}{utils\_stopwatch\_elapsed()}}
+{\footnotesize\ttfamily \label{utils_8h_ae083d9bcaa1ad6dab6aad22a8adcbce9} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t utils\+\_\+stopwatch\+\_\+elapsed (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{start}{}\end{DoxyParamCaption})}
+
+
+
+Returns the time difference between the start and current time in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+The time difference in milliseconds 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_ab3c96366cb62be8c75cc25ea4f6bc5dd}\index{utils.h@{utils.h}!utils\_stopwatch\_start@{utils\_stopwatch\_start}}
+\index{utils\_stopwatch\_start@{utils\_stopwatch\_start}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_stopwatch\_start()}{utils\_stopwatch\_start()}}
+{\footnotesize\ttfamily \label{utils_8h_ab3c96366cb62be8c75cc25ea4f6bc5dd} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API uint64\+\_\+t utils\+\_\+stopwatch\+\_\+start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the clock time at the start of a timed operation. 
+
+\begin{DoxyReturn}{Returns}
+The starting clock time 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a2f234fb5cc9367dd77bd51b00099aae2}\index{utils.h@{utils.h}!utils\_string\_contains@{utils\_string\_contains}}
+\index{utils\_string\_contains@{utils\_string\_contains}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_string\_contains()}{utils\_string\_contains()}}
+{\footnotesize\ttfamily \label{utils_8h_a2f234fb5cc9367dd77bd51b00099aae2} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool utils\+\_\+string\+\_\+contains (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{source}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{token}{}\end{DoxyParamCaption})}
+
+
+
+Test if the string contains a substring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & \mbox{[}const\mbox{]} The string to check for the substring \\
+\hline
+{\em token} & \mbox{[}const\mbox{]} The substring to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true if the substring is found 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_ad9b9f2d491907005a4e0caabce74128d}\index{utils.h@{utils.h}!utils\_string\_size@{utils\_string\_size}}
+\index{utils\_string\_size@{utils\_string\_size}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_string\_size()}{utils\_string\_size()}}
+{\footnotesize\ttfamily \label{utils_8h_ad9b9f2d491907005a4e0caabce74128d} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t utils\+\_\+string\+\_\+size (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{source}{}\end{DoxyParamCaption})}
+
+
+
+Get the character length of a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & \mbox{[}const\mbox{]} The source string pointer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the size of the string 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a7b2904cde9f3834398423f09656b0792}\index{utils.h@{utils.h}!utils\_string\_to\_lowercase@{utils\_string\_to\_lowercase}}
+\index{utils\_string\_to\_lowercase@{utils\_string\_to\_lowercase}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{utils\_string\_to\_lowercase()}{utils\_string\_to\_lowercase()}}
+{\footnotesize\ttfamily \label{utils_8h_a7b2904cde9f3834398423f09656b0792} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API void utils\+\_\+string\+\_\+to\+\_\+lowercase (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{source}{}\end{DoxyParamCaption})}
+
+
+
+Convert a string to all lower-\/case characters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & The string to convert to lower-\/case \\
+\hline
+\end{DoxyParams}

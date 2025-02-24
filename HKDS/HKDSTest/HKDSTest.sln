@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDSTest", "HKDSTest.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDS", "..\HKDS\HKDS.vcxproj", "{E951E07C-A97E-4603-8656-BEB4B18F532D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85D38812-9882-4D2D-AB85-9CFEAAA7737D}"
+	ProjectSection(SolutionItems) = preProject
+		..\HKDS\QRCS-PL License.txt = ..\HKDS\QRCS-PL License.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

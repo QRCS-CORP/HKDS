@@ -14,7 +14,7 @@
  * Written by John G. Underhill
  * Written on March 29, 2020
  * Updated on May 30, 2024
- * Contact: develop@qrcs.ca
+ * Contact: john.underhill@protonmail.com
  */
 
 #include "hkds_benchmark.h"
@@ -37,7 +37,7 @@ void print_title(void)
 	qsctest_print_line("* License:   Copyrighted and Patent pending          *");
 	qsctest_print_line("* Date:      May 30 2024                             *");
 	qsctest_print_line("* Author:    John G. Underhill                       *");
-	qsctest_print_line("* Contact:   develop@qrcs.ca                         *");
+	qsctest_print_line("* Contact:   john.underhill@protonmail.com           *");
 	qsctest_print_line("******************************************************");
 	qsctest_print_line("");
 }

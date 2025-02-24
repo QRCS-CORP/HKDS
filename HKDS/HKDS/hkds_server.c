@@ -616,4 +616,5 @@ void hkds_server_initialize_state_x64(hkds_server_x8_state state[HKDS_PARALLEL_D
 		hkds_server_initialize_state_x8(&state[i], &mdk[i], ksn[i]);
 	}
 }
+
 #endif

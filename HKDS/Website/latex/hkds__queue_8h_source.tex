@@ -1,0 +1,102 @@
+\doxysection{hkds\+\_\+queue.\+h}
+\hypertarget{hkds__queue_8h_source}{}\label{hkds__queue_8h_source}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_queue.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_queue.h}}
+\mbox{\hyperlink{hkds__queue_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ 2025\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ NOTICE:\ This\ software\ and\ all\ accompanying\ materials\ are\ the\ exclusive\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ property\ of\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation\ (QRCS).}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ The\ intellectual\ and\ technical\ concepts\ contained\ within\ this\ implementation\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ are\ proprietary\ to\ QRCS\ and\ its\ authorized\ licensors\ and\ are\ protected\ under\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ applicable\ U.S.\ and\ international\ copyright,\ patent,\ and\ trade\ secret\ laws.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ CRYPTOGRAPHIC\ STANDARDS:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ -\/\ This\ software\ includes\ implementations\ of\ cryptographic\ algorithms\ such\ as\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ \ \ SHA3,\ AES,\ and\ others.\ These\ algorithms\ are\ public\ domain\ or\ standardized\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ \ \ by\ organizations\ such\ as\ NIST\ and\ are\ NOT\ the\ property\ of\ QRCS.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ -\/\ However,\ all\ source\ code,\ optimizations,\ and\ implementations\ in\ this\ library\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ are\ original\ works\ of\ QRCS\ and\ are\ protected\ under\ this\ license.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ RESTRICTIONS:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ -\/\ Redistribution,\ modification,\ or\ unauthorized\ distribution\ of\ this\ software,\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ in\ whole\ or\ in\ part,\ is\ strictly\ prohibited.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ -\/\ This\ software\ is\ provided\ for\ non-\/commercial,\ educational,\ and\ research\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ \ \ purposes\ only.\ Commercial\ use\ in\ any\ form\ is\ expressly\ forbidden.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ -\/\ Licensing\ and\ authorized\ distribution\ are\ solely\ at\ the\ discretion\ of\ QRCS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/\ Any\ use\ of\ this\ software\ implies\ acceptance\ of\ these\ restrictions.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ DISCLAIMER:}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ software\ is\ provided\ "{}as\ is,"{}\ without\ warranty\ of\ any\ kind,\ express\ or\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ implied,\ including\ but\ not\ limited\ to\ warranties\ of\ merchantability\ or\ fitness\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ a\ particular\ purpose.\ QRCS\ disclaims\ all\ liability\ for\ any\ direct,\ indirect,\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ incidental,\ or\ consequential\ damages\ resulting\ from\ the\ use\ or\ misuse\ of\ this\ software.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ FULL\ LICENSE:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ This\ software\ is\ subject\ to\ the\ **Quantum\ Resistant\ Cryptographic\ Solutions\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Proprietary\ License\ (QRCS-\/PL)**.\ The\ complete\ license\ terms\ are\ included\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ in\ the\ LICENSE.txt\ file\ distributed\ with\ this\ software.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Written\ by:\ John\ G.\ Underhill}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Contact:\ john.underhill@protonmail.com}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifndef\ HKDS\_MESSAGE\_QUEUE\_H}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ HKDS\_MESSAGE\_QUEUE\_H}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{hkds__config_8h}{hkds\_config.h}}"{}}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ HKDS\_MESSAGE\_QUEUE\_TAG\_SIZE\ 16}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ HKDS\_QUEUE\_ALIGNMENT\ 64}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ HKDS\_QUEUE\_MAX\_DEPTH\ 64}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00072\ HKDS\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structhkds__queue__state}{hkds\_queue\_state}}}
+\DoxyCodeLine{00073\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ uint8\_t**\ \mbox{\hyperlink{structhkds__queue__state_af5d1f1cb9b21f783df67f97715f75b67}{queue}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structhkds__queue__state_a3e6054c6362d705c401073f9cbb4b942}{tags}}[HKDS\_QUEUE\_MAX\_DEPTH];\ \ \ \ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structhkds__queue__state_a76d971a3c552bc58ba9f0d5fceae9806}{count}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structhkds__queue__state_a820c167ceaaa9759b0ca2695d22db55c}{depth}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structhkds__queue__state_a7a04afe5347934be732ec70a70bd0a28}{position}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structhkds__queue__state_a02bed8590a9ddf520e58a060059518ec}{width}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00080\ \}\ \mbox{\hyperlink{structhkds__queue__state}{hkds\_queue\_state}};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \textcolor{comment}{/*\ packet\ queueing\ */}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00088\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}}
+\DoxyCodeLine{00089\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ uint8\_t*\ \mbox{\hyperlink{structhkds__message__queue__state_a4e624a18c2d70916cf54e382d4d56de9}{tag}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00091\ \ \ \ \ hkds\_queue\_state\ \mbox{\hyperlink{structhkds__message__queue__state_a917208c16eee0976273648edf3b3697c}{state}};\ \ \ \ }
+\DoxyCodeLine{00092\ \}\ \mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00099\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__queue_8h_aa99b8ccfa0732d182c3a2aafa5fa5195}{hkds\_message\_queue\_destroy}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00106\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__queue_8h_afbc3d254e35e2cf1aaca213e87df3bf2}{hkds\_message\_queue\_flush}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ uint8\_t*\ output);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00113\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__queue_8h_a20658c9a7905355e125798eeb34d9e08}{hkds\_message\_queue\_initialize}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ \textcolor{keywordtype}{size\_t}\ depth,\ \textcolor{keywordtype}{size\_t}\ width,\ uint8\_t*\ tag);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00120\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__queue_8h_a1fbcd8156c28b7f615f74e5b32fbbbd5}{hkds\_message\_queue\_pop}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ uint8\_t*\ output,\ \textcolor{keywordtype}{size\_t}\ outlen);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00127\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__queue_8h_a5d45cdea7d0ae157c1256667af8d1ed3}{hkds\_message\_queue\_push}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ \textcolor{keyword}{const}\ uint8\_t*\ inpput,\ \textcolor{keywordtype}{size\_t}\ inplen);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00135\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{hkds__queue_8h_a4f14d041e6d0f2f4d5f6208be6984ca3}{hkds\_message\_queue\_full}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00143\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{hkds__queue_8h_a92c87210002384cd262730332869b39d}{hkds\_message\_queue\_empty}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00151\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{hkds__queue_8h_a146d8272469a0466e7ad20ecc8ce9d6e}{hkds\_message\_queue\_count}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{/*\ block\ message\ export\ */}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00162\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{hkds__queue_8h_a6a38de3e171d2cb8a1ec46039038980e}{hkds\_message\_queue\_extract\_block\_x8}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ uint8\_t\ output[\mbox{\hyperlink{hkds__config_8h_a8ff92ab9ce1b32682f248fd091258c7e}{HKDS\_CACHX8\_DEPTH}}][\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\_MESSAGE\_SIZE}}]);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00171\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{hkds__queue_8h_aa6061ed6f998701ee32c279b21afe3fb}{hkds\_message\_queue\_extract\_block\_x64}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ uint8\_t\ output[\mbox{\hyperlink{hkds__config_8h_a27e614d5766833b4a1cd5572a598217c}{HKDS\_PARALLEL\_DEPTH}}][\mbox{\hyperlink{hkds__config_8h_a8ff92ab9ce1b32682f248fd091258c7e}{HKDS\_CACHX8\_DEPTH}}][\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\_MESSAGE\_SIZE}}]);}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00180\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{hkds__queue_8h_ae81254671e5d205b6b37f9cfc617bd62}{hkds\_message\_queue\_extract\_stream}}(\mbox{\hyperlink{structhkds__message__queue__state}{hkds\_message\_queue\_state}}*\ ctx,\ uint8\_t*\ stream,\ \textcolor{keywordtype}{size\_t}\ items);}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

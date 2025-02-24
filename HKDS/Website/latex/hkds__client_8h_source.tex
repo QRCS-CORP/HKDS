@@ -1,0 +1,71 @@
+\doxysection{hkds\+\_\+client.\+h}
+\hypertarget{hkds__client_8h_source}{}\label{hkds__client_8h_source}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_client.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_client.h}}
+\mbox{\hyperlink{hkds__client_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ 2025\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ NOTICE:\ This\ software\ and\ all\ accompanying\ materials\ are\ the\ exclusive\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ property\ of\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation\ (QRCS).}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ The\ intellectual\ and\ technical\ concepts\ contained\ within\ this\ implementation\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ are\ proprietary\ to\ QRCS\ and\ its\ authorized\ licensors\ and\ are\ protected\ under\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ applicable\ U.S.\ and\ international\ copyright,\ patent,\ and\ trade\ secret\ laws.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ CRYPTOGRAPHIC\ STANDARDS:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ -\/\ This\ software\ includes\ implementations\ of\ cryptographic\ algorithms\ such\ as\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ \ \ SHA3,\ AES,\ and\ others.\ These\ algorithms\ are\ public\ domain\ or\ standardized\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ \ \ by\ organizations\ such\ as\ NIST\ and\ are\ NOT\ the\ property\ of\ QRCS.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ -\/\ However,\ all\ source\ code,\ optimizations,\ and\ implementations\ in\ this\ library\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ are\ original\ works\ of\ QRCS\ and\ are\ protected\ under\ this\ license.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ RESTRICTIONS:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ -\/\ Redistribution,\ modification,\ or\ unauthorized\ distribution\ of\ this\ software,\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ in\ whole\ or\ in\ part,\ is\ strictly\ prohibited.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ -\/\ This\ software\ is\ provided\ for\ non-\/commercial,\ educational,\ and\ research\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ \ \ purposes\ only.\ Commercial\ use\ in\ any\ form\ is\ expressly\ forbidden.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ -\/\ Licensing\ and\ authorized\ distribution\ are\ solely\ at\ the\ discretion\ of\ QRCS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/\ Any\ use\ of\ this\ software\ implies\ acceptance\ of\ these\ restrictions.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ DISCLAIMER:}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ software\ is\ provided\ "{}as\ is,"{}\ without\ warranty\ of\ any\ kind,\ express\ or\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ implied,\ including\ but\ not\ limited\ to\ warranties\ of\ merchantability\ or\ fitness\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ a\ particular\ purpose.\ QRCS\ disclaims\ all\ liability\ for\ any\ direct,\ indirect,\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ incidental,\ or\ consequential\ damages\ resulting\ from\ the\ use\ or\ misuse\ of\ this\ software.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ FULL\ LICENSE:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ This\ software\ is\ subject\ to\ the\ **Quantum\ Resistant\ Cryptographic\ Solutions\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Proprietary\ License\ (QRCS-\/PL)**.\ The\ complete\ license\ terms\ are\ included\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ in\ the\ LICENSE.txt\ file\ distributed\ with\ this\ software.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Written\ by:\ John\ G.\ Underhill}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Contact:\ john.underhill@protonmail.com}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifndef\ HKDS\_CLIENT\_H}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ HKDS\_CLIENT\_H}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{hkds__config_8h}{hkds\_config.h}}"{}}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00084\ HKDS\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ uint8\_t\ edk[\mbox{\hyperlink{hkds__config_8h_a2560e623e5208ad67c33e64535e0a237}{HKDS\_EDK\_SIZE}}];}
+\DoxyCodeLine{00087\ \ \ \ \ uint8\_t\ ksn[\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\_KSN\_SIZE}}];}
+\DoxyCodeLine{00088\ \ \ \ \ uint8\_t\ tkc[\mbox{\hyperlink{hkds__config_8h_a66af21b9ecaa2d5156eca8ebfcedb15e}{HKDS\_CACHE\_SIZE}}][\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\_MESSAGE\_SIZE}}];}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{bool}\ cache\_empty;}
+\DoxyCodeLine{00090\ \}\ \mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00113\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{hkds__client_8h_a0ba6e6fe74839e5382c7b4b05b7a84a1}{hkds\_client\_decrypt\_token}}(\mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}}*\ state,\ \textcolor{keyword}{const}\ uint8\_t*\ etok,\ uint8\_t*\ token);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00134\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{hkds__client_8h_a7464228d8a1821d8bc976b9e68d3f270}{hkds\_client\_encrypt\_message}}(\mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}}*\ state,\ \textcolor{keyword}{const}\ uint8\_t*\ plaintext,\ uint8\_t*\ ciphertext);}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00157\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{hkds__client_8h_ac928ed915fbc0aad5f3029cdeda91fbb}{hkds\_client\_encrypt\_authenticate\_message}}(\mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}}*\ state,\ \textcolor{keyword}{const}\ uint8\_t*\ plaintext,\ \textcolor{keyword}{const}\ uint8\_t*\ data,\ \textcolor{keywordtype}{size\_t}\ datalen,\ uint8\_t*\ ciphertext);}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00175\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__client_8h_a01530c17ca2fb86d8f408d9e740a2b51}{hkds\_client\_generate\_cache}}(\mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}}*\ state,\ \textcolor{keyword}{const}\ uint8\_t*\ token);}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00193\ HKDS\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{hkds__client_8h_a77fd14eabdcca02faef9fc9e418b5e7c}{hkds\_client\_initialize\_state}}(\mbox{\hyperlink{structhkds__client__state}{hkds\_client\_state}}*\ state,\ \textcolor{keyword}{const}\ uint8\_t*\ edk,\ \textcolor{keyword}{const}\ uint8\_t*\ did);}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

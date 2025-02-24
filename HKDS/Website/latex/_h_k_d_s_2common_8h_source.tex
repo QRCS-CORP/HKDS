@@ -1,0 +1,512 @@
+\doxysection{common.\+h}
+\hypertarget{_h_k_d_s_2common_8h_source}{}\label{_h_k_d_s_2common_8h_source}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/common.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/common.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ 2025\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ NOTICE:\ This\ software\ and\ all\ accompanying\ materials\ are\ the\ exclusive\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ property\ of\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation\ (QRCS).}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ The\ intellectual\ and\ technical\ concepts\ contained\ within\ this\ implementation\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ are\ proprietary\ to\ QRCS\ and\ its\ authorized\ licensors\ and\ are\ protected\ under\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ applicable\ U.S.\ and\ international\ copyright,\ patent,\ and\ trade\ secret\ laws.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ CRYPTOGRAPHIC\ STANDARDS:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ -\/\ This\ software\ includes\ implementations\ of\ cryptographic\ algorithms\ such\ as\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ \ \ SHA3,\ AES,\ and\ others.\ These\ algorithms\ are\ public\ domain\ or\ standardized\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ \ \ by\ organizations\ such\ as\ NIST\ and\ are\ NOT\ the\ property\ of\ QRCS.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ -\/\ However,\ all\ source\ code,\ optimizations,\ and\ implementations\ in\ this\ library\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ are\ original\ works\ of\ QRCS\ and\ are\ protected\ under\ this\ license.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ RESTRICTIONS:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ -\/\ Redistribution,\ modification,\ or\ unauthorized\ distribution\ of\ this\ software,\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ in\ whole\ or\ in\ part,\ is\ strictly\ prohibited.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ -\/\ This\ software\ is\ provided\ for\ non-\/commercial,\ educational,\ and\ research\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ \ \ purposes\ only.\ Commercial\ use\ in\ any\ form\ is\ expressly\ forbidden.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ -\/\ Licensing\ and\ authorized\ distribution\ are\ solely\ at\ the\ discretion\ of\ QRCS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/\ Any\ use\ of\ this\ software\ implies\ acceptance\ of\ these\ restrictions.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ DISCLAIMER:}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ software\ is\ provided\ "{}as\ is,"{}\ without\ warranty\ of\ any\ kind,\ express\ or\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ implied,\ including\ but\ not\ limited\ to\ warranties\ of\ merchantability\ or\ fitness\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ a\ particular\ purpose.\ QRCS\ disclaims\ all\ liability\ for\ any\ direct,\ indirect,\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ incidental,\ or\ consequential\ damages\ resulting\ from\ the\ use\ or\ misuse\ of\ this\ software.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ FULL\ LICENSE:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ This\ software\ is\ subject\ to\ the\ **Quantum\ Resistant\ Cryptographic\ Solutions\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Proprietary\ License\ (QRCS-\/PL)**.\ The\ complete\ license\ terms\ are\ included\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ in\ the\ LICENSE.txt\ file\ distributed\ with\ this\ software.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Written\ by:\ John\ G.\ Underhill}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Contact:\ john.underhill@protonmail.com}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifndef\ HKDS\_COMMON\_H}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ HKDS\_COMMON\_H}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <assert.h>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <errno.h>}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ <limits.h>}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{comment}{/*\ \(\backslash\)cond\ DOXYGEN\_IGNORE\ */}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_MSC}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#elif\ defined(\_\_MINGW32\_\_)}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_MINGW}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_GCC}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#elif\ defined(\_\_CC\_ARM)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_ARM}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#elif\ defined(\_\_BORLANDC\_\_)}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_BORLAND}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_GCC}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#elif\ defined(\_\_clang\_\_)}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_CLANG}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#elif\ defined(\_\_IBMC\_\_)\ ||\ defined(\_\_IBMCPP\_\_)}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_IBM}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#elif\ defined(\_\_INTEL\_COMPILER)\ ||\ defined(\_\_ICL)}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_INTEL}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#elif\ defined(\_\_MWERKS\_\_)}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_MWERKS}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#elif\ defined(\_\_OPEN64\_\_)}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_OPEN64}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#elif\ defined(\_\_SUNPRO\_C)}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_SUNPRO}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#elif\ defined(\_\_TURBOC\_\_)}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_COMPILER\_TURBO}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#if\ defined(\_WIN64)\ ||\ defined(\_WIN32)\ ||\ defined(\_\_WIN64\_\_)\ ||\ defined(\_\_WIN32\_\_)}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#\ \ \ if\ !defined(SYSTEM\_OS\_WINDOWS)}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_OS\_WINDOWS}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_WIN64)}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ISWIN64}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_WIN32)}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ISWIN32}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#elif\ defined(\_\_ANDROID\_\_)}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_ANDROID}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)\ ||\ defined(\_\_MACH\_\_)}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#\ \ \ include\ "{}TargetConditionals.h"{}}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_APPLE}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_BSD}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#\ \ \ if\ defined(TARGET\_OS\_IPHONE)\ \&\&\ defined(TARGET\_IPHONE\_SIMULATOR)}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ISIPHONESIM}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#\ \ \ elif\ TARGET\_OS\_IPHONE}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ISIPHONE}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ISOSX}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#elif\ defined(\_\_FreeBSD\_\_)\ ||\ defined(\_\_NetBSD\_\_)\ ||\ defined(\_\_OpenBSD\_\_)\ ||\ defined(\_\_bsdi\_\_)\ ||\ defined(\_\_DragonFly\_\_)\ ||\ defined(SYSTEM\_ISOSX)}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_BSD}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux)\ ||\ defined(\_\_linux\_\_)\ ||\ defined(\_\_gnu\_linux\_\_\ )}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_LINUX}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{int}\ errno\_t;}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#elif\ defined(\_\_unix)\ ||\ defined(\_\_unix\_\_)}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_UNIX}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_hpux)\ ||\ defined(hpux)}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_OS\_HPUX}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_sun\_\_)\ ||\ defined(\_\_sun)\ ||\ defined(sun)}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_OS\_SUNUX}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#if\ defined(\_\_posix)\ ||\ defined(\_\_posix\_\_)\ ||\ defined(\_\_USE\_POSIX)\ ||\ defined(\_POSIX\_VERSION)\ ||\ defined(SYSTEM\_OS\_APPLE)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OS\_POSIX}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_OS\_WINDOWS)\ \&\&\ defined(SYSTEM\_COMPILER\_MSC)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_WINDOWS\_VSTUDIO\_BUILD}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\#if\ defined(\_OPENMP)}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPENMP}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#if\ defined(DEBUG)\ ||\ defined(\_DEBUG)\ ||\ defined(\_\_DEBUG\_\_)\ ||\ (defined(\_\_GNUC\_\_)\ \&\&\ !defined(\_\_OPTIMIZE\_\_))}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_DEBUG\_MODE}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00162\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_M\_X64)\ ||\ defined(\_M\_AMD64)}}
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86\_64}}
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86}}
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_M\_AMD64)}}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_AMD64}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00169\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_M\_IX86)\ ||\ defined(\_X86\_)}}
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86\_32}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86}}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_M\_ARM)}}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARM}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_M\_ARM\_ARMV7VE)}}
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARMV7VE}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ elif\ defined(\_M\_ARM\_FP)}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARMFP}}
+\DoxyCodeLine{00178\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ elif\ defined(\_M\_ARM64)}}
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARM64}}
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_M\_IA64)}}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IA64}}
+\DoxyCodeLine{00183\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_GCC)}}
+\DoxyCodeLine{00185\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_amd64\_\_)\ ||\ defined(\_\_amd64)\ ||\ defined(\_\_x86\_64\_\_)\ ||\ defined(\_\_x86\_64)}}
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86\_64}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_M\_AMD64)}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_AMD64}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(i386)\ ||\ defined(\_\_i386)\ ||\ defined(\_\_i386\_\_)}}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86\_32}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IX86}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_\_arm\_\_)}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARM}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_\_aarch64\_\_)}}
+\DoxyCodeLine{00197\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_ARM64}}
+\DoxyCodeLine{00198\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00199\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_\_ia64)\ ||\ defined(\_\_ia64\_\_)\ ||\ defined(\_\_itanium\_\_)}}
+\DoxyCodeLine{00200\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_IA64}}
+\DoxyCodeLine{00201\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_\_powerpc64\_\_)\ ||\ defined(\_\_ppc64\_\_)\ ||\ defined(\_\_PPC64\_\_)\ ||\ defined(\_\_64BIT\_\_)\ ||\ defined(\_LP64)\ ||\ defined(\_\_LP64\_\_)}}
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_PPC}}
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_\_sparc)\ ||\ defined(\_\_sparc\_\_)}}
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_SPARC}}
+\DoxyCodeLine{00205\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_\_sparc64\_\_)}}
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ SYSTEM\_ARCH\_SPARC64}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00208\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00209\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#\ \ \ if\ defined(SYSTEM\_ARCH\_ARM)}}
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ include\ <arm\_neon.h>}}
+\DoxyCodeLine{00214\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00215\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ include\ <intrin.h>}\ \ \textcolor{comment}{/*\ Microsoft\ C/C++\ compatible\ compiler\ */}}
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00217\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ \&\&\ (defined(\_\_x86\_64\_\_)\ ||\ defined(\_\_i386\_\_))}}
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#\ \ \ include\ <x86intrin.h>}\ \ \ \textcolor{comment}{/*\ GCC-\/compatible\ compiler,\ targeting\ x86/x86-\/64\ */}}
+\DoxyCodeLine{00219\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ \&\&\ defined(\_\_ARM\_NEON\_\_)}}
+\DoxyCodeLine{00220\ \textcolor{preprocessor}{\#\ \ \ include\ <arm\_neon.h>}\ \ \ \ \textcolor{comment}{/*\ GCC-\/compatible\ compiler,\ targeting\ ARM\ with\ NEON\ */}}
+\DoxyCodeLine{00221\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ \&\&\ defined(\_\_IWMMXT\_\_)}}
+\DoxyCodeLine{00222\ \textcolor{preprocessor}{\#\ \ \ include\ <mmintrin.h>}\ \ \ \ \textcolor{comment}{/*\ GCC-\/compatible\ compiler,\ targeting\ ARM\ with\ WMMX\ */}}
+\DoxyCodeLine{00223\ \textcolor{preprocessor}{\#elif\ (defined(\_\_GNUC\_\_)\ ||\ defined(\_\_xlC\_\_))\ \&\&\ (defined(\_\_VEC\_\_)\ ||\ defined(\_\_ALTIVEC\_\_))}}
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#\ \ \ include\ <altivec.h>}\ \ \ \ \ \textcolor{comment}{/*\ XLC\ or\ GCC-\/compatible\ compiler,\ targeting\ PowerPC\ with\ VMX/VSX\ */}}
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ \&\&\ defined(\_\_SPE\_\_)}}
+\DoxyCodeLine{00226\ \textcolor{preprocessor}{\#\ \ \ include\ <spe.h>}\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ GCC-\/compatible\ compiler,\ targeting\ PowerPC\ with\ SPE\ */}}
+\DoxyCodeLine{00227\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00233\ \textcolor{preprocessor}{\#if\ defined(\_WIN64)\ ||\ defined(\_WIN32)\ ||\ defined(\_\_CYGWIN\_\_)}}
+\DoxyCodeLine{00234\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SOCKETS\_WINDOWS}}
+\DoxyCodeLine{00235\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00236\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SOCKETS\_BERKELY}}
+\DoxyCodeLine{00237\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\#if\ !defined(\_\_clang\_\_)\ \&\&\ !defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\#\ \ \ ifdef\ \_\_attribute\_\_}}
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ undef\ \_\_attribute\_\_}}
+\DoxyCodeLine{00246\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00247\ \textcolor{preprocessor}{\#\ \ \ define\ \_\_attribute\_\_(a)}}
+\DoxyCodeLine{00248\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\#if\ defined(\_DLL)}}
+\DoxyCodeLine{00255\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_DLL\_API}}
+\DoxyCodeLine{00256\ \textcolor{preprocessor}{\#endif}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00261\ \textcolor{preprocessor}{\#if\ defined(HKDS\_DLL\_API)}}
+\DoxyCodeLine{00262\ \textcolor{preprocessor}{\#\ \ \ if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00263\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(HKDS\_DLL\_IMPORT)}}
+\DoxyCodeLine{00264\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_declspec(dllimport)}}
+\DoxyCodeLine{00265\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ else}}
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_declspec(dllexport)}}
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00268\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(SYSTEM\_COMPILER\_GCC)}}
+\DoxyCodeLine{00269\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(HKDS\_DLL\_IMPORT)}}
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_attribute\_\_((dllimport))}}
+\DoxyCodeLine{00271\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ else}}
+\DoxyCodeLine{00272\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_attribute\_\_((dllexport))}}
+\DoxyCodeLine{00273\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00274\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00275\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ if\ defined(\_\_SUNPRO\_C)}}
+\DoxyCodeLine{00276\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ if\ !defined(\_\_GNU\_C\_\_)}}
+\DoxyCodeLine{00277\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_attribute\_\_\ (visibility(\_\_global))}}
+\DoxyCodeLine{00278\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ else}}
+\DoxyCodeLine{00279\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_attribute\_\_\ \_\_global}}
+\DoxyCodeLine{00280\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00281\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ elif\ defined(\_MSG\_VER)}}
+\DoxyCodeLine{00282\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ extern\ \_\_declspec(dllexport)}}
+\DoxyCodeLine{00283\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ else}}
+\DoxyCodeLine{00284\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ \ \ \ \ define\ HKDS\_EXPORT\_API\ \_\_attribute\_\_\ ((visibility\ ("{}default"{})))}}
+\DoxyCodeLine{00285\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ endif}}
+\DoxyCodeLine{00286\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00287\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\#\ \ \ define\ HKDS\_EXPORT\_API}}
+\DoxyCodeLine{00289\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00295\ \textcolor{preprocessor}{\#if\ defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{00296\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CACHE\_ALIGNED\ \_\_attribute\_\_((aligned(64)))}}
+\DoxyCodeLine{00297\ \textcolor{preprocessor}{\#elif\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00298\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CACHE\_ALIGNED\ \_\_declspec(align(64))}}
+\DoxyCodeLine{00299\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_ARCH\_IX86\_64)\ ||\ defined(SYSTEM\_ARCH\_ARM64)\ ||\ defined(SYSTEM\_ARCH\_IA64)\ ||\ defined(SYSTEM\_ARCH\_AMD64)\ ||\ defined(SYSTEM\_ARCH\_ARM64)\ ||\ defined(SYSTEM\_ARCH\_SPARC64)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_IS\_X64}}
+\DoxyCodeLine{00307\ \textcolor{preprocessor}{\#else}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00312\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_IS\_X86}}
+\DoxyCodeLine{00313\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00319\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_IS\_X64)}}
+\DoxyCodeLine{00320\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIZE\_MAX\ UINT64\_MAX}}
+\DoxyCodeLine{00321\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00322\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIZE\_MAX\ UINT32\_MAX}}
+\DoxyCodeLine{00323\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00329\ \textcolor{preprocessor}{\#define\ SYSTEM\_IS\_LITTLE\_ENDIAN\ (((union\ \{\ uint32\_t\ x;\ uint8\_t\ c;\ \})\{1\}).c)}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \textcolor{preprocessor}{\#if\ (!defined(SYSTEM\_IS\_LITTLE\_ENDIAN))}}
+\DoxyCodeLine{00332\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_sparc)\ ||\ defined(\_\_sparc\_\_)\ ||\ defined(\_\_hppa\_\_)\ ||\ defined(\_\_PPC\_\_)\ ||\ defined(\_\_mips\_\_)\ ||\ defined(\_\_MWERKS\_\_)\ \&\&\ (!defined(\_\_INTEL\_\_))}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_IS\_BIG\_ENDIAN}}
+\DoxyCodeLine{00338\ \textcolor{preprocessor}{\#\ \ \ else}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00343\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_IS\_LITTLE\_ENDIAN}}
+\DoxyCodeLine{00344\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00345\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00351\ \textcolor{preprocessor}{\#if\ !defined(SYSTEM\_ALIGN)}}
+\DoxyCodeLine{00352\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_GNUC\_\_)\ ||\ defined(\_\_clang\_\_)}}
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ALIGN(x)\ \ \_\_attribute\_\_((aligned(x)))}}
+\DoxyCodeLine{00354\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00355\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ALIGN(x)\ \ \_\_declspec(align(x))}}
+\DoxyCodeLine{00356\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00357\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_ALIGN(x)}}
+\DoxyCodeLine{00358\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00359\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00365\ \textcolor{preprocessor}{\#if\ defined(\_\_SIZEOF\_INT128\_\_)\ \&\&\ defined(SYSTEM\_IS\_X64)\ \&\&\ !defined(\_\_xlc\_\_)\ \&\&\ !\ defined(uint128\_t)}}
+\DoxyCodeLine{00366\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_NATIVE\_UINT128}}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{comment}{/*\ Prefer\ TI\ mode\ over\ \_\_int128\ as\ GCC\ rejects\ the\ latter\ in\ pedantic\ mode\ */}}
+\DoxyCodeLine{00368\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_GNUC\_\_)\ }\textcolor{comment}{/*\ was\ \_\_GNUG\_\_?\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ uint32\_t\ uint128\_t\ \_\_attribute\_\_((mode(TI)));}
+\DoxyCodeLine{00370\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \_\_int128\ uint128\_t;}
+\DoxyCodeLine{00372\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00373\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00379\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_NATIVE\_UINT128)}}
+\DoxyCodeLine{00380\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00381\ \textcolor{preprocessor}{\ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00382\ \textcolor{preprocessor}{\ \ \ \ \ \ const\ uint128\_t\ r\ =\ (uint128\_t)(X)\ *\ Y;\ \ \ \(\backslash\)}}
+\DoxyCodeLine{00383\ \textcolor{preprocessor}{\ \ \ \ \ \ *High\ =\ (r\ >>\ 64)\ \&\ 0xFFFFFFFFFFFFFFFFULL;\ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00384\ \textcolor{preprocessor}{\ \ \ \ \ \ *Low\ =\ (r)\ \&\ 0xFFFFFFFFFFFFFFFFULL;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00385\ \textcolor{preprocessor}{\ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_MSC)\ \&\&\ defined(SYSTEM\_IS\_X64)}}
+\DoxyCodeLine{00388\ \textcolor{preprocessor}{\#\ \ \ include\ <intrin.h>}}
+\DoxyCodeLine{00389\ \textcolor{preprocessor}{\#\ \ \ pragma\ intrinsic(\_umul128)}}
+\DoxyCodeLine{00390\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00391\ \textcolor{preprocessor}{\ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00392\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ *Low\ =\ \_umul128(X,\ Y,\ High);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00393\ \textcolor{preprocessor}{\ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_GCC)}}
+\DoxyCodeLine{00396\ \textcolor{preprocessor}{\#\ \ \ if\ defined(SYSTEM\_ARCH\_IX86)}}
+\DoxyCodeLine{00397\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00398\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00399\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ asm("{}mulq\ \%3"{}\ :\ "{}=d"{}\ (*High),\ "{}=X"{}\ (*Low)\ :\ "{}X"{}\ (X),\ "{}rm"{}\ (Y)\ :\ "{}cc"{});\ \ \(\backslash\)}}
+\DoxyCodeLine{00400\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00401\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(SYSTEM\_ARCH\_ALPHA)}}
+\DoxyCodeLine{00402\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00403\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00404\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ asm("{}umulh\ \%1,\%2,\%0"{}\ :\ "{}=r"{}\ (*High)\ :\ "{}r"{}\ (X),\ "{}r"{}\ (Y));\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00405\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ *Low\ =\ X\ *\ Y;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00406\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00407\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(SYSTEM\_ARCH\_IA64)}}
+\DoxyCodeLine{00408\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00409\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00410\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ asm("{}xmpy.hu\ \%0=\%1,\%2"{}\ :\ "{}=f"{}\ (*High)\ :\ "{}f"{}\ (X),\ "{}f"{}\ (Y));\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00411\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ *Low\ =\ X\ *\ Y;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00412\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00413\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(SYSTEM\_ARCH\_PPC)}}
+\DoxyCodeLine{00414\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_FAST\_64X64\_MUL(X,Y,Low,High)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00415\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ do\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00416\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ asm("{}mulhdu\ \%0,\%1,\%2"{}\ :\ "{}=r"{}\ (*High)\ :\ "{}r"{}\ (X),\ "{}r"{}\ (Y)\ :\ "{}cc"{});\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00417\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ *Low\ =\ X\ *\ Y;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00418\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ while(0)}}
+\DoxyCodeLine{00419\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00420\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00426\ \textcolor{preprocessor}{\#define\ SYSTEM\_MAX\_PATH\ 260}}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00432\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00433\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE\ \_\_pragma(optimize("{}"{},\ off))}}
+\DoxyCodeLine{00434\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_GCC)\ ||\ defined(SYSTEM\_COMPILER\_MINGW)}}
+\DoxyCodeLine{00435\ \textcolor{preprocessor}{\#if\ defined(\_\_clang\_\_)}}
+\DoxyCodeLine{00436\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE\ \_\_attribute\_\_((optnone))}}
+\DoxyCodeLine{00437\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00438\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE\ \_\_attribute\_\_((optimize("{}O0"{})))}}
+\DoxyCodeLine{00439\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00440\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_CLANG)}}
+\DoxyCodeLine{00441\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE\ \_\_attribute\_\_((optnone))}}
+\DoxyCodeLine{00442\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_INTEL)}}
+\DoxyCodeLine{00443\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE\ pragma\ optimize("{}"{},\ off)}}
+\DoxyCodeLine{00444\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00445\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_IGNORE}}
+\DoxyCodeLine{00446\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00452\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00453\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_RESUME\ \_\_pragma(optimize("{}"{},\ on))}}
+\DoxyCodeLine{00454\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_GCC)\ ||\ defined(SYSTEM\_COMPILER\_MINGW)}}
+\DoxyCodeLine{00455\ \textcolor{preprocessor}{\#if\ defined(\_\_clang\_\_)}}
+\DoxyCodeLine{00456\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_RESUME}}
+\DoxyCodeLine{00457\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00458\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_RESUME\ \_Pragma("{}GCC\ diagnostic\ pop"{})}}
+\DoxyCodeLine{00459\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00460\ \textcolor{preprocessor}{\#elif\ defined(CEX\_COMPILER\_INTEL)}}
+\DoxyCodeLine{00461\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_RESUME\ pragma\ optimize("{}"{},\ on)}}
+\DoxyCodeLine{00462\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00463\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_OPTIMIZE\_RESUME}}
+\DoxyCodeLine{00464\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00470\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_COMPILER\_MSC)}}
+\DoxyCodeLine{00471\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CONDITION\_IGNORE(x)\ \_\_pragma(warning(disable\ :\ x))}}
+\DoxyCodeLine{00472\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_COMPILER\_GCC)\ ||\ defined(SYSTEM\_COMPILER\_MINGW)}}
+\DoxyCodeLine{00473\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CONDITION\_IGNORE(x)\ \_Pragma("{}GCC\ diagnostic\ push"{})\ \_Pragma("{}GCC\ diagnostic\ ignored\ \(\backslash\)"{}-\/Wunused-\/parameter\(\backslash\)"{}"{})}}
+\DoxyCodeLine{00474\ \textcolor{preprocessor}{\#elif\ defined(CEX\_COMPILER\_INTEL)}}
+\DoxyCodeLine{00475\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CONDITION\_IGNORE(x)}}
+\DoxyCodeLine{00476\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00477\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_CONDITION\_IGNORE(x)}}
+\DoxyCodeLine{00478\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \textcolor{comment}{/*\ intrinsics\ support\ level\ */}}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \textcolor{preprocessor}{\#if\ (\_MSC\_VER\ >=\ 1600)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00487\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_WMMINTRIN\_H\ 1}}
+\DoxyCodeLine{00488\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00489\ \textcolor{preprocessor}{\#if\ (\_MSC\_VER\ >=\ 1700)\ \&\&\ (defined(\_M\_X64))}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00494\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAVE\_AVX2INTRIN\_H\ 1}}
+\DoxyCodeLine{00495\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00498\ \textcolor{comment}{*\ AVX512\ Capabilities\ Check}}
+\DoxyCodeLine{00499\ \textcolor{comment}{*\ https://software.intel.com/en-\/us/intel-\/cplusplus-\/compiler-\/16.0-\/user-\/and-\/reference-\/guide}}
+\DoxyCodeLine{00500\ \textcolor{comment}{*\ https://software.intel.com/en-\/us/articles/compiling-\/for-\/the-\/intel-\/xeon-\/phi-\/processor-\/and-\/the-\/intel-\/avx-\/512-\/isa}}
+\DoxyCodeLine{00501\ \textcolor{comment}{*\ https://colfaxresearch.com/knl-\/avx512/}}
+\DoxyCodeLine{00502\ \textcolor{comment}{*}}
+\DoxyCodeLine{00503\ \textcolor{comment}{*\ \#include\ <immintrin.h>}}
+\DoxyCodeLine{00504\ \textcolor{comment}{*\ supported\ is\ 1:\ ex.\ \_\_AVX512CD\_\_\ 1}}
+\DoxyCodeLine{00505\ \textcolor{comment}{*\ F\ \ \ \ \ \_\_AVX512F\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Foundation}}
+\DoxyCodeLine{00506\ \textcolor{comment}{*\ CD\ \ \ \ \_\_AVX512CD\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Conflict\ Detection\ Instructions(CDI)}}
+\DoxyCodeLine{00507\ \textcolor{comment}{*\ ER\ \ \ \ \_\_AVX512ER\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Exponential\ and\ Reciprocal\ Instructions(ERI)}}
+\DoxyCodeLine{00508\ \textcolor{comment}{*\ PF\ \ \ \ \_\_AVX512PF\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pre-\/fetch\ Instructions(PFI)}}
+\DoxyCodeLine{00509\ \textcolor{comment}{*\ DQ\ \ \ \ \_\_AVX512DQ\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Double-\/word\ and\ Quadword\ Instructions(DQ)}}
+\DoxyCodeLine{00510\ \textcolor{comment}{*\ BW\ \ \ \ \_\_AVX512BW\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Byte\ and\ Word\ Instructions(BW)}}
+\DoxyCodeLine{00511\ \textcolor{comment}{*\ VL\ \ \ \ \_\_AVX512VL\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Vector\ Length\ Extensions(VL)}}
+\DoxyCodeLine{00512\ \textcolor{comment}{*\ IFMA\ \ \_\_AVX512IFMA\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ Integer\ Fused\ Multiply\ Add(IFMA)}}
+\DoxyCodeLine{00513\ \textcolor{comment}{*\ VBMI\ \ \_\_AVX512VBMI\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ Vector\ Byte\ Manipulation\ Instructions(VBMI)}}
+\DoxyCodeLine{00514\ \textcolor{comment}{*\ VNNIW\ \_\_AVX5124VNNIW\_\_\ \ \ \ \ \ \ \ \ \ \ \ Vector\ instructions\ for\ deep\ learning\ enhanced\ word\ variable\ precision}}
+\DoxyCodeLine{00515\ \textcolor{comment}{*\ FMAPS\ \_\_AVX5124FMAPS\_\_\ \ \ \ \ \ \ \ \ \ \ \ Vector\ instructions\ for\ deep\ learning\ floating\ -\/\ point\ single\ precision}}
+\DoxyCodeLine{00516\ \textcolor{comment}{*\ VPOPCNT\ \ \ \_\_AVX512VPOPCNTDQ\_\_\ \ \ \ \ ?}}
+\DoxyCodeLine{00517\ \textcolor{comment}{*}}
+\DoxyCodeLine{00518\ \textcolor{comment}{*\ Note:\ AVX512\ is\ currently\ untested,\ this\ flag\ enables\ support\ on\ a\ compliant\ system}}
+\DoxyCodeLine{00519\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \textcolor{comment}{/*\ Enable\ this\ define\ to\ support\ AVX512\ on\ a\ compatible\ system\ */}}
+\DoxyCodeLine{00522\ \textcolor{comment}{/*\#define\ CEX\_AVX512\_SUPPORTED*/}}
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00524\ \textcolor{preprocessor}{\#if\ defined(\_\_AVX512F\_\_)\ \&\&\ (\_\_AVX512F\_\_\ ==\ 1)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00529\ \textcolor{preprocessor}{\#\ \ \ include\ <immintrin.h>}}
+\DoxyCodeLine{00530\ \textcolor{preprocessor}{\#\ \ \ if\ (!defined(\_\_AVX512\_\_))}}
+\DoxyCodeLine{00531\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ \_\_AVX512\_\_}}
+\DoxyCodeLine{00532\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00533\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00535\ \textcolor{preprocessor}{\#if\ defined(\_\_SSE2\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00540\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_SSE2}}
+\DoxyCodeLine{00541\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \textcolor{preprocessor}{\#if\ defined(\_\_SSE3\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00548\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_SSE3}}
+\DoxyCodeLine{00549\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ \textcolor{preprocessor}{\#if\ defined(\_\_SSSE3\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00556\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_SSSE3}}
+\DoxyCodeLine{00557\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \textcolor{preprocessor}{\#if\ defined(\_\_SSE4\_1\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00564\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_SSE41}}
+\DoxyCodeLine{00565\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00566\ }
+\DoxyCodeLine{00567\ \textcolor{preprocessor}{\#if\ defined(\_\_SSE4\_2\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00572\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_SSE42}}
+\DoxyCodeLine{00573\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00575\ \textcolor{preprocessor}{\#if\ defined(\_\_AVX\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00580\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_AVX}}
+\DoxyCodeLine{00581\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ \textcolor{preprocessor}{\#if\ defined(\_\_AVX2\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00588\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_AVX2}}
+\DoxyCodeLine{00589\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \textcolor{preprocessor}{\#if\ defined(\_\_AVX512\_\_)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00596\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_AVX512}}
+\DoxyCodeLine{00597\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00598\ \textcolor{preprocessor}{\#if\ defined(\_\_XOP\_\_)}}
+\DoxyCodeLine{00599\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_HAS\_XOP}}
+\DoxyCodeLine{00600\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_HAS\_AVX)\ ||\ defined(SYSTEM\_HAS\_AVX2)\ ||\ defined(SYSTEM\_HAS\_AVX512)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00607\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_AVX\_INTRINSICS}}
+\DoxyCodeLine{00608\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00609\ }
+\DoxyCodeLine{00614\ \textcolor{comment}{//\#define\ SYSTEM\_ASM\_ENABLED}}
+\DoxyCodeLine{00615\ }
+\DoxyCodeLine{00620\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_AVX\_INTRINSICS)\ \&\&\ defined(SYSTEM\_COMPILER\_GCC)\ \&\&\ defined(SYSTEM\_ASM\_ENABLED)}}
+\DoxyCodeLine{00621\ \textcolor{comment}{/*\ \#\ \ \ \ define\ SYSTEM\_GCC\_ASM\_ENABLED\ */}}
+\DoxyCodeLine{00622\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00628\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_HAS\_AVX512)}}
+\DoxyCodeLine{00629\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGN\ SYSTEM\_ALIGN(64)}}
+\DoxyCodeLine{00630\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGNMENT\ 64}}
+\DoxyCodeLine{00631\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_HAS\_AVX2)}}
+\DoxyCodeLine{00632\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGN\ SYSTEM\_ALIGN(32)}}
+\DoxyCodeLine{00633\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGNMENT\ 32}}
+\DoxyCodeLine{00634\ \textcolor{preprocessor}{\#elif\ defined(SYSTEM\_HAS\_AVX)}}
+\DoxyCodeLine{00635\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGN\ SYSTEM\_ALIGN(16)}}
+\DoxyCodeLine{00636\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGNMENT\ 16}}
+\DoxyCodeLine{00637\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00638\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGN}}
+\DoxyCodeLine{00639\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_SIMD\_ALIGNMENT\ 8}}
+\DoxyCodeLine{00640\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00642\ \textcolor{preprocessor}{\#if\ defined(SYSTEM\_AVX\_INTRINSICS)}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00647\ \textcolor{preprocessor}{\#\ \ \ define\ SYSTEM\_RDRAND\_COMPATIBLE}}
+\DoxyCodeLine{00648\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00654\ \textcolor{preprocessor}{\#define\ SYSTEM\_STATUS\_SUCCESS\ 0}}
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00660\ \textcolor{preprocessor}{\#define\ SYSTEM\_STATUS\_FAILURE\ -\/1}}
+\DoxyCodeLine{00661\ }
+\DoxyCodeLine{00662\ }
+\DoxyCodeLine{00663\ \textcolor{comment}{/*\ User\ Modifiable\ Values}}
+\DoxyCodeLine{00664\ \textcolor{comment}{*\ Modifiable\ values\ that\ determine\ which\ parameter\ sets\ and\ options\ get\ compiled.}}
+\DoxyCodeLine{00665\ \textcolor{comment}{*\ These\ values\ can\ be\ tuned\ by\ the\ user\ to\ enable/disable\ features\ for\ a\ specific\ environment,\ or\ hardware\ configuration.}}
+\DoxyCodeLine{00666\ \textcolor{comment}{*\ This\ list\ also\ includes\ the\ asymmetric\ cipher\ and\ signature\ scheme\ parameter\ set\ options.}}
+\DoxyCodeLine{00667\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00674\ \textcolor{preprocessor}{\#if\ !defined(SYSTEM\_AESNI\_ENABLED)}}
+\DoxyCodeLine{00675\ \textcolor{preprocessor}{\#\ \ \ if\ defined(SYSTEM\_AVX\_INTRINSICS)}}
+\DoxyCodeLine{00676\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SYSTEM\_AESNI\_ENABLED}}
+\DoxyCodeLine{00677\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00678\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00685\ \textcolor{comment}{/*\ \#define\ SYSTEM\_KECCAK\_UNROLLED\_PERMUTATION\ */}}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \textcolor{comment}{/*\ \(\backslash\)endcond\ DOXYGEN\_IGNORE\ */}}
+\DoxyCodeLine{00688\ }
+\DoxyCodeLine{00689\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

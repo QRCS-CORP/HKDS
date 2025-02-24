@@ -2,7 +2,7 @@
 #include "keccak.h"
 #include "utils.h"
 
-static void hkds_client_generate_transactionkey(hkds_client_state* state, uint8_t* tkey)
+static void hkds_client_generate_transaction_key(hkds_client_state* state, uint8_t* tkey)
 {
 	size_t idx;
 
@@ -100,7 +100,7 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 	if (state->cache_empty == false)
 	{
 		/* extract the transaction key */
-		hkds_client_generate_transactionkey(state, ciphertext);
+		hkds_client_generate_transaction_key(state, ciphertext);
 
 		/* encrypt the message */
 		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
@@ -127,7 +127,7 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 	if (state->cache_empty == false)
 	{
 		/* extract the transaction key */
-		hkds_client_generate_transactionkey(state, ctxt);
+		hkds_client_generate_transaction_key(state, ctxt);
 
 		/* encrypt the message */
 		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
@@ -139,7 +139,7 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 	if (state->cache_empty == false)
 	{
 		/* extract the MAC key */
-		hkds_client_generate_transactionkey(state, hkey);
+		hkds_client_generate_transaction_key(state, hkey);
 
 		/* initialize KMAC and generate the MAC tag */
 #if defined(HKDS_SHAKE_128)

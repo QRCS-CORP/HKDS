@@ -1,0 +1,56 @@
+\doxysection{hkds\+\_\+master\+\_\+key Struct Reference}
+\hypertarget{structhkds__master__key}{}\label{structhkds__master__key}\index{hkds\_master\_key@{hkds\_master\_key}}
+
+
+Contains the HKDS master key set.  
+
+
+
+
+{\ttfamily \#include $<$hkds\+\_\+server.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__master__key_a4251f46f77271454ec81897f021dadea}{bdk}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_a906baa004d215bc00208ac5d55d9c7d6}{HKDS\+\_\+\+BDK\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__master__key_a6dc5e4e41965939ab9d0a5b2cc828185}{stk}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_a9605d3e7325ea12470eeac0acf19ed24}{HKDS\+\_\+\+STK\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__master__key_ae260de8c11c243e3b3667c75c5a0619c}{kid}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_ae848bed01b46d938ad40e916b0c17ea4}{HKDS\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains the HKDS master key set. 
+
+The master key set is comprised of\+:
+\begin{DoxyItemize}
+\item {\ttfamily bdk\+:} The Base Derivation Key used to derive client embedded keys.
+\item {\ttfamily stk\+:} The Secret Token Key used to generate device tokens.
+\item {\ttfamily kid\+:} The Key Identity, which uniquely identifies the master key set. 
+\end{DoxyItemize}
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structhkds__master__key_a4251f46f77271454ec81897f021dadea}\index{hkds\_master\_key@{hkds\_master\_key}!bdk@{bdk}}
+\index{bdk@{bdk}!hkds\_master\_key@{hkds\_master\_key}}
+\doxysubsubsection{\texorpdfstring{bdk}{bdk}}
+{\footnotesize\ttfamily \label{structhkds__master__key_a4251f46f77271454ec81897f021dadea} 
+uint8\+\_\+t bdk\mbox{[}\mbox{\hyperlink{hkds__config_8h_a906baa004d215bc00208ac5d55d9c7d6}{HKDS\+\_\+\+BDK\+\_\+\+SIZE}}\mbox{]}}
+
+The base derivation key \Hypertarget{structhkds__master__key_ae260de8c11c243e3b3667c75c5a0619c}\index{hkds\_master\_key@{hkds\_master\_key}!kid@{kid}}
+\index{kid@{kid}!hkds\_master\_key@{hkds\_master\_key}}
+\doxysubsubsection{\texorpdfstring{kid}{kid}}
+{\footnotesize\ttfamily \label{structhkds__master__key_ae260de8c11c243e3b3667c75c5a0619c} 
+uint8\+\_\+t kid\mbox{[}\mbox{\hyperlink{hkds__config_8h_ae848bed01b46d938ad40e916b0c17ea4}{HKDS\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}}
+
+The key identity \Hypertarget{structhkds__master__key_a6dc5e4e41965939ab9d0a5b2cc828185}\index{hkds\_master\_key@{hkds\_master\_key}!stk@{stk}}
+\index{stk@{stk}!hkds\_master\_key@{hkds\_master\_key}}
+\doxysubsubsection{\texorpdfstring{stk}{stk}}
+{\footnotesize\ttfamily \label{structhkds__master__key_a6dc5e4e41965939ab9d0a5b2cc828185} 
+uint8\+\_\+t stk\mbox{[}\mbox{\hyperlink{hkds__config_8h_a9605d3e7325ea12470eeac0acf19ed24}{HKDS\+\_\+\+STK\+\_\+\+SIZE}}\mbox{]}}
+
+The secret token key 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/\mbox{\hyperlink{hkds__server_8h}{hkds\+\_\+server.\+h}}\end{DoxyCompactItemize}

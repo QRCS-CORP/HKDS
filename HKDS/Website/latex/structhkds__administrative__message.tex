@@ -1,0 +1,47 @@
+\doxysection{hkds\+\_\+administrative\+\_\+message Struct Reference}
+\hypertarget{structhkds__administrative__message}{}\label{structhkds__administrative__message}\index{hkds\_administrative\_message@{hkds\_administrative\_message}}
+
+
+Represents an administrative message packet.  
+
+
+
+
+{\ttfamily \#include $<$hkds\+\_\+config.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structhkds__packet__header}{hkds\+\_\+packet\+\_\+header}} \mbox{\hyperlink{structhkds__administrative__message_a07457434e72feeb2cec29906645a116d}{header}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__administrative__message_a724d5c601984c45dc7832b068bab5fb4}{message}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_aeae7e0d668f413433092fd80178d9bfd}{HKDS\+\_\+\+ADMIN\+\_\+\+SIZE}}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents an administrative message packet. 
+
+Administrative messages are used to signal requests, status updates, or to reset a communications session following an error. This structure contains\+:
+\begin{DoxyItemize}
+\item A common HKDS packet header.
+\item The administrative message payload. 
+\end{DoxyItemize}
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structhkds__administrative__message_a07457434e72feeb2cec29906645a116d}\index{hkds\_administrative\_message@{hkds\_administrative\_message}!header@{header}}
+\index{header@{header}!hkds\_administrative\_message@{hkds\_administrative\_message}}
+\doxysubsubsection{\texorpdfstring{header}{header}}
+{\footnotesize\ttfamily \label{structhkds__administrative__message_a07457434e72feeb2cec29906645a116d} 
+\mbox{\hyperlink{structhkds__packet__header}{hkds\+\_\+packet\+\_\+header}} header}
+
+The HKDS packet header \Hypertarget{structhkds__administrative__message_a724d5c601984c45dc7832b068bab5fb4}\index{hkds\_administrative\_message@{hkds\_administrative\_message}!message@{message}}
+\index{message@{message}!hkds\_administrative\_message@{hkds\_administrative\_message}}
+\doxysubsubsection{\texorpdfstring{message}{message}}
+{\footnotesize\ttfamily \label{structhkds__administrative__message_a724d5c601984c45dc7832b068bab5fb4} 
+uint8\+\_\+t message\mbox{[}\mbox{\hyperlink{hkds__config_8h_aeae7e0d668f413433092fd80178d9bfd}{HKDS\+\_\+\+ADMIN\+\_\+\+SIZE}}\mbox{]}}
+
+The administrative message payload 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/\mbox{\hyperlink{hkds__config_8h}{hkds\+\_\+config.\+h}}\end{DoxyCompactItemize}

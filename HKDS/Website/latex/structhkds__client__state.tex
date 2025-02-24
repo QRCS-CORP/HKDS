@@ -1,0 +1,44 @@
+\doxysection{hkds\+\_\+client\+\_\+state Struct Reference}
+\hypertarget{structhkds__client__state}{}\label{structhkds__client__state}\index{hkds\_client\_state@{hkds\_client\_state}}
+
+
+Contains the HKDS client state.  
+
+
+
+
+{\ttfamily \#include $<$hkds\+\_\+client.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structhkds__client__state_a29a19ab4a9e4bd7a9203eb5011823281}\label{structhkds__client__state_a29a19ab4a9e4bd7a9203eb5011823281} 
+uint8\+\_\+t {\bfseries edk} \mbox{[}\mbox{\hyperlink{hkds__config_8h_a2560e623e5208ad67c33e64535e0a237}{HKDS\+\_\+\+EDK\+\_\+\+SIZE}}\mbox{]}
+\item 
+\Hypertarget{structhkds__client__state_a1df0dd08c6db9d4717d8c16c3b1901fd}\label{structhkds__client__state_a1df0dd08c6db9d4717d8c16c3b1901fd} 
+uint8\+\_\+t {\bfseries ksn} \mbox{[}\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\+\_\+\+KSN\+\_\+\+SIZE}}\mbox{]}
+\item 
+\Hypertarget{structhkds__client__state_afbfb38cb4fb39c7bee7ca03b6d177766}\label{structhkds__client__state_afbfb38cb4fb39c7bee7ca03b6d177766} 
+uint8\+\_\+t {\bfseries tkc} \mbox{[}\mbox{\hyperlink{hkds__config_8h_a66af21b9ecaa2d5156eca8ebfcedb15e}{HKDS\+\_\+\+CACHE\+\_\+\+SIZE}}\mbox{]}\mbox{[}\mbox{\hyperlink{hkds__config_8h_a04dc7ea0bbae776d018f2644f1ad120a}{HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE}}\mbox{]}
+\item 
+\Hypertarget{structhkds__client__state_aee4a420606564b9ea2d66e33ffdda105}\label{structhkds__client__state_aee4a420606564b9ea2d66e33ffdda105} 
+bool {\bfseries cache\+\_\+empty}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains the HKDS client state. 
+
+This structure holds all state information required by the HKDS client. It includes\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily edk\+:} The Embedded Device Key used for cryptographic operations (size defined by {\ttfamily HKDS\+\_\+\+EDK\+\_\+\+SIZE}).
+\item {\ttfamily ksn\+:} The Key Serial Number containing the device identity and transaction counter (size defined by {\ttfamily HKDS\+\_\+\+KSN\+\_\+\+SIZE}).
+\item {\ttfamily tkc\+:} The Transaction Key Cache, an array of keys (each of size {\ttfamily HKDS\+\_\+\+MESSAGE\+\_\+\+SIZE}) used for message encryption and authentication. The total number of keys is defined by {\ttfamily HKDS\+\_\+\+CACHE\+\_\+\+SIZE}.
+\item {\ttfamily cache\+\_\+empty\+:} A boolean flag indicating whether the key cache has been exhausted. 
+\end{DoxyItemize}
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/\mbox{\hyperlink{hkds__client_8h}{hkds\+\_\+client.\+h}}\end{DoxyCompactItemize}

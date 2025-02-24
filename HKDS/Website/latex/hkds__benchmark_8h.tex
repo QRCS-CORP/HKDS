@@ -1,0 +1,76 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDSTest/hkds\+\_\+benchmark.h File Reference}
+\hypertarget{hkds__benchmark_8h}{}\label{hkds__benchmark_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDSTest/hkds\_benchmark.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDSTest/hkds\_benchmark.h}}
+
+
+HKDS performance benchmark tests.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{hkds__benchmark_8h_ac20007a363e611f050635f78760cbb1d}{hkdstest\+\_\+benchmark\+\_\+hkds\+\_\+server\+\_\+run}} (void)
+\begin{DoxyCompactList}\small\item\em Tests the HKDS server implementation performance. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hkds__benchmark_8h_a68e8b88725412b06da7849512b83b32a}{hkdstest\+\_\+benchmark\+\_\+hkds\+\_\+client\+\_\+run}} (void)
+\begin{DoxyCompactList}\small\item\em Tests the HKDS client encryption performance. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hkds__benchmark_8h_adf447d6f117d92f1422166191fd94a92}{hkdstest\+\_\+benchmark\+\_\+kmac\+\_\+run}} (void)
+\begin{DoxyCompactList}\small\item\em Tests the KMAC implementations performance. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hkds__benchmark_8h_a653839b9219e1ac6531f28234043804a}{hkdstest\+\_\+benchmark\+\_\+shake\+\_\+run}} (void)
+\begin{DoxyCompactList}\small\item\em Tests the SHAKE implementations performance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+HKDS performance benchmark tests. 
+
+This header defines functions to benchmark the performance of various HKDS cryptographic operations and primitives. The benchmark tests measure the timing performance for key generation, encryption/decryption, and MAC computations for both the server and client implementations, as well as for the underlying KMAC and SHAKE functions. The tests cover both scalar and vectorized (SIMD) implementations where applicable.
+
+The benchmark test suite includes\+:
+\begin{DoxyItemize}
+\item {\bfseries{Server}} benchmarks\+: Timing the performance of server key generation, extraction, and decryption operations.
+\item {\bfseries{Client}} benchmarks\+: Timing the performance of the client\textquotesingle{}s message encryption operations.
+\item {\bfseries{KMAC}} benchmarks\+: Measuring the throughput of the KMAC (Keccak-\/based MAC) implementations.
+\item {\bfseries{SHAKE}} benchmarks\+: Measuring the throughput of the various SHAKE (extendable-\/output function) implementations. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{hkds__benchmark_8h_a68e8b88725412b06da7849512b83b32a}\index{hkds\_benchmark.h@{hkds\_benchmark.h}!hkdstest\_benchmark\_hkds\_client\_run@{hkdstest\_benchmark\_hkds\_client\_run}}
+\index{hkdstest\_benchmark\_hkds\_client\_run@{hkdstest\_benchmark\_hkds\_client\_run}!hkds\_benchmark.h@{hkds\_benchmark.h}}
+\doxysubsubsection{\texorpdfstring{hkdstest\_benchmark\_hkds\_client\_run()}{hkdstest\_benchmark\_hkds\_client\_run()}}
+{\footnotesize\ttfamily \label{hkds__benchmark_8h_a68e8b88725412b06da7849512b83b32a} 
+void hkdstest\+\_\+benchmark\+\_\+hkds\+\_\+client\+\_\+run (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Tests the HKDS client encryption performance. 
+
+This function benchmarks the performance of the HKDS client encryption functions. It measures the time required to encrypt a fixed number of messages over multiple iterations. \Hypertarget{hkds__benchmark_8h_ac20007a363e611f050635f78760cbb1d}\index{hkds\_benchmark.h@{hkds\_benchmark.h}!hkdstest\_benchmark\_hkds\_server\_run@{hkdstest\_benchmark\_hkds\_server\_run}}
+\index{hkdstest\_benchmark\_hkds\_server\_run@{hkdstest\_benchmark\_hkds\_server\_run}!hkds\_benchmark.h@{hkds\_benchmark.h}}
+\doxysubsubsection{\texorpdfstring{hkdstest\_benchmark\_hkds\_server\_run()}{hkdstest\_benchmark\_hkds\_server\_run()}}
+{\footnotesize\ttfamily \label{hkds__benchmark_8h_ac20007a363e611f050635f78760cbb1d} 
+void hkdstest\+\_\+benchmark\+\_\+hkds\+\_\+server\+\_\+run (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Tests the HKDS server implementation performance. 
+
+This function benchmarks the performance of the HKDS server functions. It tests the server key generation, extraction, and decryption functions over a fixed number of cycles, and prints the total elapsed time. \Hypertarget{hkds__benchmark_8h_adf447d6f117d92f1422166191fd94a92}\index{hkds\_benchmark.h@{hkds\_benchmark.h}!hkdstest\_benchmark\_kmac\_run@{hkdstest\_benchmark\_kmac\_run}}
+\index{hkdstest\_benchmark\_kmac\_run@{hkdstest\_benchmark\_kmac\_run}!hkds\_benchmark.h@{hkds\_benchmark.h}}
+\doxysubsubsection{\texorpdfstring{hkdstest\_benchmark\_kmac\_run()}{hkdstest\_benchmark\_kmac\_run()}}
+{\footnotesize\ttfamily \label{hkds__benchmark_8h_adf447d6f117d92f1422166191fd94a92} 
+void hkdstest\+\_\+benchmark\+\_\+kmac\+\_\+run (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Tests the KMAC implementations performance. 
+
+This function benchmarks the performance of the KMAC implementations for various security levels. It processes approximately 1GB of data using KMAC-\/128, KMAC-\/256, and KMAC-\/512 (including vectorized versions, if available) and prints the time taken. \Hypertarget{hkds__benchmark_8h_a653839b9219e1ac6531f28234043804a}\index{hkds\_benchmark.h@{hkds\_benchmark.h}!hkdstest\_benchmark\_shake\_run@{hkdstest\_benchmark\_shake\_run}}
+\index{hkdstest\_benchmark\_shake\_run@{hkdstest\_benchmark\_shake\_run}!hkds\_benchmark.h@{hkds\_benchmark.h}}
+\doxysubsubsection{\texorpdfstring{hkdstest\_benchmark\_shake\_run()}{hkdstest\_benchmark\_shake\_run()}}
+{\footnotesize\ttfamily \label{hkds__benchmark_8h_a653839b9219e1ac6531f28234043804a} 
+void hkdstest\+\_\+benchmark\+\_\+shake\+\_\+run (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Tests the SHAKE implementations performance. 
+
+This function benchmarks the performance of various SHAKE implementations (SHAKE-\/128, SHAKE-\/256, and SHAKE-\/512). It processes approximately 1GB of data using both scalar and vectorized (if available) versions of SHAKE, and prints the timing results. 

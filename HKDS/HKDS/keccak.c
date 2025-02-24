@@ -4278,7 +4278,7 @@ void hkds_keccakx4_absorb(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rat
 	{
 		for (i = 0; i < (size_t)rate / sizeof(uint64_t); ++i)
 		{
-			t = _mm256_i64gather_epi64((int64_t*)pos, idx, 1);
+			t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
 			state[i] = _mm256_xor_si256(state[i], t);
 			pos += sizeof(uint64_t);
 		}
@@ -4291,7 +4291,7 @@ void hkds_keccakx4_absorb(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rat
 
 	while (inplen >= sizeof(uint64_t))
 	{
-		t = _mm256_i64gather_epi64((int64_t*)pos, idx, 1);
+		t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
 		state[i] = _mm256_xor_si256(state[i], t);
 
 		i++;
@@ -4301,7 +4301,7 @@ void hkds_keccakx4_absorb(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rat
 
 	if (inplen != 0)
 	{
-		t = _mm256_i64gather_epi64((int64_t*)pos, idx, 1);
+		t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
 		idx = _mm256_set1_epi64x((1ULL << (sizeof(uint64_t) * inplen)) - 1);
 		t = _mm256_and_si256(t, idx);
 		state[i] = _mm256_xor_si256(state[i], t);

@@ -1,0 +1,43 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/hkds\+\_\+selftest.h File Reference}
+\hypertarget{hkds__selftest_8h}{}\label{hkds__selftest_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_selftest.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/HKDS/HKDS/hkds\_selftest.h}}
+
+
+This file contains HKDS self-\/test definitions.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{hkds__selftest_8h_a094c46f2cfc248cbd3ec3e194e4fcfad}{hkds\+\_\+selftest\+\_\+symmetric\+\_\+run}} (void)
+\begin{DoxyCompactList}\small\item\em Runs the library self tests. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains HKDS self-\/test definitions. 
+
+This header defines the self-\/test function for the HKDS library. The self-\/test validates the correctness of the symmetric cryptographic primitives implemented within the library (including various SHAKE and KMAC variants) by comparing computed outputs against predetermined known-\/answer test vectors. Successful execution of these tests ensures that the cryptographic functions are operating as expected. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{hkds__selftest_8h_a094c46f2cfc248cbd3ec3e194e4fcfad}\index{hkds\_selftest.h@{hkds\_selftest.h}!hkds\_selftest\_symmetric\_run@{hkds\_selftest\_symmetric\_run}}
+\index{hkds\_selftest\_symmetric\_run@{hkds\_selftest\_symmetric\_run}!hkds\_selftest.h@{hkds\_selftest.h}}
+\doxysubsubsection{\texorpdfstring{hkds\_selftest\_symmetric\_run()}{hkds\_selftest\_symmetric\_run()}}
+{\footnotesize\ttfamily \label{hkds__selftest_8h_a094c46f2cfc248cbd3ec3e194e4fcfad} 
+HKDS\+\_\+\+EXPORT\+\_\+\+API bool hkds\+\_\+selftest\+\_\+symmetric\+\_\+run (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Runs the library self tests. 
+
+This function executes a comprehensive suite of self-\/tests for the symmetric primitives used in HKDS. The tests cover\+:
+\begin{DoxyItemize}
+\item Known-\/answer tests for SHAKE-\/128, SHAKE-\/256, and SHAKE-\/512.
+\item Known-\/answer tests for KMAC with different security parameters (e.\+g., KMAC-\/128, KMAC-\/256, and KMAC-\/512).
+\item Additional equality tests for vectorized implementations (if supported by the system, such as AVX2/\+AVX512).
+\end{DoxyItemize}
+
+The function returns true if all tests pass successfully, indicating that the library\textquotesingle{}s cryptographic functions are correctly implemented. Otherwise, it returns false.
+
+\begin{DoxyReturn}{Returns}
+Returns true if all tests pass successfully; otherwise, false. 
+\end{DoxyReturn}

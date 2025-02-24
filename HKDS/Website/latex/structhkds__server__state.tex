@@ -1,0 +1,65 @@
+\doxysection{hkds\+\_\+server\+\_\+state Struct Reference}
+\hypertarget{structhkds__server__state}{}\label{structhkds__server__state}\index{hkds\_server\_state@{hkds\_server\_state}}
+
+
+Contains the HKDS server state.  
+
+
+
+
+{\ttfamily \#include $<$hkds\+\_\+server.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__server__state_a1df0dd08c6db9d4717d8c16c3b1901fd}{ksn}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\+\_\+\+KSN\+\_\+\+SIZE}}\mbox{]}
+\item 
+\mbox{\hyperlink{structhkds__master__key}{hkds\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structhkds__server__state_abb853c04d7dab05f3bc661cc754196ff}{mdk}}
+\item 
+size\+\_\+t \mbox{\hyperlink{structhkds__server__state_a76d971a3c552bc58ba9f0d5fceae9806}{count}}
+\item 
+size\+\_\+t \mbox{\hyperlink{structhkds__server__state_a591a9837b83764fcc50ea7375c95ae9e}{rate}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains the HKDS server state. 
+
+This structure represents the state of an HKDS server instance. It includes\+:
+\begin{DoxyItemize}
+\item {\ttfamily ksn\+:} The client\textquotesingle{}s Key Serial Number (KSN).
+\item {\ttfamily mdk\+:} A pointer to the master key set used for deriving keys.
+\item {\ttfamily count\+:} The token or transaction count.
+\item {\ttfamily rate\+:} The output rate for the key derivation function (PRF). 
+\end{DoxyItemize}
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structhkds__server__state_a76d971a3c552bc58ba9f0d5fceae9806}\index{hkds\_server\_state@{hkds\_server\_state}!count@{count}}
+\index{count@{count}!hkds\_server\_state@{hkds\_server\_state}}
+\doxysubsubsection{\texorpdfstring{count}{count}}
+{\footnotesize\ttfamily \label{structhkds__server__state_a76d971a3c552bc58ba9f0d5fceae9806} 
+size\+\_\+t count}
+
+The token count \Hypertarget{structhkds__server__state_a1df0dd08c6db9d4717d8c16c3b1901fd}\index{hkds\_server\_state@{hkds\_server\_state}!ksn@{ksn}}
+\index{ksn@{ksn}!hkds\_server\_state@{hkds\_server\_state}}
+\doxysubsubsection{\texorpdfstring{ksn}{ksn}}
+{\footnotesize\ttfamily \label{structhkds__server__state_a1df0dd08c6db9d4717d8c16c3b1901fd} 
+uint8\+\_\+t ksn\mbox{[}\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\+\_\+\+KSN\+\_\+\+SIZE}}\mbox{]}}
+
+The key serial number array \Hypertarget{structhkds__server__state_abb853c04d7dab05f3bc661cc754196ff}\index{hkds\_server\_state@{hkds\_server\_state}!mdk@{mdk}}
+\index{mdk@{mdk}!hkds\_server\_state@{hkds\_server\_state}}
+\doxysubsubsection{\texorpdfstring{mdk}{mdk}}
+{\footnotesize\ttfamily \label{structhkds__server__state_abb853c04d7dab05f3bc661cc754196ff} 
+\mbox{\hyperlink{structhkds__master__key}{hkds\+\_\+master\+\_\+key}}\texorpdfstring{$\ast$}{*} mdk}
+
+A pointer to the master derivation key \Hypertarget{structhkds__server__state_a591a9837b83764fcc50ea7375c95ae9e}\index{hkds\_server\_state@{hkds\_server\_state}!rate@{rate}}
+\index{rate@{rate}!hkds\_server\_state@{hkds\_server\_state}}
+\doxysubsubsection{\texorpdfstring{rate}{rate}}
+{\footnotesize\ttfamily \label{structhkds__server__state_a591a9837b83764fcc50ea7375c95ae9e} 
+size\+\_\+t rate}
+
+The derivation function\textquotesingle{}s rate 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/\mbox{\hyperlink{hkds__server_8h}{hkds\+\_\+server.\+h}}\end{DoxyCompactItemize}

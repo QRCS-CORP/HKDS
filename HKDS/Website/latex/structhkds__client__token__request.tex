@@ -1,0 +1,47 @@
+\doxysection{hkds\+\_\+client\+\_\+token\+\_\+request Struct Reference}
+\hypertarget{structhkds__client__token__request}{}\label{structhkds__client__token__request}\index{hkds\_client\_token\_request@{hkds\_client\_token\_request}}
+
+
+Represents the client token request packet.  
+
+
+
+
+{\ttfamily \#include $<$hkds\+\_\+config.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structhkds__packet__header}{hkds\+\_\+packet\+\_\+header}} \mbox{\hyperlink{structhkds__client__token__request_a07457434e72feeb2cec29906645a116d}{header}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structhkds__client__token__request_a1df0dd08c6db9d4717d8c16c3b1901fd}{ksn}} \mbox{[}\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\+\_\+\+KSN\+\_\+\+SIZE}}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents the client token request packet. 
+
+The client token request packet is sent to the server during initialization and each time the transaction key cache is exhausted. It includes\+:
+\begin{DoxyItemize}
+\item A common HKDS packet header.
+\item The client\textquotesingle{}s Key Serial Number (KSN). 
+\end{DoxyItemize}
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structhkds__client__token__request_a07457434e72feeb2cec29906645a116d}\index{hkds\_client\_token\_request@{hkds\_client\_token\_request}!header@{header}}
+\index{header@{header}!hkds\_client\_token\_request@{hkds\_client\_token\_request}}
+\doxysubsubsection{\texorpdfstring{header}{header}}
+{\footnotesize\ttfamily \label{structhkds__client__token__request_a07457434e72feeb2cec29906645a116d} 
+\mbox{\hyperlink{structhkds__packet__header}{hkds\+\_\+packet\+\_\+header}} header}
+
+The HKDS packet header \Hypertarget{structhkds__client__token__request_a1df0dd08c6db9d4717d8c16c3b1901fd}\index{hkds\_client\_token\_request@{hkds\_client\_token\_request}!ksn@{ksn}}
+\index{ksn@{ksn}!hkds\_client\_token\_request@{hkds\_client\_token\_request}}
+\doxysubsubsection{\texorpdfstring{ksn}{ksn}}
+{\footnotesize\ttfamily \label{structhkds__client__token__request_a1df0dd08c6db9d4717d8c16c3b1901fd} 
+uint8\+\_\+t ksn\mbox{[}\mbox{\hyperlink{hkds__config_8h_ae43db7c4b1c63682b673c5e237941215}{HKDS\+\_\+\+KSN\+\_\+\+SIZE}}\mbox{]}}
+
+The client\textquotesingle{}s Key Serial Number (KSN) 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+HKDS/\+HKDS/\mbox{\hyperlink{hkds__config_8h}{hkds\+\_\+config.\+h}}\end{DoxyCompactItemize}

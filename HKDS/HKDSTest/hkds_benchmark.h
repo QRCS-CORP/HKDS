@@ -1,29 +1,41 @@
-// The GPL version 3 License (GPLv3)
-// 
-// Copyright (c) 2024 QRCS Corp.
-// This file is part of the HKDS test suite.
-// 
-// This program is free software : you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-/**
-* \file symmetric_benchmark.h
-* \brief <b>AES and RHX performance benchmarking</b> \n
-* Tests the CBC, CTR, AND HBA modes for timimng performance.
-* \author John Underhill
-* \date November 24, 2020
-*/
+/* 2025 Quantum Resistant Cryptographic Solutions Corporation
+ * All Rights Reserved.
+ *
+ * NOTICE: This software and all accompanying materials are the exclusive 
+ * property of Quantum Resistant Cryptographic Solutions Corporation (QRCS).
+ * The intellectual and technical concepts contained within this implementation 
+ * are proprietary to QRCS and its authorized licensors and are protected under 
+ * applicable U.S. and international copyright, patent, and trade secret laws.
+ *
+ * CRYPTOGRAPHIC STANDARDS:
+ * - This software includes implementations of cryptographic algorithms such as 
+ *   SHA3, AES, and others. These algorithms are public domain or standardized 
+ *   by organizations such as NIST and are NOT the property of QRCS.
+ * - However, all source code, optimizations, and implementations in this library 
+ *   are original works of QRCS and are protected under this license.
+ *
+ * RESTRICTIONS:
+ * - Redistribution, modification, or unauthorized distribution of this software, 
+ *   in whole or in part, is strictly prohibited.
+ * - This software is provided for non-commercial, educational, and research 
+ *   purposes only. Commercial use in any form is expressly forbidden.
+ * - Licensing and authorized distribution are solely at the discretion of QRCS.
+ * - Any use of this software implies acceptance of these restrictions.
+ *
+ * DISCLAIMER:
+ * This software is provided "as is," without warranty of any kind, express or 
+ * implied, including but not limited to warranties of merchantability or fitness 
+ * for a particular purpose. QRCS disclaims all liability for any direct, indirect, 
+ * incidental, or consequential damages resulting from the use or misuse of this software.
+ *
+ * FULL LICENSE:
+ * This software is subject to the **Quantum Resistant Cryptographic Solutions 
+ * Proprietary License (QRCS-PL)**. The complete license terms are included 
+ * in the LICENSE.txt file distributed with this software.
+ *
+ * Written by: John G. Underhill
+ * Contact: john.underhill@protonmail.com
+ */
 
 #ifndef HKDSTEST_BENCHMARK_H
 #define HKDSTEST_BENCHMARK_H
@@ -31,27 +43,58 @@
 #include "common.h"
 
 /**
-* \brief Tests the HKDS server implementations performance.
-* Tests the server key generation, extraction, and decryption functions for performance timing.
-*/
+ * \file hkds_benchmark.h
+ * \brief HKDS performance benchmark tests.
+ *
+ * \details
+ * This header defines functions to benchmark the performance of various HKDS cryptographic operations and
+ * primitives. The benchmark tests measure the timing performance for key generation, encryption/decryption,
+ * and MAC computations for both the server and client implementations, as well as for the underlying KMAC and
+ * SHAKE functions. The tests cover both scalar and vectorized (SIMD) implementations where applicable.
+ *
+ * The benchmark test suite includes:
+ * - \b Server benchmarks: Timing the performance of server key generation, extraction, and decryption operations.
+ * - \b Client benchmarks: Timing the performance of the client's message encryption operations.
+ * - \b KMAC benchmarks: Measuring the throughput of the KMAC (Keccak-based MAC) implementations.
+ * - \b SHAKE benchmarks: Measuring the throughput of the various SHAKE (extendable-output function) implementations.
+ */
+
+/**
+ * \brief Tests the HKDS server implementation performance.
+ *
+ * \details
+ * This function benchmarks the performance of the HKDS server functions. It tests the server key generation,
+ * extraction, and decryption functions over a fixed number of cycles, and prints the total elapsed time.
+ */
 void hkdstest_benchmark_hkds_server_run(void);
 
 /**
-* \brief Tests the HKDS client encryption performance.
-* Tests the clients encryption function for performance timing.
-*/
+ * \brief Tests the HKDS client encryption performance.
+ *
+ * \details
+ * This function benchmarks the performance of the HKDS client encryption functions. It measures the time required
+ * to encrypt a fixed number of messages over multiple iterations.
+ */
 void hkdstest_benchmark_hkds_client_run(void);
 
 /**
-* \brief Tests the KMAC implementations performance.
-* Tests the Keccak MACs for performance timing.
-*/
+ * \brief Tests the KMAC implementations performance.
+ *
+ * \details
+ * This function benchmarks the performance of the KMAC implementations for various security levels.
+ * It processes approximately 1GB of data using KMAC-128, KMAC-256, and KMAC-512 (including vectorized versions,
+ * if available) and prints the time taken.
+ */
 void hkdstest_benchmark_kmac_run(void);
 
 /**
-* \brief Tests the SHAKE implementations performance.
-* Tests the various SHAKE implementations for performance timing.
-*/
+ * \brief Tests the SHAKE implementations performance.
+ *
+ * \details
+ * This function benchmarks the performance of various SHAKE implementations (SHAKE-128, SHAKE-256, and SHAKE-512).
+ * It processes approximately 1GB of data using both scalar and vectorized (if available) versions of SHAKE, and prints
+ * the timing results.
+ */
 void hkdstest_benchmark_shake_run(void);
 
 #endif
