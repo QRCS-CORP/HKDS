@@ -49,7 +49,7 @@ Together, these modules form a complete solution for secure key management and m
 ## License
 
 QRCS-PL private License. See license file for details.  
-Software is copyrighted and SKDP is patent pending.
+Software is copyrighted and HKDS is patent pending.
 Written by John G. Underhill, under the QRCS-PL license, see the included license file for details. 
 Not to be redistributed or used commercially without the author's expressed written permission. 
 All rights reserved by QRCS Corp. 2025.
