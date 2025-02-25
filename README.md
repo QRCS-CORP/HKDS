@@ -46,7 +46,7 @@ The project is organized into several modules:
 
 Together, these modules form a complete solution for secure key management and message processing in transactional systems. The HKDS protocol, with its rigorous testing and performance benchmarks, ensures both security and operational efficiency in high-stakes environments. This documentation serves as a guide for understanding, using, and extending the HKDS protocol and its accompanying test suite.
 
----
+--
 
 QRCS-PL private License. See license file for details.  
 Software is copyrighted and SKDP is patent pending.
