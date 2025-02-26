@@ -3,7 +3,7 @@
 ## Introduction
 
 The HKDS Protocol Project implements a Hierarchical Key Derivation System (HKDS) designed to provide a robust and secure mechanism for key management and token exchange between client devices and a transaction processing server. Leveraging cryptographic primitives standardized by NIST (including SHA-3, SHAKE, and KMAC), the HKDS protocol is well-suited for high-security environments such as point-of-sale (POS) systems.
-See the documentation at: [https://qrcs-corp.github.io/SKDP/](https://qrcs-corp.github.io/HKDS/)
+[View full documentation online](https://qrcs-corp.github.io/HKDS/)
 
 ## HKDS Protocol Overview
 
