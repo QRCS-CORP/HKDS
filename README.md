@@ -6,7 +6,7 @@ The HKDS Protocol Project implements a Hierarchical Key Derivation System (HKDS)
 
 [HKDS Help Documentation](https://qrcs-corp.github.io/HKDS/)  
 [HKDS Protocol Specification](https://qrcs-corp.github.io/HKDS/pdf/HKDS_Specification.pdf)  
-[HKDS Summary Document](https://qrcs-corp.github.io/HKDS/pdf/HKDS_Summary.pdf)  
+[HKDS Summary Document](https://qrcs-corp.github.io/HKDS/pdf/HKDS_Technical_Summary.pdf)  
 
 ## HKDS Protocol Overview
 
