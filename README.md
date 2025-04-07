@@ -51,8 +51,17 @@ Together, these modules form a complete solution for secure key management and m
 
 ## License
 
+ACQUISITION INQUIRIES:
+QRCS is currently seeking a corporate acquirer for this technology.
+Parties interested in exclusive licensing or acquisition should contact:
+john.underhill@protonmail.com  
+
+PATENT NOTICE:
+One or more patent applications (provisional and/or non-provisional) covering aspects of this software have been filed with the United States Patent and 
+Trademark Office (USPTO). Unauthorized use may result in patent infringement liability.  
+
 QRCS-PL private License. See license file for details.  
 Software is copyrighted and HKDS is patent pending.
 Written by John G. Underhill, under the QRCS-PL license, see the included license file for details. 
 Not to be redistributed or used commercially without the author's expressed written permission. 
-All rights reserved by QRCS Corp. 2025.
+_All rights reserved by QRCS Corp. 2025._
