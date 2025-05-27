@@ -600,7 +600,7 @@ static void utils_arm_features(utils_cpu_features* features)
 #	define XCR0_ZMM_HI256 0x00000040UL
 #	define XCR0_HI16_ZMM 0x00000080UL
 
-static void utils_cpu_info(uint32_t info[4U], const uint32_t infotype)
+static void utils_cpu_info(int32_t info[4U], const uint32_t infotype)
 {
 #if defined(HKDS_SYSTEM_COMPILER_MSC) || defined(HKDS_SYSTEM_COMPILER_INTEL)
 	__cpuid(info, infotype);

@@ -1,0 +1,33 @@
+name: Cppcheck
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  cppcheck:
+    name: Run Cppcheck
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Install cppcheck
+      run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+    - name: Run cppcheck
+      run: |
+        cppcheck --enable=all --inconclusive --std=c11 --force \
+                 --suppress=missingIncludeSystem \
+                 --inline-suppr \
+                 -I include/ \
+                 src/ 2> cppcheck-report.txt
+
+    - name: Upload Cppcheck report
+      uses: actions/upload-artifact@v4
+      with:
+        name: cppcheck-report
+        path: cppcheck-report.txt
