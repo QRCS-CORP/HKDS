@@ -6,7 +6,7 @@
 #define KPA_LEAF_HASH512 64
 
 /* keccak round constants */
-static const uint64_t KECCAK_ROUND_CONSTANTS[HKDS_KECCAK_PERMUTATION_MAX_ROUNDS] =
+static const HKDS_SIMD_ALIGN uint64_t KECCAK_ROUND_CONSTANTS[HKDS_KECCAK_PERMUTATION_MAX_ROUNDS] =
 {
 	0x0000000000000001ULL, 0x0000000000008082ULL, 0x800000000000808AULL, 0x8000000080008000ULL,
 	0x000000000000808BULL, 0x0000000080000001ULL, 0x8000000080008081ULL, 0x8000000000008009ULL,
@@ -820,7 +820,7 @@ void hkds_keccak_finalize(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t
 	HKDS_ASSERT(ctx != NULL);
 	HKDS_ASSERT(output != NULL);
 
-	HKDS_SIMD_ALIGN uint8_t buf[sizeof(size_t) + 1U] = { 0U };
+	uint8_t buf[sizeof(size_t) + 1U] = { 0U };
 	HKDS_SIMD_ALIGN uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t bitlen;
 
@@ -3622,7 +3622,7 @@ void hkds_kmac_initialize(hkds_keccak_state* ctx, hkds_keccak_rate rate, const u
 	HKDS_ASSERT(ctx != NULL);
 	HKDS_ASSERT(key != NULL);
 
-	HKDS_SIMD_ALIGN const uint8_t name[4U] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
+	const uint8_t name[4U] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	hkds_keccak_absorb_key_custom(ctx, rate, key, keylen, custom, custlen, name, sizeof(name), HKDS_KECCAK_PERMUTATION_ROUNDS);
 }

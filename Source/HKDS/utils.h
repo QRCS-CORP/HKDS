@@ -210,7 +210,7 @@ HKDS_EXPORT_API void utils_print_line(const char* input);
 *
 * \return The starting clock time
 */
-HKDS_EXPORT_API uint64_t utils_stopwatch_start();
+HKDS_EXPORT_API uint64_t utils_stopwatch_start(void);
 
 /**
 * \brief Returns the time difference between the start and current time in milliseconds

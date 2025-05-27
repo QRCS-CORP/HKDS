@@ -7,7 +7,7 @@
 
 static void hkds_server_generate_token(const uint8_t* stk, const uint8_t* ctok, uint8_t* token)
 {
-	HKDS_SIMD_ALIGN uint8_t tkey[HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0U };
+	uint8_t tkey[HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0U };
 
 	/* combine the custom token string and the token key */
 	utils_memory_copy(tkey, ctok, HKDS_CTOK_SIZE);
@@ -46,12 +46,12 @@ static void hkds_server_get_tms(const uint8_t* ksn, uint8_t* tms)
 
 static void hkds_server_generate_transaction_key(hkds_server_state* state, uint8_t* tkey, size_t tkeylen)
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t did[HKDS_DID_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t edk[HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tok[HKDS_STK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
+	uint8_t did[HKDS_DID_SIZE] = { 0U };
+	uint8_t edk[HKDS_EDK_SIZE] = { 0U };
+	uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t tok[HKDS_STK_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 	size_t nblocks;
 	uint32_t index;
 
@@ -110,8 +110,8 @@ void hkds_server_decrypt_message(hkds_server_state* state, const uint8_t* cipher
 
 bool hkds_server_decrypt_verify_message(hkds_server_state* state, const uint8_t* ciphertext, const uint8_t* data, size_t datalen, uint8_t* plaintext)
 {
-	HKDS_SIMD_ALIGN uint8_t code[HKDS_TAG_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t dkey[2U * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t code[HKDS_TAG_SIZE] = { 0U };
+	uint8_t dkey[2U * HKDS_MESSAGE_SIZE] = { 0U };
 	bool res;
 
 	res = false;
@@ -145,7 +145,7 @@ bool hkds_server_decrypt_verify_message(hkds_server_state* state, const uint8_t*
 
 void hkds_server_generate_edk(const uint8_t* bdk, const uint8_t* did, uint8_t* edk)
 {
-	HKDS_SIMD_ALIGN uint8_t dkey[HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0U };
+	uint8_t dkey[HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0U };
 
 	/* copy the did and bdk to the key */
 	utils_memory_copy(dkey, did, HKDS_DID_SIZE);
@@ -163,12 +163,12 @@ void hkds_server_generate_edk(const uint8_t* bdk, const uint8_t* did, uint8_t* e
 
 void hkds_server_encrypt_token(hkds_server_state* state, uint8_t* etok)
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t did[HKDS_DID_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t edk[HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tms[HKDS_TMS_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tok[HKDS_STK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
+	uint8_t did[HKDS_DID_SIZE] = { 0U };
+	uint8_t edk[HKDS_EDK_SIZE] = { 0U };
+	uint8_t tms[HKDS_TMS_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t tok[HKDS_STK_SIZE] = { 0U };
 
 	/* copy the device id from the ksn */
 	utils_memory_copy(did, state->ksn, HKDS_DID_SIZE);
@@ -213,7 +213,7 @@ void hkds_server_encrypt_token(hkds_server_state* state, uint8_t* etok)
 
 void hkds_server_generate_mdk(bool (*rng_generate)(uint8_t*, size_t), hkds_master_key* mdk, const uint8_t* kid)
 {
-	HKDS_SIMD_ALIGN uint8_t tmpr[HKDS_BDK_SIZE + HKDS_STK_SIZE] = { 0U };
+	uint8_t tmpr[HKDS_BDK_SIZE + HKDS_STK_SIZE] = { 0U };
 
 	rng_generate(tmpr, sizeof(tmpr));
 	utils_memory_copy(mdk->bdk, tmpr, HKDS_BDK_SIZE);
@@ -235,7 +235,7 @@ static void hkds_server_generate_token_x8(const hkds_server_x8_state* state,
 	const uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE], 
 	uint8_t token[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE])
 {
-	HKDS_SIMD_ALIGN uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0U };
+	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0U };
 
 	for (size_t i = 0U; i < HKDS_CACHX8_DEPTH; ++i)
 	{
@@ -275,12 +275,12 @@ static void hkds_server_get_ctok_x8(hkds_server_x8_state* state,
 static void hkds_server_generate_transaction_key_x8(hkds_server_x8_state* state, 
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE])
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
+	uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 	uint32_t index[HKDS_CACHX8_DEPTH] = { 0U };
 	size_t i;
 
@@ -329,12 +329,12 @@ static void hkds_server_generate_transaction_key_x8(hkds_server_x8_state* state,
 static void hkds_server_generate_transaction_authkey_x8(hkds_server_x8_state* state, 
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE + HKDS_TAG_SIZE])
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
+	uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 	uint32_t index[HKDS_CACHX8_DEPTH] = { 0U };
 	size_t i;
 
@@ -396,12 +396,12 @@ void hkds_server_decrypt_message_x8(hkds_server_x8_state* state,
 
 void hkds_server_encrypt_token_x8(hkds_server_x8_state* state, uint8_t etok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_TAG_SIZE])
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tms[HKDS_TMS_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
+	uint8_t tms[HKDS_TMS_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
 	size_t i;
 
 	/* copy the device id from the ksn */
@@ -464,8 +464,8 @@ void hkds_server_decrypt_verify_message_x8(hkds_server_x8_state* state,
 	uint8_t plaintext[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE], 
 	bool valid[HKDS_CACHX8_DEPTH])
 {
-	HKDS_SIMD_ALIGN uint8_t code[HKDS_CACHX8_DEPTH][HKDS_TAG_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t dkey[HKDS_CACHX8_DEPTH][2 * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t code[HKDS_CACHX8_DEPTH][HKDS_TAG_SIZE] = { 0U };
+	uint8_t dkey[HKDS_CACHX8_DEPTH][2 * HKDS_MESSAGE_SIZE] = { 0U };
 
 	/* derive the transaction key  */
 	hkds_server_generate_transaction_authkey_x8(state, dkey);
@@ -516,7 +516,7 @@ void hkds_server_generate_edk_x8(const hkds_server_x8_state* state,
 	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE])
 {
-	HKDS_SIMD_ALIGN uint8_t dkey[HKDS_CACHX8_DEPTH][HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0U };
+	uint8_t dkey[HKDS_CACHX8_DEPTH][HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0U };
 
 	for (size_t i = 0U; i < HKDS_CACHX8_DEPTH; ++i)
 	{

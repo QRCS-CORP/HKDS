@@ -572,9 +572,9 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
-    HKDS_SIMD_ALIGN uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The client's encrypted message */
-    HKDS_SIMD_ALIGN uint8_t tag[HKDS_TAG_SIZE];          /*!< The optional authentication tag */
+    uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
+    uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The client's encrypted message */
+    uint8_t tag[HKDS_TAG_SIZE];          /*!< The optional authentication tag */
 } hkds_client_message_request;
 
 /*!
@@ -590,7 +590,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
+    uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
 } hkds_client_token_request;
 
 /*!
@@ -606,7 +606,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The server's message response */
+    uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The server's message response */
 } hkds_server_message_response;
 
 /*!
@@ -622,7 +622,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t etok[HKDS_ETOK_SIZE];        /*!< The server's encrypted token */
+    uint8_t etok[HKDS_ETOK_SIZE];        /*!< The server's encrypted token */
 } hkds_server_token_response;
 
 /*!
@@ -638,7 +638,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t message[HKDS_ADMIN_SIZE];    /*!< The administrative message payload */
+    uint8_t message[HKDS_ADMIN_SIZE];    /*!< The administrative message payload */
 } hkds_administrative_message;
 
 /*!
@@ -653,7 +653,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    HKDS_SIMD_ALIGN uint8_t message[HKDS_ERROR_SIZE];    /*!< The error message payload */
+    uint8_t message[HKDS_ERROR_SIZE];    /*!< The error message payload */
 } hkds_error_message;
 
 #endif

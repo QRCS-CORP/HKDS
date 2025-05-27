@@ -11,12 +11,12 @@
 
 static bool shake_128_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t exp0[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp1600[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_128 * 4U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg0[1U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
+	uint8_t exp0[512U] = { 0U };
+	uint8_t exp1600[512U] = { 0U };
+	uint8_t hash[hkds_keccak_rate_128 * 4U] = { 0U };
+	uint8_t msg0[1U] = { 0U };
+	uint8_t msg1600[200U] = { 0U };
+	uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -102,12 +102,12 @@ static bool shake_128_kat(void)
 
 static bool shake_256_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t exp0[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp1600[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_256 * 4U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg0[1U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
+	uint8_t exp0[512U] = { 0U };
+	uint8_t exp1600[512U] = { 0U };
+	uint8_t hash[hkds_keccak_rate_256 * 4U] = { 0U };
+	uint8_t msg0[1U] = { 0U };
+	uint8_t msg1600[200U] = { 0U };
+	uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -193,12 +193,12 @@ static bool shake_256_kat(void)
 
 static bool shake_512_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t exp1[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp2[512U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_512 * 8U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg2[200U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
+	uint8_t exp1[512U] = { 0U };
+	uint8_t exp2[512U] = { 0U };
+	uint8_t hash[hkds_keccak_rate_512 * 8U] = { 0U };
+	uint8_t msg1[64U] = { 0U };
+	uint8_t msg2[200U] = { 0U };
+	uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -287,15 +287,15 @@ static bool shake_512_kat(void)
 
 static bool kmac_128_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cust0[1U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t cust168[21U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256a[32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256b[32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256c[32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg32[4U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key256[32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[32U] = { 0U };
+	uint8_t cust0[1U] = { 0U };
+	uint8_t cust168[21U] = { 0U };
+	uint8_t exp256a[32U] = { 0U };
+	uint8_t exp256b[32U] = { 0U };
+	uint8_t exp256c[32U] = { 0U };
+	uint8_t msg32[4U] = { 0U };
+	uint8_t msg1600[200U] = { 0U };
+	uint8_t key256[32U] = { 0U };
+	uint8_t output[32U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -366,15 +366,15 @@ static bool kmac_128_kat(void)
 
 static bool kmac_256_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cust0[1U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t cust168[21U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256a[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256b[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp256c[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg32[4U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key256[32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[64U] = { 0U };
+	uint8_t cust0[1U] = { 0U };
+	uint8_t cust168[21U] = { 0U };
+	uint8_t exp256a[64U] = { 0U };
+	uint8_t exp256b[64U] = { 0U };
+	uint8_t exp256c[64U] = { 0U };
+	uint8_t msg32[4U] = { 0U };
+	uint8_t msg1600[200U] = { 0U };
+	uint8_t key256[32U] = { 0U };
+	uint8_t output[64U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -448,17 +448,17 @@ static bool kmac_256_kat(void)
 
 static bool kmac_512_kat(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cust0[21U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t cust1[42U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t cust2[45U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp0[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp1[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp2[64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key0[21U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key1[60U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg0[42U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg1[84U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t output[64U] = { 0U };
+	uint8_t cust0[21U] = { 0U };
+	uint8_t cust1[42U] = { 0U };
+	uint8_t cust2[45U] = { 0U };
+	uint8_t exp0[64U] = { 0U };
+	uint8_t exp1[64U] = { 0U };
+	uint8_t exp2[64U] = { 0U };
+	uint8_t key0[21U] = { 0U };
+	uint8_t key1[60U] = { 0U };
+	uint8_t msg0[42U] = { 0U };
+	uint8_t msg1[84U] = { 0U };
+	uint8_t output[64U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -535,11 +535,11 @@ static bool kmac_512_kat(void)
 #if defined(HKDS_SYSTEM_HAS_AVX2)
 static bool kmac128x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[4U][16U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[4U][18U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][16U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][16U] = { 0U };
+	uint8_t cst[4U][16U] = { 0U };
+	uint8_t key[4U][18U] = { 0U };
+	uint8_t msg[4U][256U] = { 0U };
+	uint8_t otp[4U][16U] = { 0U };
+	uint8_t exp[4U][16U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -610,11 +610,11 @@ static bool kmac128x4_equality(void)
 
 static bool kmac256x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[4U][32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[4U][34U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][32U] = { 0U };
+	uint8_t cst[4U][32U] = { 0U };
+	uint8_t key[4U][34U] = { 0U };
+	uint8_t msg[4U][256U] = { 0U };
+	uint8_t otp[4U][32U] = { 0U };
+	uint8_t exp[4U][32U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -685,11 +685,11 @@ static bool kmac256x4_equality(void)
 
 static bool kmac512x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[4U][64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[4U][66U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][64U] = { 0U };
+	uint8_t cst[4U][64U] = { 0U };
+	uint8_t key[4U][66U] = { 0U };
+	uint8_t msg[4U][256U] = { 0U };
+	uint8_t otp[4U][64U] = { 0U };
+	uint8_t exp[4U][64U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -760,9 +760,9 @@ static bool kmac512x4_equality(void)
 
 static bool shake128x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[4U][18U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][168] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][168] = { 0U };
+	uint8_t key[4U][18U] = { 0U };
+	uint8_t otp[4U][168] = { 0U };
+	uint8_t exp[4U][168] = { 0U };
 	bool status;
 
 	status = true;
@@ -819,9 +819,9 @@ static bool shake128x4_equality(void)
 
 static bool shake256x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[4U][34U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][136U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][136U] = { 0U };
+	uint8_t key[4U][34U] = { 0U };
+	uint8_t otp[4U][136U] = { 0U };
+	uint8_t exp[4U][136U] = { 0U };
 	bool status;
 
 	status = true;
@@ -878,9 +878,9 @@ static bool shake256x4_equality(void)
 
 static bool shake512x4_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[4U][66U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[4U][72U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[4U][72U] = { 0U };
+	uint8_t key[4U][66U] = { 0U };
+	uint8_t otp[4U][72U] = { 0U };
+	uint8_t exp[4U][72U] = { 0U };
 	bool status;
 
 	status = true;
@@ -939,11 +939,11 @@ static bool shake512x4_equality(void)
 #if defined(HKDS_SYSTEM_HAS_AVX512)
 static bool kmac128x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[8U][16U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[8U][18U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[8U][256U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][16U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][16U] = { 0U };
+	uint8_t cst[8U][16U] = { 0U };
+	uint8_t key[8U][18U] = { 0U };
+	uint8_t msg[8U][256U] = { 0U };
+	uint8_t otp[8U][16U] = { 0U };
+	uint8_t exp[8U][16U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1064,11 +1064,11 @@ static bool kmac128x8_equality(void)
 
 static bool kmac256x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[8U][32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[8U][34U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[8U][25U6] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][32U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][32U] = { 0U };
+	uint8_t cst[8U][32U] = { 0U };
+	uint8_t key[8U][34U] = { 0U };
+	uint8_t msg[8U][25U6] = { 0U };
+	uint8_t otp[8U][32U] = { 0U };
+	uint8_t exp[8U][32U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1189,11 +1189,11 @@ static bool kmac256x8_equality(void)
 
 static bool kmac512x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t cst[8U][64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t key[8U][66U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t msg[8U][256U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][64U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][64U] = { 0U };
+	uint8_t cst[8U][64U] = { 0U };
+	uint8_t key[8U][66U] = { 0U };
+	uint8_t msg[8U][256U] = { 0U };
+	uint8_t otp[8U][64U] = { 0U };
+	uint8_t exp[8U][64U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1314,9 +1314,9 @@ static bool kmac512x8_equality(void)
 
 static bool shake128x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[8U][18U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][168U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][168U] = { 0U };
+	uint8_t key[8U][18U] = { 0U };
+	uint8_t otp[8U][168U] = { 0U };
+	uint8_t exp[8U][168U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1415,9 +1415,9 @@ static bool shake128x8_equality(void)
 
 static bool shake256x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[8U][34U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][136U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][136U] = { 0U };
+	uint8_t key[8U][34U] = { 0U };
+	uint8_t otp[8U][136U] = { 0U };
+	uint8_t exp[8U][136U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1516,9 +1516,9 @@ static bool shake256x8_equality(void)
 
 static bool shake512x8_equality(void)
 {
-	HKDS_SIMD_ALIGN uint8_t key[8U][66U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t otp[8U][72U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t exp[8U][72U] = { 0U };
+	uint8_t key[8U][66U] = { 0U };
+	uint8_t otp[8U][72U] = { 0U };
+	uint8_t exp[8U][72U] = { 0U };
 	size_t i;
 	bool status;
 

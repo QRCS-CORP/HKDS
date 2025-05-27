@@ -1159,7 +1159,7 @@ bool utils_cpu_features_set(utils_cpu_features* features)
     return res;
 }
 
-uint64_t utils_stopwatch_start()
+uint64_t utils_stopwatch_start(void)
 {
 	uint64_t start;
 

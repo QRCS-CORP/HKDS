@@ -29,10 +29,10 @@ static void hkds_client_get_tms(const hkds_client_state* state, uint8_t* tms)
 
 bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, uint8_t* token)
 {
-	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t mtk[HKDS_TAG_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tms[HKDS_TMS_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
+	uint8_t mtk[HKDS_TAG_SIZE] = { 0U };
+	uint8_t tms[HKDS_TMS_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
 	uint32_t tkc;
 	bool res;
 
@@ -116,9 +116,9 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 
 bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const uint8_t* plaintext, const uint8_t* data, size_t datalen, uint8_t* ciphertext)
 {
-	HKDS_SIMD_ALIGN uint8_t code[HKDS_TAG_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t code[HKDS_TAG_SIZE] = { 0U };
+	uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0U };
 	bool res;
 
 	res = false;
@@ -162,8 +162,8 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 
 void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 {
-	HKDS_SIMD_ALIGN uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
+	uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
+	uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 
 	/* combine the token and edk keys */
 	utils_memory_copy(tmpk, token, HKDS_STK_SIZE);
