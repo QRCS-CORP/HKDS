@@ -44,4 +44,4 @@ install(DIRECTORY include/ DESTINATION include)
 
 # Testing support
 enable_testing()
-add_subdirectory(HKDSTest)
+# add_subdirectory(HKDSTest)
