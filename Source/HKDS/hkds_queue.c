@@ -3,11 +3,11 @@
 
 void hkds_message_queue_destroy(hkds_message_queue_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
-		for (size_t i = 0; i < ctx->state.depth; ++i)
+		for (size_t i = 0U; i < ctx->state.depth; ++i)
 		{
 			if (ctx->state.queue[i] != NULL)
 			{
@@ -18,21 +18,21 @@ void hkds_message_queue_destroy(hkds_message_queue_state* ctx)
 
 		utils_memory_aligned_free(ctx->state.queue);
 		utils_memory_clear((uint8_t*)ctx->state.tags, sizeof(ctx->state.tags));
-		ctx->state.count = 0;
-		ctx->state.depth = 0;
-		ctx->state.position = 0;
-		ctx->state.width = 0;
+		ctx->state.count = 0U;
+		ctx->state.depth = 0U;
+		ctx->state.position = 0U;
+		ctx->state.width = 0U;
 	}
 }
 
 void hkds_message_queue_flush(hkds_message_queue_state* ctx, uint8_t* output)
 {
-	assert(ctx != NULL);
-	assert(output != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(output != NULL);
 
 	if (ctx->state.queue != NULL)
 	{
-		for (size_t i = 0; i < ctx->state.position; ++i)
+		for (size_t i = 0U; i < ctx->state.position; ++i)
 		{
 			if (ctx->state.queue[i] != NULL)
 			{
@@ -41,16 +41,17 @@ void hkds_message_queue_flush(hkds_message_queue_state* ctx, uint8_t* output)
 			}
 		}
 
-		ctx->state.count = 0;
-		ctx->state.position = 0;
+		ctx->state.count = 0U;
+		ctx->state.position = 0U;
 		utils_memory_clear((uint8_t*)ctx->state.tags, sizeof(ctx->state.tags));
 	}
 }
 
 void hkds_message_queue_initialize(hkds_message_queue_state* ctx, size_t depth, size_t width, uint8_t* tag)
 {
-	assert(ctx != NULL);
-	assert(depth != 0 && width != 0);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(depth != 0U);
+	HKDS_ASSERT(width != 0U);
 
 	ctx->state.queue = (uint8_t**)utils_memory_aligned_alloc(HKDS_QUEUE_ALIGNMENT, depth * sizeof(uint8_t*));
 
@@ -68,9 +69,9 @@ void hkds_message_queue_initialize(hkds_message_queue_state* ctx, size_t depth, 
 			}
 		}
 
-		ctx->state.count = 0;
+		ctx->state.count = 0U;
 		ctx->state.depth = depth;
-		ctx->state.position = 0;
+		ctx->state.position = 0U;
 		utils_memory_clear((uint8_t*)ctx->state.tags, HKDS_QUEUE_MAX_DEPTH);
 		ctx->state.width = width;
 	}
@@ -78,34 +79,34 @@ void hkds_message_queue_initialize(hkds_message_queue_state* ctx, size_t depth, 
 
 void hkds_message_queue_pop(hkds_message_queue_state* ctx, uint8_t* output, size_t outlen)
 {
-	assert(ctx != NULL);
-	assert(output != NULL);
-	assert(outlen != 0);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(outlen != 0U);
 
 	uint64_t tag;
 
-	tag = 0;
+	tag = 0U;
 
-	if (ctx->state.position != 0)
+	if (ctx->state.position != 0U)
 	{
 
 		if (!hkds_message_queue_empty(ctx) && outlen <= ctx->state.width)
 		{
-			utils_memory_copy(output, ctx->state.queue[0], outlen);
-			utils_memory_clear(ctx->state.queue[0], ctx->state.width);
-			tag = ctx->state.tags[ctx->state.position - 1];
+			utils_memory_copy(output, ctx->state.queue[0U], outlen);
+			utils_memory_clear(ctx->state.queue[0U], ctx->state.width);
+			tag = ctx->state.tags[ctx->state.position - 1U];
 
-			if (ctx->state.count > 1)
+			if (ctx->state.count > 1U)
 			{
-				for (size_t i = 1; i < ctx->state.count; ++i)
+				for (size_t i = 1U; i < ctx->state.count; ++i)
 				{
-					utils_memory_copy(ctx->state.queue[i - 1], ctx->state.queue[i], ctx->state.width);
-					ctx->state.tags[i - 1] = ctx->state.tags[i];
+					utils_memory_copy(ctx->state.queue[i - 1U], ctx->state.queue[i], ctx->state.width);
+					ctx->state.tags[i - 1U] = ctx->state.tags[i];
 				}
 			}
 
-			utils_memory_clear(ctx->state.queue[ctx->state.position - 1], ctx->state.width);
-			ctx->state.tags[ctx->state.position - 1] = 0;
+			utils_memory_clear(ctx->state.queue[ctx->state.position - 1U], ctx->state.width);
+			ctx->state.tags[ctx->state.position - 1U] = 0U;
 			--ctx->state.count;
 			--ctx->state.position;
 		}
@@ -114,9 +115,9 @@ void hkds_message_queue_pop(hkds_message_queue_state* ctx, uint8_t* output, size
 
 void hkds_message_queue_push(hkds_message_queue_state* ctx, const uint8_t* input, size_t inplen)
 {
-	assert(ctx != NULL);
-	assert(input != NULL);
-	assert(inplen != 0);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(input != NULL);
+	HKDS_ASSERT(inplen != 0U);
 
 	if (ctx->state.position != ctx->state.depth)
 	{
@@ -136,7 +137,7 @@ void hkds_message_queue_push(hkds_message_queue_state* ctx, const uint8_t* input
 
 bool hkds_message_queue_full(const hkds_message_queue_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	bool res;
 
@@ -152,7 +153,7 @@ bool hkds_message_queue_full(const hkds_message_queue_state* ctx)
 
 bool hkds_message_queue_empty(const hkds_message_queue_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	bool res;
 
@@ -160,7 +161,7 @@ bool hkds_message_queue_empty(const hkds_message_queue_state* ctx)
 
 	if (ctx != NULL)
 	{
-		res = (bool)(ctx->state.count == 0);
+		res = (bool)(ctx->state.count == 0U);
 	}
 
 	return res;
@@ -168,11 +169,11 @@ bool hkds_message_queue_empty(const hkds_message_queue_state* ctx)
 
 size_t hkds_message_queue_count(const hkds_message_queue_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	size_t res;
 
-	res = 0;
+	res = 0U;
 
 	if (ctx != NULL)
 	{
@@ -188,11 +189,11 @@ size_t hkds_message_queue_extract_block_x8(hkds_message_queue_state* ctx, uint8_
 {
 	size_t i;
 
-	i = 0;
+	i = 0U;
 
 	if (ctx->state.position >= HKDS_CACHX8_DEPTH)
 	{
-		for (i = 0; i < HKDS_CACHX8_DEPTH; ++i)
+		for (i = 0U; i < HKDS_CACHX8_DEPTH; ++i)
 		{
 			hkds_message_queue_pop(ctx, output[i], ctx->state.width);
 		}
@@ -206,14 +207,14 @@ size_t hkds_message_queue_extract_block_x64(hkds_message_queue_state* ctx, uint8
 	size_t i;
 	size_t j;
 
-	i = 0;
-	j = 0;
+	i = 0U;
+	j = 0U;
 
 	if (ctx->state.position >= HKDS_CACHX64_SIZE)
 	{
-		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
+		for (i = 0U; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
-			for (j = 0; j < HKDS_CACHX8_DEPTH; ++j)
+			for (j = 0U; j < HKDS_CACHX8_DEPTH; ++j)
 			{
 				hkds_message_queue_pop(ctx, output[i][j], ctx->state.width);
 			}
@@ -229,11 +230,11 @@ size_t hkds_message_queue_extract_stream(hkds_message_queue_state* ctx, uint8_t*
 {
 	size_t i;
 
-	i = 0;
+	i = 0U;
 
 	if (ctx->state.position >= items)
 	{
-		for (i = 0; i < items; ++i)
+		for (i = 0U; i < items; ++i)
 		{
 			hkds_message_queue_pop(ctx, (stream + (i * ctx->state.width)), ctx->state.width);
 		}

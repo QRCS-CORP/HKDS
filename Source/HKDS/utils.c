@@ -5,68 +5,101 @@
 #include <string.h>
 
 /* bogus winbase.h error */
-SYSTEM_CONDITION_IGNORE(5105)
+HKDS_SYSTEM_CONDITION_IGNORE(5105)
 
-#if defined(SYSTEM_OS_WINDOWS)
-#	include <Windows.h>
-#	if defined(SYSTEM_ARCH_IX86)
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
+#	if defined(HKDS_SYSTEM_COMPILER_MSC)
+#		pragma comment(lib, "Bcrypt.lib")
+#	endif
+#  include <Windows.h>
+#  include <bcrypt.h>
+#	if defined(HKDS_SYSTEM_ARCH_IX86)
 #		include <intrin.h>
 #		pragma intrinsic(__cpuid)
-#	elif defined(SYSTEM_ARCH_ARM)
+#	elif defined(HKDS_SYSTEM_ARCH_ARM)
 #		include <processthreadsapi.h>
 #	endif
-#elif defined(SYSTEM_OS_POSIX)
-#	if defined(SYSTEM_OS_BSD)
+#elif defined(HKDS_SYSTEM_OS_POSIX)
+#	include <unistd.h>
+#	include <sys/types.h>
+#	if defined(HKDS_SYSTEM_OS_BSD) || defined(HKDS_SYSTEM_OS_APPLE)
+#		include <errno.h>
+#		include <stdlib.h>
 #   	include <sys/param.h>
 #   	include <sys/sysctl.h>
-#		include <sys/types.h>
-#		include <unistd.h>
+#	elif defined(HKDS_SYSTEM_OS_LINUX)
+#       include <sys/auxv.h>
+#		include <sys/random.h>
 #	else
 #		include <cpuid.h>
 #   	include <limits.h>
 #		include <x86intrin.h>
-#   	include <unistd.h>
+#		include <fcntl.h>
 #		include <xsaveintrin.h>
 #	endif
 #	if defined(_AIX)
 #		include <sys/systemcfg.h>
 #	endif
 #endif
+/*!
+ * \def HKDS_CPUIDEX_SERIAL_SIZE
+ * \brief The CPU serial number length (in bytes).
+ */
+#define HKDS_CPUIDEX_SERIAL_SIZE 12ULL
 
+#if defined(HKDS_SYSTEM_OS_APPLE) && defined(HKDS_SYSTEM_COMPILER_GCC)
+	/*!
+	 * \def HKDS_CPUIDEX_VENDOR_SIZE
+	 * \brief The CPU vendor name length for Apple systems using GCC.
+	 */
+	#define HKDS_CPUIDEX_VENDOR_SIZE 32
+#else
+	/*!
+	 * \def HKDS_CPUIDEX_VENDOR_SIZE
+	 * \brief The CPU vendor name length.
+	 */
+	#define HKDS_CPUIDEX_VENDOR_SIZE 12ULL
+#endif
 
+static void utils_le32to8(uint8_t* output, uint32_t value)
+{
+	HKDS_ASSERT(output != NULL);
+
+	output[0U] = (uint8_t)value & 0xFFU;
+	output[1U] = (uint8_t)(value >> 8) & 0xFFU;
+	output[2U] = (uint8_t)(value >> 16) & 0xFFU;
+	output[3U] = (uint8_t)(value >> 24) & 0xFFU;
+}
 void utils_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 {
-	assert(hexstr != NULL);
-	assert(output != NULL);
-	assert(length != 0);
+	HKDS_ASSERT(hexstr != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(length != 0U);
 
 	uint8_t idx0;
 	uint8_t idx1;
 
 	const uint8_t hashmap[] =
 	{
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U,
+		0x08U, 0x09U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
+		0x00U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU, 0x00U,
+		0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U
 	};
 
-	if (hexstr != NULL && output != NULL && length != 0)
-	{
-		utils_memory_clear(output, length);
+	utils_memory_clear(output, length);
 
-		for (size_t  pos = 0; pos < (length * 2); pos += 2)
-		{
-			idx0 = ((uint8_t)hexstr[pos] & 0x1FU) ^ 0x10U;
-			idx1 = ((uint8_t)hexstr[pos + 1] & 0x1FU) ^ 0x10U;
-			output[pos / 2] = (uint8_t)(hashmap[idx0] << 4) | hashmap[idx1];
-		}
+	for (size_t pos = 0U; pos < (length * 2U); pos += 2U)
+	{
+		idx0 = ((uint8_t)hexstr[pos] & 0x1FU) ^ 0x10U;
+		idx1 = ((uint8_t)hexstr[pos + 1U] & 0x1FU) ^ 0x10U;
+		output[pos / 2U] = (uint8_t)(hashmap[idx0] << 4) | hashmap[idx1];
 	}
 }
 
 void utils_print_line(const char* input)
 {
-	assert(input != NULL);
+	HKDS_ASSERT(input != NULL);
 
 	if (input != NULL)
 	{
@@ -78,11 +111,11 @@ void utils_print_line(const char* input)
 
 void utils_print_safe(const char* input)
 {
-	assert(input != NULL);
+	HKDS_ASSERT(input != NULL);
 
-	if (input != NULL && utils_string_size(input) > 0)
+	if (input != NULL && utils_string_size(input) > 0U)
 	{
-#if defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
 		printf_s("%s", input);
 #else
 		printf("%s", input);
@@ -93,84 +126,121 @@ void utils_print_safe(const char* input)
 
 bool utils_seed_generate(uint8_t* output, size_t length)
 {
-	assert(output != 0);
-	assert(length <= UTILS_SEED_MAX);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(length != 0U);
 
 	bool res;
 
-	res = true;
+	res = false;
 
-#if defined(SYSTEM_OS_WINDOWS)
-
-	HCRYPTPROV hprov;
-
-	if (CryptAcquireContextW(&hprov, 0, 0, PROV_RSA_FULL, (CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) == true)
+	if (output != NULL && length != 0U)
 	{
-		if (CryptGenRandom(hprov, (DWORD)length, output) == false)
-		{
-			res = false;
-		}
-	}
-	else
-	{
-		res = false;
-	}
+		res = true;
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
 
-	if (hprov != 0)
-	{
-		CryptReleaseContext(hprov, 0);
-	}
+		ULONG ulen = (ULONG)length;
 
-#elif defined(HAVE_SAFE_ARC4RANDOM)
-
-	arc4random_buf(output, length);
-
-#else
-
-	int32_t fd = open("/dev/urandom", O_RDONLY);
-
-	if (fd <= 0)
-	{
-		res = false;
-	}
-	else
-	{
-		int32_t r = read(fd, output, length);
-
-		if (r != length)
+		if (BCryptGenRandom(NULL, output, ulen, BCRYPT_USE_SYSTEM_PREFERRED_RNG) != 0)
 		{
 			res = false;
 		}
 
-		close(fd);
-	}
+#elif defined(HKDS_SYSTEM_OS_LINUX)
 
-#endif
+		ssize_t pos;
+		size_t  rmd;
+		uint8_t* ptr;
 
-	return res;
-}
+		rmd = length;
+		ptr = output;
 
-static uint32_t utils_cpu_count()
-{
-	uint32_t res;
+		while (rmd > 0U)
+		{
+			pos = getrandom(ptr, rmd, 0U);
 
-#if defined(SYSTEM_OS_WINDOWS)
-	SYSTEM_INFO sysinfo;
-	GetSystemInfo(&sysinfo);
-	res = (uint32_t)sysinfo.dwNumberOfProcessors;
+			if (pos < 0U)
+			{
+				if (errno == EINTR)
+				{
+					continue;
+				}
+
+				res = false;
+				break;
+			}
+
+			ptr += (size_t)pos;
+			rmd -= (size_t)pos;
+		}
+
+#elif defined(HKDS_SYSTEM_OS_BSD) || defined(HKDS_SYSTEM_OS_APPLE)
+
+		arc4random_buf(output, length);
+
 #else
-	res = (uint32_t)sysconf(_SC_NPROCESSORS_CONF);
-#endif
 
-	if (res < 1)
+		int fd;
+
+		/* fallback: read from /dev/urandom */
+
+		do
+		{
+			fd = open("/dev/urandom", O_RDONLY);
+		} while ((fd < 0) && (errno == EINTR));
+
+		if (fd < 0)
+		{
+			res = false;
+		}
+		else
+		{
+			ssize_t pos;
+			size_t rmd;
+			uint8_t* ptr;
+
+			rmd = length;
+			ptr = output;
+
+			while (rmd > 0U)
+			{
+				pos = read(fd, ptr, rmd);
+
+				if (pos < 0)
+				{
+					if (errno == EINTR)
+					{
+						continue;
+					}
+
+					res = false;
+					break;
+				}
+				else if (pos == 0)
+				{
+					/* zero-length read—treat as failure */
+					res = false;
+					break;
+				}
+
+				ptr += (size_t)pos;
+				rmd -= (size_t)pos;
+			}
+
+			(void)close(fd);
+		}
+
+#endif
+	}
+
+	if (!res)
 	{
-		res = 1;
+		utils_memory_clear(output, length);
 	}
 
 	return res;
 }
 
-#if defined(SYSTEM_ARCH_ARM)
+#if defined(HKDS_SYSTEM_ARCH_ARM)
 #	if !defined(HWCAP_ARMv7)
 #		define HWCAP_ARMv7 (1 << 29)
 #	endif
@@ -511,7 +581,7 @@ static void utils_arm_features(utils_cpu_features* features)
 
 #endif
 
-#if defined(SYSTEM_ARCH_IX86) && !defined(SYSTEM_OS_BSD)
+#if defined(HKDS_SYSTEM_ARCH_IX86) && !defined(HKDS_SYSTEM_OS_BSD)
 
 #	define CPUID_EBX_AVX2 0x00000020UL
 #	define CPUID_EBX_AVX512F 0x00010000UL
@@ -530,51 +600,67 @@ static void utils_arm_features(utils_cpu_features* features)
 #	define XCR0_ZMM_HI256 0x00000040UL
 #	define XCR0_HI16_ZMM 0x00000080UL
 
-static void utils_cpu_info(uint32_t info[4], const uint32_t infotype)
+static void utils_cpu_info(uint32_t info[4U], const uint32_t infotype)
 {
-#if defined(SYSTEM_COMPILER_MSC)
-	__cpuid((int*)info, infotype);
-#elif defined(SYSTEM_COMPILER_GCC)
-	__get_cpuid(infotype, &info[0], &info[1], &info[2], &info[3]);
+#if defined(HKDS_SYSTEM_COMPILER_MSC) || defined(HKDS_SYSTEM_COMPILER_INTEL)
+	__cpuid(info, infotype);
+#elif defined(HKDS_SYSTEM_COMPILER_GCC) || defined(HKDS_SYSTEM_COMPILER_CLANG)
+	__get_cpuid(infotype, (uint32_t*)&info[0U], (uint32_t*)&info[1U], (uint32_t*)&info[2U], (uint32_t*)&info[3U]);
 #endif
 }
 
 static uint32_t utils_read_bits(uint32_t value, int index, int length)
 {
-	int mask = ((1L << length) - 1) << index;
+	uint32_t mask;
+	uint32_t res;
 
-	return (value & mask) >> index;
+	res = 0U;
+
+	if (length > 0 && length < 31)
+	{
+		mask = ((1U << length) - 1U) << (uint32_t)index;
+		res = (value & mask) >> (uint32_t)index;
+	}
+
+	return res;
 }
 
 static void utils_vendor_name(utils_cpu_features* features)
 {
-	uint32_t info[4] = { 0 };
+	HKDS_ASSERT(features != NULL);
+
+	int32_t info[4U] = { 0U };
 
 	utils_cpu_info(info, 0x00000000UL);
-	utils_memory_clear(features->vendor, UTILS_CPUIDEX_VENDOR_SIZE);
-	utils_memory_copy(&features->vendor[0], &info[1], sizeof(uint32_t));
-	utils_memory_copy(&features->vendor[4], &info[3], sizeof(uint32_t));
-	utils_memory_copy(&features->vendor[8], &info[2], sizeof(uint32_t));
+	utils_memory_clear(features->vendor, HKDS_CPUIDEX_VENDOR_SIZE);
+	utils_le32to8((uint8_t*)&features->vendor[0U], (uint32_t)info[1U]);
+    utils_le32to8((uint8_t*)&features->vendor[4U], (uint32_t)info[3U]);
+    utils_le32to8((uint8_t*)&features->vendor[8U], (uint32_t)info[2U]);
 }
 
 static void utils_bus_info(utils_cpu_features* features)
 {
-	uint32_t info[4] = { 0 };
+	HKDS_ASSERT(features != NULL);
+
+	int32_t info[4U] = { 0U };
+
 	utils_cpu_info(info, 0x00000000UL);
 
-	if (info[0] >= 0x00000016UL)
+	if (info[0U] >= 0x00000016UL)
 	{
 		utils_memory_clear(info, sizeof(info));
 		utils_cpu_info(info, 0x00000016UL);
-		features->freqbase = info[0];
-		features->freqmax = info[1];
-		features->freqref = info[2];
+		features->freqbase = info[0U];
+		features->freqmax = info[1U];
+		features->freqref = info[2U];
 	}
 }
 
 static void utils_cpu_cache(utils_cpu_features* features)
 {
-	uint32_t info[4] = { 0 };
+	HKDS_ASSERT(features != NULL);
+
+	int32_t info[4U] = { 0U };
 
 	utils_cpu_info(info, 0x80000006UL);
 
@@ -584,37 +670,68 @@ static void utils_cpu_cache(utils_cpu_features* features)
 	features->l2cache = utils_read_bits(info[2], 16, 16);
 }
 
+static uint32_t utils_cpu_count()
+{
+	uint32_t resu;
+
+	resu = 1U;
+
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
+	uint32_t resl;
+	SYSTEM_INFO sysinfo;
+
+	GetSystemInfo(&sysinfo);
+	resl = (uint32_t)sysinfo.dwNumberOfProcessors;
+
+	if (resl > 1U)
+	{
+		resu = resl;
+	}
+#else
+    long resl;
+    
+	resl = sysconf(_SC_NPROCESSORS_CONF);
+
+    if (resl > 1L)
+    {
+        resu = (uint32_t)resl;
+    }
+#endif
+
+	return resu;
+}
+
 static void utils_cpu_topology(utils_cpu_features* features)
 {
-	uint32_t info[4] = { 0 };
+	int32_t info[4U] = { 0U };
 
 	/* total cpu cores */
 	features->cores = utils_cpu_count();
 
 	/* hyperthreading and actual cpus */
 	utils_cpu_info(info, 0x00000001UL);
-	features->hyperthread = utils_read_bits(info[3], 28, 1) != 0;
+	features->hyperthread = utils_read_bits(info[3U], 28, 1) != 0;
 	features->cpus = (features->hyperthread == true && features->cores > 1) ? (features->cores / 2) : features->cores;
 
 	/* cache line size */
 	utils_cpu_info(info, 0x00000001UL);
 
 	/* cpu features */
-	features->pcmul = ((info[2] & CPUID_ECX_PCLMUL) != 0x00000000UL);
-	features->aesni = ((info[2] & CPUID_ECX_AESNI) != 0x00000000UL);
-	features->rdrand = ((info[2] & CPUID_ECX_RDRAND) != 0x00000000UL);
-	features->rdtcsp = ((info[3] & CPUID_EDX_RDTCSP) != 0x00000000UL);
+	features->pcmul = ((info[2U] & CPUID_ECX_PCLMUL) != 0x00000000UL);
+	features->aesni = ((info[2U] & CPUID_ECX_AESNI) != 0x00000000UL);
+	features->rdrand = ((info[2U] & CPUID_ECX_RDRAND) != 0x00000000UL);
+	features->rdtcsp = ((info[3U] & CPUID_EDX_RDTCSP) != 0x00000000UL);
 
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 	bool havx;
 
-	havx = (info[2] & CPUID_ECX_AVX) != 0x00000000UL;
+	havx = (info[2U] & CPUID_ECX_AVX) != 0x00000000UL;
 
 	if (havx == true)
 	{
 		uint32_t xcr0;
 
-		xcr0 = 0;
+		xcr0 = 0U;
 
 		if ((info[2] & (CPUID_ECX_AVX | CPUID_ECX_XSAVE | CPUID_ECX_OSXSAVE)) ==
 			(CPUID_ECX_AVX | CPUID_ECX_XSAVE | CPUID_ECX_OSXSAVE))
@@ -631,7 +748,7 @@ static void utils_cpu_topology(utils_cpu_features* features)
 
 	if (features->cputype == hkds_cpuid_intel)
 	{
-		features->cacheline = utils_read_bits(info[1], 16, 8) * 8;
+		features->cacheline = utils_read_bits(info[1], 16, 8) * 8U;
 	}
 	else if (features->cputype == hkds_cpuid_amd)
 	{
@@ -641,13 +758,13 @@ static void utils_cpu_topology(utils_cpu_features* features)
 
 	if (features->avx == true)
 	{
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 		bool havx2;
 
 		utils_memory_clear(info, sizeof(info));
 		utils_cpu_info(info, 0x00000007UL);
 
-#	if defined(SYSTEM_COMPILER_GCC)
+#	if defined(HKDS_SYSTEM_COMPILER_GCC)
 		__builtin_cpu_init();
 		havx2 = __builtin_cpu_supports("avx2") != 0;
 #	else
@@ -659,9 +776,9 @@ static void utils_cpu_topology(utils_cpu_features* features)
 		features->sha256 = ((info[1] & CPUID_EBX_SHA2) != 0x00000000UL);
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 		bool havx512;
-#	if defined(SYSTEM_COMPILER_GCC)
+#	if defined(HKDS_SYSTEM_COMPILER_GCC)
 		havx512 = __builtin_cpu_supports("avx512f") != 0;
 #	else
 		havx512 = ((info[1] & CPUID_EBX_AVX512F) != 0x00000000UL);
@@ -682,7 +799,7 @@ static void utils_cpu_topology(utils_cpu_features* features)
 
 static void utils_cpu_type(utils_cpu_features* features)
 {
-	char tmpn[UTILS_CPUIDEX_VENDOR_SIZE + 1] = { 0 };
+	char tmpn[UTILS_CPUIDEX_VENDOR_SIZE + 1U] = { 0U };
 
 	utils_vendor_name(features);
 	utils_memory_copy(tmpn, features->vendor, UTILS_CPUIDEX_VENDOR_SIZE);
@@ -716,25 +833,25 @@ static void utils_cpu_type(utils_cpu_features* features)
 
 static void utils_serial_number(utils_cpu_features* features)
 {
-	uint32_t info[4] = { 0 };
+	int32_t info[4U] = { 0U };
 
 	utils_cpu_info(info, 0x00000003UL);
 	utils_memory_clear(features->serial, UTILS_CPUIDEX_SERIAL_SIZE);
-	utils_memory_copy(&features->serial[0], &info[1], sizeof(uint32_t));
-	utils_memory_copy(&features->serial[4], &info[3], sizeof(uint32_t));
-	utils_memory_copy(&features->serial[8], &info[2], sizeof(uint32_t));
+	utils_memory_copy(&features->serial[0U], &info[1U], sizeof(uint32_t));
+	utils_memory_copy(&features->serial[4U], &info[3U], sizeof(uint32_t));
+	utils_memory_copy(&features->serial[8U], &info[2U], sizeof(uint32_t));
 }
 
 #endif
 
-#if defined(SYSTEM_OS_BSD)
+#if defined(HKDS_SYSTEM_OS_BSD)
 
 static void utils_bsd_topology(utils_cpu_features* features)
 {
 	size_t plen;
 	uint64_t pval;
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.physicalcpu", &pval, &plen, NULL, 0) == 0)
@@ -742,7 +859,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->cpus = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.logicalcpu", &pval, &plen, NULL, 0) == 0)
@@ -751,7 +868,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->hyperthread = (pval > features->cpus);
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.cachelinesize", &pval, &plen, NULL, 0) == 0)
@@ -759,7 +876,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->cacheline = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.cpufrequency", &pval, &plen, NULL, 0) == 0)
@@ -767,7 +884,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->freqbase = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.cpufrequency_max", &pval, &plen, NULL, 0) == 0)
@@ -775,7 +892,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->freqmax = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.cpufrequency_min", &pval, &plen, NULL, 0) == 0)
@@ -783,7 +900,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->freqref = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.l1dcachesize", &pval, &plen, NULL, 0) == 0)
@@ -791,7 +908,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->l1cache = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.cachelinesize", &pval, &plen, NULL, 0) == 0)
@@ -799,7 +916,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->cacheline = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.l2cachesize", &pval, &plen, NULL, 0) == 0)
@@ -807,7 +924,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->l2cache = pval;
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.adx", &pval, &plen, NULL, 0) == 0)
@@ -815,7 +932,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->adx = (pval == 1);
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.aes", &pval, &plen, NULL, 0) == 0)
@@ -823,7 +940,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->aesni = (pval == 1);
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.avx1_0", &pval, &plen, NULL, 0) == 0)
@@ -832,7 +949,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 	}
 
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.avx2_0", &pval, &plen, NULL, 0) == 0)
@@ -840,7 +957,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->avx2 = (pval == 1);
 	}
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.avx512f", &pval, &plen, NULL, 0) == 0)
@@ -850,7 +967,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 
 	features->pcmul = features->avx;
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.rdrand", &pval, &plen, NULL, 0) == 0)
@@ -860,7 +977,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 
 	features->rdtcsp = features->avx;
 
-	pval = 0;
+	pval = 0U;
 	plen = sizeof(pval);
 
 	if (sysctlbyname("hw.optional.rdrand", &pval, &plen, NULL, 0) == 0)
@@ -868,7 +985,7 @@ static void utils_bsd_topology(utils_cpu_features* features)
 		features->rdrand = (pval == 1);
 	}
 
-	char vend[1024] = { 0 };
+	char vend[1024U] = { 0U };
 	plen = sizeof(vend);
 
 	if (sysctlbyname("machdep.cpu.brand_string", vend, &plen, NULL, 0) >= 0)
@@ -891,11 +1008,11 @@ static void utils_bsd_topology(utils_cpu_features* features)
 	}
 }
 
-#elif defined(SYSTEM_OS_POSIX)
+#elif defined(HKDS_SYSTEM_OS_POSIX)
 
 static void utils_posix_topology(utils_cpu_features* features)
 {
-#	if defined(SYSTEM_ARCH_IX86) && defined(SYSTEM_COMPILER_GCC)
+#	if defined(HKDS_SYSTEM_ARCH_IX86) && defined(HKDS_SYSTEM_COMPILER_GCC)
 
 	utils_cpu_type(features);
 
@@ -963,11 +1080,11 @@ static void utils_posix_topology(utils_cpu_features* features)
 #	endif
 }
 
-#elif defined(SYSTEM_OS_WINDOWS)
+#elif defined(HKDS_SYSTEM_OS_WINDOWS)
 
 static void utils_windows_topology(utils_cpu_features* features)
 {
-#	if defined(SYSTEM_ARCH_IX86)
+#	if defined(HKDS_SYSTEM_ARCH_IX86)
 	utils_cpu_type(features);
 
 	if (features->cputype == hkds_cpuid_intel || features->cputype == hkds_cpuid_amd)
@@ -1008,34 +1125,34 @@ bool utils_cpu_features_set(utils_cpu_features* features)
     features->rdrand = false;
     features->rdtcsp = false;
 	/* cpu topology */
-    features->cacheline = 0;
-    features->cores = 0;
-    features->cpus = 1;
-    features->freqbase = 0;
-    features->freqmax = 0;
-    features->freqref = 0;
-    features->l1cache = 0;
-    features->l1cacheline = 0;
-    features->l2associative = 4;
-    features->l2cache = 0;
+    features->cacheline = 0U;
+    features->cores = 0U;
+    features->cpus = 1U;
+    features->freqbase = 0U;
+    features->freqmax = 0U;
+    features->freqref = 0U;
+    features->l1cache = 0U;
+    features->l1cacheline = 0U;
+    features->l2associative = 4U;
+    features->l2cache = 0U;
     utils_memory_clear(features->serial, UTILS_CPUIDEX_SERIAL_SIZE);
 
-#if defined(SYSTEM_OS_POSIX)
-#	if defined(SYSTEM_OS_BSD)
+#if defined(HKDS_SYSTEM_OS_POSIX)
+#	if defined(HKDS_SYSTEM_OS_BSD)
 	utils_bsd_topology(features);
     res = true;
 #else
 	utils_posix_topology(features);
 	res = true;
 #endif
-#elif defined(SYSTEM_OS_WINDOWS)
+#elif defined(HKDS_SYSTEM_OS_WINDOWS)
 	utils_windows_topology(features);
 	res = true;
 #else
 	res = false;
 #endif
 
-#if defined(SYSTEM_ARCH_ARM)
+#if defined(HKDS_SYSTEM_ARCH_ARM)
 	utils_arm_features(features);
 #endif
 
@@ -1058,7 +1175,7 @@ uint64_t utils_stopwatch_elapsed(uint64_t start)
 
 	msec = clock();
 	diff = msec - start;
-	msec = (diff * 1000) / CLOCKS_PER_SEC;
+	msec = (diff * 1000U) / CLOCKS_PER_SEC;
 
 	return msec;
 }
@@ -1066,8 +1183,8 @@ uint64_t utils_stopwatch_elapsed(uint64_t start)
 
 int64_t utils_find_string(const char* source, const char* token)
 {
-	assert(source != NULL);
-	assert(token != NULL);
+	HKDS_ASSERT(source != NULL);
+	HKDS_ASSERT(token != NULL);
 
 	int64_t pos;
 
@@ -1081,9 +1198,9 @@ int64_t utils_find_string(const char* source, const char* token)
 		slen = utils_string_size(source);
 		tlen = utils_string_size(token);
 
-		for (size_t i = 0; i < slen; ++i)
+		for (size_t i = 0U; i < slen; ++i)
 		{
-			if (source[i] == token[0])
+			if (source[i] == token[0U])
 			{
 				if (utils_memory_are_equal(source + i, token, tlen) == true)
 				{
@@ -1099,8 +1216,8 @@ int64_t utils_find_string(const char* source, const char* token)
 
 bool utils_string_contains(const char* source, const char* token)
 {
-	assert(source != NULL);
-	assert(token != NULL);
+	HKDS_ASSERT(source != NULL);
+	HKDS_ASSERT(token != NULL);
 
 	bool res;
 
@@ -1116,15 +1233,15 @@ bool utils_string_contains(const char* source, const char* token)
 
 size_t utils_string_size(const char* source)
 {
-	assert(source != NULL);
+	HKDS_ASSERT(source != NULL);
 
 	size_t res;
 
-	res = 0;
+	res = 0U;
 
 	if (source != NULL)
 	{
-#if defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
 		res = strnlen_s(source, UTILS_STRING_MAX_LEN);
 #else
 		res = strlen(source);
@@ -1136,17 +1253,17 @@ size_t utils_string_size(const char* source)
 
 void utils_string_to_lowercase(char* source)
 {
-	assert(source != NULL);
+	HKDS_ASSERT(source != NULL);
 
 	if (source != NULL)
 	{
-#if defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
 		size_t slen;
 
-		slen = utils_string_size(source) + 1;
+		slen = utils_string_size(source) + 1U;
 		_strlwr_s(source, slen);
 #else
-		for(size_t i = 0; i < strlen(source); ++i)
+		for(size_t i = 0U; i < utils_string_size(source); ++i)
 		{
 			source[i] = tolower(source[i]);
 		}
@@ -1155,21 +1272,21 @@ void utils_string_to_lowercase(char* source)
 }
 
 
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 static void utils_clear128(void* output)
 {
 	_mm_storeu_si128((__m128i*)output, _mm_setzero_si128());
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 static void utils_clear256(void* output)
 {
 	_mm256_storeu_si256((__m256i*)output, _mm256_setzero_si256());
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static void utils_clear512(void* output)
 {
 	_mm512_storeu_si512((__m512i*)output, _mm512_setzero_si512());
@@ -1178,22 +1295,22 @@ static void utils_clear512(void* output)
 
 void utils_memory_clear(void* output, size_t length)
 {
-	assert(output != NULL);
-	assert(length != 0);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(length != 0U);
 
 	size_t pctr;
 
-	if (output != NULL && length != 0)
+	if (output != NULL && length != 0U)
 	{
-		pctr = 0;
+		pctr = 0U;
 
-#if defined(SYSTEM_AVX_INTRINSICS)
-#	if defined(SYSTEM_HAS_AVX512)
-		const size_t SMDBLK = 64;
-#	elif defined(SYSTEM_HAS_AVX2)
-		const size_t SMDBLK = 32;
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS)
+#	if defined(HKDS_SYSTEM_HAS_AVX512)
+		const size_t SMDBLK = 64U;
+#	elif defined(HKDS_SYSTEM_HAS_AVX2)
+		const size_t SMDBLK = 32U;
 #	else
-		const size_t SMDBLK = 16;
+		const size_t SMDBLK = 16U;
 #	endif
 
 		if (length >= SMDBLK)
@@ -1202,11 +1319,11 @@ void utils_memory_clear(void* output, size_t length)
 
 			while (pctr != ALNLEN)
 			{
-#	if defined(SYSTEM_HAS_AVX512)
+#	if defined(HKDS_SYSTEM_HAS_AVX512)
 				utils_clear512(((uint8_t*)output + pctr));
-#	elif defined(SYSTEM_HAS_AVX2)
+#	elif defined(HKDS_SYSTEM_HAS_AVX2)
 				utils_clear256(((uint8_t*)output + pctr));
-#	elif defined(SYSTEM_HAS_AVX)
+#	elif defined(HKDS_SYSTEM_HAS_AVX)
 				utils_clear128(((uint8_t*)output + pctr));
 #	endif
 				pctr += SMDBLK;
@@ -1214,22 +1331,22 @@ void utils_memory_clear(void* output, size_t length)
 		}
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
-		if (length - pctr >= 32)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
+		if (length - pctr >= 32U)
 		{
 			utils_clear256(((uint8_t*)output + pctr));
-			pctr += 32;
+			pctr += 32U;
 		}
-		else if (length - pctr >= 16)
+		else if (length - pctr >= 16U)
 		{
 			utils_clear128(((uint8_t*)output + pctr));
-			pctr += 16;
+			pctr += 16U;
 		}
-#elif defined(SYSTEM_HAS_AVX2)
-		if (length - pctr >= 16)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
+		if (length - pctr >= 16U)
 		{
 			utils_clear128(((uint8_t*)output + pctr));
-			pctr += 16;
+			pctr += 16U;
 		}
 #endif
 
@@ -1237,70 +1354,69 @@ void utils_memory_clear(void* output, size_t length)
 		{
 			for (size_t i = pctr; i < length; ++i)
 			{
-				((uint8_t*)output)[i] = 0x00;
+				((uint8_t*)output)[i] = 0x00U;
 			}
 		}
 	}
 }
 
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 static bool utils_equal128(const uint8_t* a, const uint8_t* b)
 {
 	__m128i wa;
 	__m128i wb;
 	__m128i wc;
-	uint64_t ra[sizeof(__m128i) / sizeof(uint64_t)] = { 0 };
+	uint64_t ra[sizeof(__m128i) / sizeof(uint64_t)] = { 0U };
 
 	wa = _mm_loadu_si128((const __m128i*)a);
 	wb = _mm_loadu_si128((const __m128i*)b);
 	wc = _mm_cmpeq_epi64(wa, wb);
 	_mm_storeu_si128((__m128i*)ra, wc);
 
-	return ((~ra[0] + ~ra[1]) == 0);
+	return ((~ra[0U] + ~ra[1U]) == 0U);
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 static bool utils_equal256(const uint8_t* a, const uint8_t* b)
 {
 	__m256i wa;
 	__m256i wb;
 	__m256i wc;
-	uint64_t ra[sizeof(__m256i) / sizeof(uint64_t)] = { 0 };
+	uint64_t ra[sizeof(__m256i) / sizeof(uint64_t)] = { 0U };
 
 	wa = _mm256_loadu_si256((const __m256i*)a);
 	wb = _mm256_loadu_si256((const __m256i*)b);
 	wc = _mm256_cmpeq_epi64(wa, wb);
 	_mm256_storeu_si256((__m256i*)ra, wc);
 
-	return ((~ra[0] + ~ra[1] + ~ra[2] + ~ra[3]) == 0);
+	return ((~ra[0U] + ~ra[1U] + ~ra[2U] + ~ra[3U]) == 0U);
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static bool utils_equal512(const uint8_t* a, const uint8_t* b)
 {
-	__m512i wa;
-	__m512i wb;
-	__m512i wc;
-	__mmask8 mr;
+	__m512i va;
+	__m512i vb;
+	__mmask8 eq64;
 
-	wa = _mm512_loadu_si512((const __m512i*)a);
-	wb = _mm512_loadu_si512((const __m512i*)b);
-	mr = _mm512_cmpeq_epi64_mask(wa, wb); // NOTE: test this.
+    va = _mm512_loadu_si512(a);
+    vb = _mm512_loadu_si512(b);
+    eq64 = _mm512_cmpeq_epi64_mask(va, vb);
 
-	return ((const char)mr == 0);
+    return (eq64 == 0xFFU);
 }
 #endif
 
 
 void utils_memory_aligned_free(void* block)
 {
-	assert(block != NULL);
+	HKDS_ASSERT(block != NULL);
 
 	if (block != NULL)
 	{
-#if defined(SYSTEM_AVX_INTRINSICS) && defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS) && defined(HKDS_SYSTEM_OS_WINDOWS)
 		_aligned_free(block);
 #	else
 		free(block);
@@ -1310,19 +1426,19 @@ void utils_memory_aligned_free(void* block)
 
 void* utils_memory_aligned_alloc(int32_t align, size_t length)
 {
-	assert(align != 0);
-	assert(length != 0);
+	HKDS_ASSERT(align != 0);
+	HKDS_ASSERT(length != 0U);
 
 	void* ret;
 
 	ret = NULL;
 
-	if (length != 0)
+	if (length != 0U)
 	{
-#if defined(SYSTEM_AVX_INTRINSICS) && defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS) && defined(HKDS_SYSTEM_OS_WINDOWS)
 		ret = _aligned_malloc(length, align);
-#elif defined(SYSTEM_OS_POSIX)
-		int res;
+#elif defined(HKDS_SYSTEM_OS_POSIX)
+		int32_t res;
 
 		res = posix_memalign(&ret, align, length);
 
@@ -1340,25 +1456,25 @@ void* utils_memory_aligned_alloc(int32_t align, size_t length)
 
 bool utils_memory_are_equal(const uint8_t* a, const uint8_t* b, size_t length)
 {
-	assert(a != NULL);
-	assert(b != NULL);
-	assert(length > 0);
+	HKDS_ASSERT(a != NULL);
+	HKDS_ASSERT(b != NULL);
+	HKDS_ASSERT(length > 0U);
 
 	size_t pctr;
 	int32_t mctr;
 
 	mctr = 0;
-	pctr = 0;
+	pctr = 0U;
 
-	if (a != NULL && b != NULL && length != 0)
+	if (a != NULL && b != NULL && length != 0U)
 	{
-#if defined(SYSTEM_AVX_INTRINSICS)
-#	if defined(SYSTEM_HAS_AVX512)
-		const size_t SMDBLK = 64;
-#	elif defined(SYSTEM_HAS_AVX2)
-		const size_t SMDBLK = 32;
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS)
+#	if defined(HKDS_SYSTEM_HAS_AVX512)
+		const size_t SMDBLK = 64U;
+#	elif defined(HKDS_SYSTEM_HAS_AVX2)
+		const size_t SMDBLK = 32U;
 #	else
-		const size_t SMDBLK = 16;
+		const size_t SMDBLK = 16U;
 #	endif
 
 		if (length >= SMDBLK)
@@ -1367,12 +1483,12 @@ bool utils_memory_are_equal(const uint8_t* a, const uint8_t* b, size_t length)
 
 			while (pctr != ALNLEN)
 			{
-#if defined(SYSTEM_HAS_AVX512)
-				mctr |= ((int32_t)utils_equal512(a + pctr, b + pctr) - 1);
-#elif defined(SYSTEM_HAS_AVX2)
-				mctr |= ((int32_t)utils_equal256(a + pctr, b + pctr) - 1);
-#elif defined(SYSTEM_HAS_AVX)
-				mctr |= ((int32_t)utils_equal128(a + pctr, b + pctr) - 1);
+#if defined(HKDS_SYSTEM_HAS_AVX512)
+				mctr |= ((int32_t)utils_equal512(a + pctr, b + pctr) - 1U);
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
+				mctr |= ((int32_t)utils_equal256(a + pctr, b + pctr) - 1U);
+#elif defined(HKDS_SYSTEM_HAS_AVX)
+				mctr |= ((int32_t)utils_equal128(a + pctr, b + pctr) - 1U);
 #endif
 				pctr += SMDBLK;
 			}
@@ -1393,61 +1509,61 @@ bool utils_memory_are_equal(const uint8_t* a, const uint8_t* b, size_t length)
 
 bool utils_memory_are_equal_128(const uint8_t* a, const uint8_t* b)
 {
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 
 	return utils_equal128(a, b);
 
 #else
 
-	int32_t mctr;
+	uint8_t mctr;
 
-	for (size_t i = 0; i < 16; ++i)
+	for (size_t i = 0U; i < 16U; ++i)
 	{
 		mctr |= (a[i] ^ b[i]);
 	}
 
-	return (mctr == 0);
+	return (mctr == 0U);
 
 #endif
 }
 
 bool utils_memory_are_equal_256(const uint8_t* a, const uint8_t* b)
 {
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 	return utils_equal256(a, b);
 
-#elif defined(SYSTEM_HAS_AVX)
+#elif defined(HKDS_SYSTEM_HAS_AVX)
 
 	return (utils_equal128(a, b) && 
 		utils_equal128(a + sizeof(__m128i), b + sizeof(__m128i)));
 
 #else
 
-	int32_t mctr;
+	uint8_t mctr;
 
-	for (size_t i = 0; i < 32; ++i)
+	for (size_t i = 0U; i < 32U; ++i)
 	{
 		mctr |= (a[i] ^ b[i]);
 	}
 
-	return (mctr == 0);
+	return (mctr == 0U);
 
 #endif
 }
 
 bool utils_memory_are_equal_512(const uint8_t* a, const uint8_t* b)
 {
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 	return utils_equal512(a, b);
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	return utils_equal256(a, b) && 
 		utils_equal256(a + sizeof(__m256i), b + sizeof(__m256i));
 
-#elif defined(SYSTEM_HAS_AVX)
+#elif defined(HKDS_SYSTEM_HAS_AVX)
 
 	return (utils_equal128(a, b) && 
 		utils_equal128(a + sizeof(__m128i), b + sizeof(__m128i)) &&
@@ -1456,33 +1572,33 @@ bool utils_memory_are_equal_512(const uint8_t* a, const uint8_t* b)
 
 #else
 
-	int32_t mctr;
+	uint8_t mctr;
 
-	for (size_t i = 0; i < 64; ++i)
+	for (size_t i = 0U; i < 64U; ++i)
 	{
 		mctr |= (a[i] ^ b[i]);
 	}
 
-	return (mctr == 0);
+	return (mctr == 0U);
 
 #endif
 }
 
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 static void utils_copy128(const void* input, void* output)
 {
 	_mm_storeu_si128((__m128i*)output, _mm_loadu_si128((const __m128i*)input));
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 static void utils_copy256(const void* input, void* output)
 {
 	_mm256_storeu_si256((__m256i*)output, _mm256_loadu_si256((const __m256i*)input));
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static void utils_copy512(const void* input, void* output)
 {
 	_mm512_storeu_si512((__m512i*)output, _mm512_loadu_si512((const __m512i*)input));
@@ -1491,22 +1607,22 @@ static void utils_copy512(const void* input, void* output)
 
 void utils_memory_copy(void* output, const void* input, size_t length)
 {
-	assert(output != NULL);
-	assert(input != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(input != NULL);
 
 	size_t pctr;
 
-	if (output != NULL && input != NULL && length != 0)
+	if (output != NULL && input != NULL && length != 0U)
 	{
-		pctr = 0;
+		pctr = 0U;
 
-#if defined(SYSTEM_AVX_INTRINSICS)
-#	if defined(SYSTEM_HAS_AVX512)
-		const size_t SMDBLK = 64;
-#	elif defined(SYSTEM_HAS_AVX2)
-		const size_t SMDBLK = 32;
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS)
+#	if defined(HKDS_SYSTEM_HAS_AVX512)
+		const size_t SMDBLK = 64U;
+#	elif defined(HKDS_SYSTEM_HAS_AVX2)
+		const size_t SMDBLK = 32U;
 #	else
-		const size_t SMDBLK = 16;
+		const size_t SMDBLK = 16U;
 #	endif
 
 		if (length >= SMDBLK)
@@ -1515,11 +1631,11 @@ void utils_memory_copy(void* output, const void* input, size_t length)
 
 			while (pctr != ALNLEN)
 			{
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 				utils_copy512((const uint8_t*)input + pctr, (uint8_t*)output + pctr);
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 				utils_copy256((const uint8_t*)input + pctr, (uint8_t*)output + pctr);
-#elif defined(SYSTEM_HAS_AVX)
+#elif defined(HKDS_SYSTEM_HAS_AVX)
 				utils_copy128((const uint8_t*)input + pctr, (uint8_t*)output + pctr);
 #endif
 				pctr += SMDBLK;
@@ -1527,22 +1643,22 @@ void utils_memory_copy(void* output, const void* input, size_t length)
 		}
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
-		if (length - pctr >= 32)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
+		if (length - pctr >= 32U)
 		{
 			utils_copy256((uint8_t*)input + pctr, (uint8_t*)output + pctr);
-			pctr += 32;
+			pctr += 32U;
 		}
-		else if (length - pctr >= 16)
+		else if (length - pctr >= 16U)
 		{
 			utils_copy128((uint8_t*)input + pctr, (uint8_t*)output + pctr);
 			pctr += 16;
 		}
-#elif defined(SYSTEM_HAS_AVX2)
-		if (length - pctr >= 16)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
+		if (length - pctr >= 16U)
 		{
 			utils_copy128((const uint8_t*)input + pctr, (uint8_t*)output + pctr);
-			pctr += 16;
+			pctr += 16U;
 		}
 #endif
 
@@ -1556,21 +1672,21 @@ void utils_memory_copy(void* output, const void* input, size_t length)
 	}
 }
 
-#if defined(SYSTEM_HAS_AVX)
+#if defined(HKDS_SYSTEM_HAS_AVX)
 static void utils_xor128(const uint8_t* input, uint8_t* output)
 {
 	_mm_storeu_si128((__m128i*)output, _mm_xor_si128(_mm_loadu_si128((const __m128i*)input), _mm_loadu_si128((const __m128i*)output)));
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 static void utils_xor256(const uint8_t* input, uint8_t* output)
 {
 	_mm256_storeu_si256((__m256i*)output, _mm256_xor_si256(_mm256_loadu_si256((const __m256i*)input), _mm256_loadu_si256((const __m256i*)output)));
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static void utils_xor512(const uint8_t* input, uint8_t* output)
 {
 	_mm512_storeu_si512((__m512i*)output, _mm512_xor_si512(_mm512_loadu_si512((const __m512i*)input), _mm512_loadu_si512((__m512i*)output)));
@@ -1579,21 +1695,21 @@ static void utils_xor512(const uint8_t* input, uint8_t* output)
 
 void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length)
 {
-	assert(output != NULL);
-	assert(input != NULL);
-	assert(length != 0);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(input != NULL);
+	HKDS_ASSERT(length != 0U);
 
 	size_t pctr;
 
-	pctr = 0;
+	pctr = 0U;
 
-#if defined(SYSTEM_AVX_INTRINSICS)
-#	if defined(SYSTEM_HAS_AVX512)
-	const size_t SMDBLK = 64;
-#	elif defined(SYSTEM_HAS_AVX2)
-	const size_t SMDBLK = 32;
+#if defined(HKDS_SYSTEM_AVX_INTRINSICS)
+#	if defined(HKDS_SYSTEM_HAS_AVX512)
+	const size_t SMDBLK = 64U;
+#	elif defined(HKDS_SYSTEM_HAS_AVX2)
+	const size_t SMDBLK = 32U;
 #	else
-	const size_t SMDBLK = 16;
+	const size_t SMDBLK = 16U;
 #	endif
 
 	if (output != NULL && input != NULL && length >= SMDBLK)
@@ -1602,11 +1718,11 @@ void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length)
 
 		while (pctr != ALNLEN)
 		{
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 			utils_xor512((input + pctr), output + pctr);
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 			utils_xor256((input + pctr), output + pctr);
-#elif defined(SYSTEM_HAS_AVX)
+#elif defined(HKDS_SYSTEM_HAS_AVX)
 			utils_xor128((input + pctr), output + pctr);
 #endif
 			pctr += SMDBLK;
@@ -1614,22 +1730,22 @@ void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length)
 	}
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
-	if (length - pctr >= 32)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
+	if (length - pctr >= 32U)
 	{
 		utils_xor256((input + pctr), output + pctr);
-		pctr += 32;
+		pctr += 32U;
 	}
-	else if (length - pctr >= 16)
+	else if (length - pctr >= 16U)
 	{
 		utils_xor128((input + pctr), output + pctr);
-		pctr += 16;
+		pctr += 16U;
 	}
-#elif defined(SYSTEM_HAS_AVX2)
-	if (length - pctr >= 16)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
+	if (length - pctr >= 16U)
 	{
 		utils_xor128((input + pctr), output + pctr);
-		pctr += 16;
+		pctr += 16U;
 	}
 #endif
 
@@ -1642,19 +1758,19 @@ void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length)
 	}
 }
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static void utils_xorv512(const uint8_t value, uint8_t* output)
 {
 	__m512i v = _mm512_set1_epi8(value);
 	_mm512_storeu_si512((__m512i*)output, _mm512_xor_si512(_mm512_loadu_si512((const __m512i*)&v), _mm512_loadu_si512((__m512i*)output)));
 }
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 static void utils_xorv256(const uint8_t value, uint8_t* output)
 {
 	__m256i v = _mm256_set1_epi8(value);
 	_mm256_storeu_si256((__m256i*)output, _mm256_xor_si256(_mm256_loadu_si256((const __m256i*) & v), _mm256_loadu_si256((const __m256i*)output)));
 }
-#elif defined(SYSTEM_HAS_AVX)
+#elif defined(HKDS_SYSTEM_HAS_AVX)
 static void utils_xorv128(const uint8_t value, uint8_t* output)
 {
 	__m128i v = _mm_set1_epi8(value);
@@ -1665,71 +1781,71 @@ static void utils_xorv128(const uint8_t value, uint8_t* output)
 
 uint32_t utils_integer_be8to32(const uint8_t* input)
 {
-	return (uint32_t)(input[3]) |
-		(((uint32_t)(input[2])) << 8) |
-		(((uint32_t)(input[1])) << 16) |
-		(((uint32_t)(input[0])) << 24);
+	return (uint32_t)(input[3U]) |
+		(((uint32_t)(input[2U])) << 8) |
+		(((uint32_t)(input[1U])) << 16) |
+		(((uint32_t)(input[0U])) << 24);
 }
 
 void utils_integer_be32to8(uint8_t* output, uint32_t value)
 {
-	output[3] = (uint8_t)value & 0xFFU;
-	output[2] = (uint8_t)(value >> 8) & 0xFFU;
-	output[1] = (uint8_t)(value >> 16) & 0xFFU;
-	output[0] = (uint8_t)(value >> 24) & 0xFFU;
+	output[3U] = (uint8_t)value & 0xFFU;
+	output[2U] = (uint8_t)(value >> 8) & 0xFFU;
+	output[1U] = (uint8_t)(value >> 16) & 0xFFU;
+	output[0U] = (uint8_t)(value >> 24) & 0xFFU;
 }
 
 uint64_t utils_integer_le8to64(const uint8_t* input)
 {
-	return ((uint64_t)input[0]) |
-		((uint64_t)input[1] << 8) |
-		((uint64_t)input[2] << 16) |
-		((uint64_t)input[3] << 24) |
-		((uint64_t)input[4] << 32) |
-		((uint64_t)input[5] << 40) |
-		((uint64_t)input[6] << 48) |
-		((uint64_t)input[7] << 56);
+	return ((uint64_t)input[0U]) |
+		((uint64_t)input[1U] << 8) |
+		((uint64_t)input[2U] << 16) |
+		((uint64_t)input[3U] << 24) |
+		((uint64_t)input[4U] << 32) |
+		((uint64_t)input[5U] << 40) |
+		((uint64_t)input[6U] << 48) |
+		((uint64_t)input[7U] << 56);
 }
 
 void utils_integer_le64to8(uint8_t* output, uint64_t value)
 {
-	output[0] = (uint8_t)value & 0xFFU;
-	output[1] = (uint8_t)(value >> 8) & 0xFFU;
-	output[2] = (uint8_t)(value >> 16) & 0xFFU;
-	output[3] = (uint8_t)(value >> 24) & 0xFFU;
-	output[4] = (uint8_t)(value >> 32) & 0xFFU;
-	output[5] = (uint8_t)(value >> 40) & 0xFFU;
-	output[6] = (uint8_t)(value >> 48) & 0xFFU;
-	output[7] = (uint8_t)(value >> 56) & 0xFFU;
+	output[0U] = (uint8_t)value & 0xFFU;
+	output[1U] = (uint8_t)(value >> 8) & 0xFFU;
+	output[2U] = (uint8_t)(value >> 16) & 0xFFU;
+	output[3U] = (uint8_t)(value >> 24) & 0xFFU;
+	output[4U] = (uint8_t)(value >> 32) & 0xFFU;
+	output[5U] = (uint8_t)(value >> 40) & 0xFFU;
+	output[6U] = (uint8_t)(value >> 48) & 0xFFU;
+	output[7U] = (uint8_t)(value >> 56) & 0xFFU;
 }
 
 void utils_integer_be8increment(uint8_t* output, size_t otplen)
 {
 	size_t i = otplen;
 
-	if (otplen > 0)
+	if (otplen > 0U)
 	{
 		do
 		{
 			--i;
 			++output[i];
 		} 
-		while (i != 0 && output[i] == 0);
+		while (i != 0U && output[i] == 0U);
 	}
 }
 
 uint64_t utils_integer_rotl64(uint64_t value, size_t shift)
 {
-	return (value << shift) | (value >> ((sizeof(uint64_t) * 8) - shift));
+	return (value << shift) | (value >> ((sizeof(uint64_t) * 8U) - shift));
 }
 
 int32_t utils_integer_verify(const uint8_t* a, const uint8_t* b, size_t length)
 {
 	uint8_t d;
 
-	d = 0;
+	d = 0U;
 
-	for (size_t i = 0; i < length; ++i)
+	for (size_t i = 0U; i < length; ++i)
 	{
 		d |= (a[i] ^ b[i]);
 	}

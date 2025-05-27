@@ -34,9 +34,9 @@ static void kmac128_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-128 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-128 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac256_benchmark(void)
@@ -62,9 +62,9 @@ static void kmac256_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-256 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-256 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac512_benchmark(void)
@@ -90,9 +90,9 @@ static void kmac512_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-512 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-512 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 #if defined(SYSTEM_HAS_AVX2)
@@ -116,9 +116,9 @@ static void kmac128x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-128x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-128x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac256x4_benchmark(void)
@@ -141,9 +141,9 @@ static void kmac256x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-256x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-256x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac512x4_benchmark(void)
@@ -166,9 +166,9 @@ static void kmac512x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-512x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-512x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 #endif
 
@@ -195,9 +195,9 @@ static void kmac128x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-128x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-128x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac256x8_benchmark(void)
@@ -222,9 +222,9 @@ static void kmac256x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-256x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-256x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void kmac512x8_benchmark(void)
@@ -249,9 +249,9 @@ static void kmac512x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("KMAC-512x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("KMAC-512x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 #endif
 
@@ -275,9 +275,9 @@ static void shake128_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-128 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-128 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake256_benchmark(void)
@@ -300,9 +300,9 @@ static void shake256_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-256 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-256 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake512_benchmark(void)
@@ -325,9 +325,9 @@ static void shake512_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-512 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-512 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 #if defined(SYSTEM_HAS_AVX2)
@@ -349,9 +349,9 @@ static void shake128x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-128x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-128x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake256x4_benchmark(void)
@@ -372,9 +372,9 @@ static void shake256x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-256x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-256x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake512x4_benchmark(void)
@@ -395,9 +395,9 @@ static void shake512x4_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-512x4 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-512x4 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 #endif
 
@@ -421,9 +421,9 @@ static void shake128x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-128x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-128x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake256x8_benchmark(void)
@@ -445,9 +445,9 @@ static void shake256x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-256x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-256x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void shake512x8_benchmark(void)
@@ -469,9 +469,9 @@ static void shake512x8_benchmark(void)
 	}
 
 	elapsed = utils_stopwatch_elapsed(start);
-	qsctest_print_safe("SHAKE-512x8 processed 1GB of data in ");
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_safe("SHAKE-512x8 processed 1GB of data in ");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 #endif
 
@@ -502,7 +502,7 @@ static void hkdstest_benchmark_client_encrypt_run(void)
 	uint64_t start;
 	uint64_t elapsed;
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 
 	/* generate the master derivation key {BDK, BTK, MID} */
 	hkds_master_key mdk;
@@ -534,15 +534,15 @@ static void hkdstest_benchmark_client_encrypt_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Client encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Client encrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Client encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Client encrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Client encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Client encrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_client_encrypt_authenticate_run(void)
@@ -574,7 +574,7 @@ static void hkdstest_benchmark_client_encrypt_authenticate_run(void)
 	uint64_t start;
 	uint64_t elapsed;
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 
 	/* generate the master derivation key {BDK, BTK, MID} */
 	hkds_master_key mdk;
@@ -614,15 +614,15 @@ static void hkdstest_benchmark_client_encrypt_authenticate_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Client authenticated and encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Client authenticated and encrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Client authenticated and encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Client authenticated and encrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Client authenticated and encrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Client authenticated and encrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_server_decrypt_run(void)
@@ -652,15 +652,15 @@ static void hkdstest_benchmark_server_decrypt_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Server decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Server decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Server decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_server_decrypt_authenticate_run(void)
@@ -691,15 +691,15 @@ static void hkdstest_benchmark_server_decrypt_authenticate_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Server authenticated and decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Server authenticated and decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Server authenticated and decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_server_decrypt_x8_run(void)
@@ -729,15 +729,15 @@ static void hkdstest_benchmark_server_decrypt_x8_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 SIMD Server decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 SIMD Server decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 SIMD Server decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_server_decrypt_authenticate_x8_run(void)
@@ -769,15 +769,15 @@ static void hkdstest_benchmark_server_decrypt_authenticate_x8_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 SIMD Server authenticated and decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 SIMD Server authenticated and decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 SIMD Server authenticated and decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 #if defined(SYSTEM_OPENMP)
@@ -813,15 +813,15 @@ static void hkdstest_benchmark_server_decrypt_x64_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Parallel SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Parallel SIMD Server decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Parallel SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Parallel SIMD Server decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Parallel SIMD Server decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Parallel SIMD Server decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 
 static void hkdstest_benchmark_server_decrypt_authenticate_x64_run(void)
@@ -858,15 +858,15 @@ static void hkdstest_benchmark_server_decrypt_authenticate_x64_run(void)
 	elapsed = utils_stopwatch_elapsed(start);
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_print_safe("HKDS-128 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-128 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
 #elif defined(HKDS_SHAKE_256)
-	qsctest_print_safe("HKDS-256 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-256 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
 #else
-	qsctest_print_safe("HKDS-512 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
+	hkdstest_print_safe("HKDS-512 Parallel SIMD Server authenticated and decrypted 1 million messages in ");
 #endif
 
-	qsctest_print_double((double)elapsed / 1000.0);
-	qsctest_print_line(" seconds");
+	hkdstest_print_double((double)elapsed / 1000.0);
+	hkdstest_print_line(" seconds");
 }
 #endif
 
@@ -892,68 +892,68 @@ void hkdstest_benchmark_hkds_client_run()
 
 void hkdstest_benchmark_kmac_run()
 {
-	qsctest_print_line("Running the KMAC-128 performance benchmarks.");
+	hkdstest_print_line("Running the KMAC-128 performance benchmarks.");
 	kmac128_benchmark();
 
-	qsctest_print_line("Running the KMAC-256 performance benchmarks.");
+	hkdstest_print_line("Running the KMAC-256 performance benchmarks.");
 	kmac256_benchmark();
 
-	qsctest_print_line("Running the KMAC-512 performance benchmarks.");
+	hkdstest_print_line("Running the KMAC-512 performance benchmarks.");
 	kmac512_benchmark();
 
 #if defined(SYSTEM_HAS_AVX2)
-	qsctest_print_line("Running the AVX2 4X KMAC-128 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X KMAC-128 performance benchmarks.");
 	kmac128x4_benchmark();
 
-	qsctest_print_line("Running the AVX2 4X KMAC-256 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X KMAC-256 performance benchmarks.");
 	kmac256x4_benchmark();
 
-	qsctest_print_line("Running the AVX2 4X KMAC-512 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X KMAC-512 performance benchmarks.");
 	kmac512x4_benchmark();
 #endif
 
 #if defined(SYSTEM_HAS_AVX512)
-	qsctest_print_line("Running the AVX512 8X KMAC-128 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X KMAC-128 performance benchmarks.");
 	kmac128x8_benchmark();
 
-	qsctest_print_line("Running the AVX512 8X KMAC-256 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X KMAC-256 performance benchmarks.");
 	kmac256x8_benchmark();
 
-	qsctest_print_line("Running the AVX512 8X KMAC-512 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X KMAC-512 performance benchmarks.");
 	kmac512x8_benchmark();
 #endif
 }
 
 void hkdstest_benchmark_shake_run()
 {
-	qsctest_print_line("Running the SHAKE-128 performance benchmarks.");
+	hkdstest_print_line("Running the SHAKE-128 performance benchmarks.");
 	shake128_benchmark();
 
-	qsctest_print_line("Running the SHAKE-256 performance benchmarks.");
+	hkdstest_print_line("Running the SHAKE-256 performance benchmarks.");
 	shake256_benchmark();
 
-	qsctest_print_line("Running the SHAKE-512 performance benchmarks.");
+	hkdstest_print_line("Running the SHAKE-512 performance benchmarks.");
 	shake512_benchmark();
 
 #if defined(SYSTEM_HAS_AVX2)
-	qsctest_print_line("Running the AVX2 4X SHAKE-128 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X SHAKE-128 performance benchmarks.");
 	shake128x4_benchmark();
 
-	qsctest_print_line("Running the AVX2 4X SHAKE-256 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X SHAKE-256 performance benchmarks.");
 	shake256x4_benchmark();
 
-	qsctest_print_line("Running the AVX2 4X SHAKE-512 performance benchmarks.");
+	hkdstest_print_line("Running the AVX2 4X SHAKE-512 performance benchmarks.");
 	shake512x4_benchmark();
 #endif
 
 #if defined(SYSTEM_HAS_AVX512)
-	qsctest_print_line("Running the AVX512 8X SHAKE-128 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X SHAKE-128 performance benchmarks.");
 	shake128x8_benchmark();
 
-	qsctest_print_line("Running the AVX512 8X SHAKE-256 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X SHAKE-256 performance benchmarks.");
 	shake256x8_benchmark();
 
-	qsctest_print_line("Running the AVX512 8X SHAKE-512 performance benchmarks.");
+	hkdstest_print_line("Running the AVX512 8X SHAKE-512 performance benchmarks.");
 	shake512x8_benchmark();
 #endif
 }

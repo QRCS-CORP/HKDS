@@ -269,7 +269,7 @@ HKDS_EXPORT_API void hkds_server_initialize_state_x8(hkds_server_x8_state* state
     hkds_master_key* mdk, 
     const uint8_t ksn[HKDS_CACHX8_DEPTH][HKDS_KSN_SIZE]);
 
-#if defined(SYSTEM_OPENMP)
+#if defined(HKDS_SYSTEM_OPENMP)
 
 /* --- Parallel SIMD Vectorized x64 API --- */
 

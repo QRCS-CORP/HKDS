@@ -42,9 +42,9 @@
 
 #include "common.h"
 #include <time.h>
-#if defined(SYSTEM_OS_WINDOWS)
+#if defined(HKDS_SYSTEM_OS_WINDOWS)
 #	include <Windows.h>
-#   if defined(SYSTEM_COMPILER_MSC)
+#   if defined(HKDS_SYSTEM_COMPILER_MSC)
 #	    pragma comment(lib, "advapi32.lib")
 #   endif
 #else
@@ -94,7 +94,7 @@
 * \def UTILS_CPUIDEX_VENDOR_SIZE
 * \brief The CPU vendor name length
 */
-#if defined(SYSTEM_OS_APPLE) && defined(SYSTEM_COMPILER_GCC)
+#if defined(HKDS_SYSTEM_OS_APPLE) && defined(HKDS_SYSTEM_COMPILER_GCC)
 #	define UTILS_CPUIDEX_VENDOR_SIZE 32
 #else
 #	define UTILS_CPUIDEX_VENDOR_SIZE 12
@@ -341,6 +341,7 @@ HKDS_EXPORT_API void utils_memory_copy(void* output, const void* input, size_t l
 HKDS_EXPORT_API void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length);
 
 /* integer functions */
+
 /**
 * \brief Convert an 8-bit integer array to a 32-bit big-endian integer
 *

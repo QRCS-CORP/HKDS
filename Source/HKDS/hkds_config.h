@@ -77,12 +77,12 @@
  */
 typedef enum hkds_packet_type
 {
-    packet_token_request         = 0x01,    /*!< A client token request */
-    packet_token_response        = 0x02,    /*!< A server token response */
-    packet_message_request       = 0x03,    /*!< A client message request */
-    packet_message_response      = 0x04,    /*!< A server message response */
-    packet_administrative_message= 0x05,    /*!< An administrative message */
-    packet_error_message         = 0x06     /*!< An error message */
+    packet_token_request         = 0x01U,    /*!< A client token request */
+    packet_token_response        = 0x02U,    /*!< A server token response */
+    packet_message_request       = 0x03U,    /*!< A client message request */
+    packet_message_response      = 0x04U,    /*!< A server message response */
+    packet_administrative_message= 0x05U,    /*!< An administrative message */
+    packet_error_message         = 0x06U     /*!< An error message */
 } hkds_packet_type;
 
 /*! \enum hkds_protocol_id
@@ -96,9 +96,9 @@ typedef enum hkds_packet_type
  */
 typedef enum hkds_protocol_id
 {
-    protocol_shake_128 = 0x09,    /*!< Protocol is SHAKE-128 */
-    protocol_shake_256 = 0x0A,    /*!< Protocol is SHAKE-256 */
-    protocol_shake_512 = 0x0B     /*!< Protocol is SHAKE-512 */
+    protocol_shake_128 = 0x09U,    /*!< Protocol is SHAKE-128 */
+    protocol_shake_256 = 0x0AU,    /*!< Protocol is SHAKE-256 */
+    protocol_shake_512 = 0x0BU     /*!< Protocol is SHAKE-512 */
 } hkds_protocol_id;
 
 /*! \enum hkds_error_type
@@ -117,14 +117,14 @@ typedef enum hkds_protocol_id
  */
 typedef enum hkds_error_type
 {
-    error_general_failure       = 0x1F,    /*!< General failure */
-    error_connection_aborted    = 0x21,    /*!< The connection was aborted by the remote host */
-    error_disconnected          = 0x22,    /*!< The network link was lost */
-    error_connection_refused    = 0x23,    /*!< The connection was refused by the remote host */
-    error_invalid_format        = 0x24,    /*!< The request format was invalid */
-    error_retries_exceeded      = 0x25,    /*!< The allowed number of retries was exceeded */
-    error_connection_failure    = 0x26,    /*!< The connection had a general failure */
-    error_unkown_failure        = 0xFF     /*!< The cause of failure is unknown */
+    error_general_failure       = 0x1FU,    /*!< General failure */
+    error_connection_aborted    = 0x21U,    /*!< The connection was aborted by the remote host */
+    error_disconnected          = 0x22U,    /*!< The network link was lost */
+    error_connection_refused    = 0x23U,    /*!< The connection was refused by the remote host */
+    error_invalid_format        = 0x24U,    /*!< The request format was invalid */
+    error_retries_exceeded      = 0x25U,    /*!< The allowed number of retries was exceeded */
+    error_connection_failure    = 0x26U,    /*!< The connection had a general failure */
+    error_unkown_failure        = 0xFFU     /*!< The cause of failure is unknown */
 } hkds_error_type;
 
 /*! \enum hkds_message_type
@@ -141,14 +141,14 @@ typedef enum hkds_error_type
  */
 typedef enum hkds_message_type
 {
-    message_synchronize_token      = 0x01,   /*!< Sent by the client indicating a token key failure */
-    message_reinitialized_token    = 0x02,   /*!< The server's response to a token key rejection */
-    message_token_requests_exceeded= 0x03,   /*!< The server indicates that maximum token failures occurred */
-    message_remote_reset           = 0x04,   /*!< The server sends a remote reset to the client terminal */
-    message_diagnostic             = 0x05,   /*!< The server requests diagnostic output */
-    message_reserved1              = 0x06,   /*!< Reserved message 1 */
-    message_reserved2              = 0x07,   /*!< Reserved message 2 */
-    message_reserved3              = 0x08    /*!< Reserved message 3 */
+    message_synchronize_token      = 0x01U,   /*!< Sent by the client indicating a token key failure */
+    message_reinitialized_token    = 0x02U,   /*!< The server's response to a token key rejection */
+    message_token_requests_exceeded= 0x03U,   /*!< The server indicates that maximum token failures occurred */
+    message_remote_reset           = 0x04U,   /*!< The server sends a remote reset to the client terminal */
+    message_diagnostic             = 0x05U,   /*!< The server requests diagnostic output */
+    message_reserved1              = 0x06U,   /*!< Reserved message 1 */
+    message_reserved2              = 0x07U,   /*!< Reserved message 2 */
+    message_reserved3              = 0x08U    /*!< Reserved message 3 */
 } hkds_message_type;
 
 /*** Modifiable Values ***/
@@ -207,7 +207,7 @@ typedef enum hkds_message_type
  * A larger multiplier results in fewer token exchanges, but leads to slower decryption and a larger client cache.
  * The recommended value is 4, and it should not exceed 8.
  */
-#define HKDS_CACHE_MULTIPLIER 4
+#define HKDS_CACHE_MULTIPLIER 4U
 
 /*** Static Values (Do Not Change) ***/
 
@@ -215,25 +215,25 @@ typedef enum hkds_message_type
  * \def HKDS_ADMIN_SIZE
  * \brief The size of the administrative message in bytes.
  */
-#define HKDS_ADMIN_SIZE 2
+#define HKDS_ADMIN_SIZE 2U
 
 /*!
  * \def HKDS_AUTHENTICATION_KMAC
  * \brief The KMAC authentication mode designator contained in a client's DID.
  */
-#define HKDS_AUTHENTICATION_KMAC 0x11
+#define HKDS_AUTHENTICATION_KMAC 0x11U
 
 /*!
  * \def HKDS_AUTHENTICATION_NONE
  * \brief The authentication mode designator for no authentication.
  */
-#define HKDS_AUTHENTICATION_NONE 0x10
+#define HKDS_AUTHENTICATION_NONE 0x10U
 
 /*!
  * \def HKDS_AUTHENTICATION_SHA3
  * \brief The SHA3 authentication mode designator contained in a client's DID.
  */
-#define HKDS_AUTHENTICATION_SHA3 0x12
+#define HKDS_AUTHENTICATION_SHA3 0x12U
 
 /*!
  * \def HKDS_PARALLEL_DEPTH
@@ -242,7 +242,7 @@ typedef enum hkds_message_type
  * \details
  * Specifies the number of simultaneous server decryption and token generation operations when using the (x8) SIMD API.
  */
-#define HKDS_PARALLEL_DEPTH 8
+#define HKDS_PARALLEL_DEPTH 8U
 
 /*!
  * \def HKDS_CACHX8_DEPTH
@@ -251,73 +251,73 @@ typedef enum hkds_message_type
  * \details
  * Specifies the number of simultaneous operations when using the (x8) SIMD API.
  */
-#define HKDS_CACHX8_DEPTH 8
+#define HKDS_CACHX8_DEPTH 8U
 
 /*!
  * \def HKDS_CACHX64_SIZE
  * \brief The total number of tokens when using the multi-threaded/SIMD 3-d array (x64) API.
  */
-#define HKDS_CACHX64_SIZE 64
+#define HKDS_CACHX64_SIZE 64U
 
 /*!
  * \def HKDS_CTOK_SIZE
  * \brief Internal size of the token customization string.
  */
-#define HKDS_CTOK_SIZE 23
+#define HKDS_CTOK_SIZE 23U
 
 /*!
  * \def HKDS_DID_SIZE
  * \brief The device identity size in bytes.
  */
-#define HKDS_DID_SIZE 12
+#define HKDS_DID_SIZE 12U
 
 /*!
  * \def HKDS_ERROR_SIZE
  * \brief The error message size in bytes.
  */
-#define HKDS_ERROR_SIZE 16
+#define HKDS_ERROR_SIZE 16U
 
 /*!
  * \def HKDS_HEADER_SIZE
  * \brief The size of the HKDS packet header in bytes.
  */
-#define HKDS_HEADER_SIZE 4
+#define HKDS_HEADER_SIZE 4U
 
 /*!
  * \def HKDS_KID_SIZE
  * \brief The master key identity string size in bytes.
  */
-#define HKDS_KID_SIZE 4
+#define HKDS_KID_SIZE 4U
 
 /*!
  * \def HKDS_KSN_SIZE
  * \brief The Key Serial Number (KSN) size in bytes.
  */
-#define HKDS_KSN_SIZE 16
+#define HKDS_KSN_SIZE 16U
 
 /*!
  * \def HKDS_MESSAGE_SIZE
  * \brief The encrypted message size in bytes.
  */
-#define HKDS_MESSAGE_SIZE 16
+#define HKDS_MESSAGE_SIZE 16U
 
 /*!
  * \def HKDS_NAME_SIZE
  * \brief Internal: The formal algorithm name size in bytes.
  */
-#define HKDS_NAME_SIZE 7
+#define HKDS_NAME_SIZE 7U
 
 /*!
  * \def HKDS_TAG_SIZE
  * \brief The size of the authentication tag (MAC) in bytes.
  */
-#define HKDS_TAG_SIZE 16
+#define HKDS_TAG_SIZE 16U
 
 /*!
  * \def HKDS_TKC_SIZE
  * \brief The transaction key counter size (big endian) in bytes.
  */
-#define HKDS_TKC_SIZE 4
+#define HKDS_TKC_SIZE 4U
 
 /*!
  * \def HKDS_TMS_SIZE
@@ -334,25 +334,25 @@ typedef enum hkds_message_type
  * \def HKDS_BDK_SIZE
  * \brief The Base Derivation Key size for SHAKE-128 in bytes.
  */
-#	define HKDS_BDK_SIZE 16
+#	define HKDS_BDK_SIZE 16U
 
 /*!
  * \def HKDS_EDK_SIZE
  * \brief The Embedded Device Key size for SHAKE-128 in bytes.
  */
-#	define HKDS_EDK_SIZE 16
+#	define HKDS_EDK_SIZE 16U
 
 /*!
  * \def HKDS_ETOK_SIZE
  * \brief The encrypted token (server response) size for SHAKE-128 in bytes.
  */
-#	define HKDS_ETOK_SIZE 32
+#	define HKDS_ETOK_SIZE 32U
 
 /*!
  * \def HKDS_PRF_RATE
  * \brief The output length of the underlying PRF (SHAKE-128) in bytes.
  */
-#	define HKDS_PRF_RATE 168
+#	define HKDS_PRF_RATE 168U
 
 /*!
  * \def HKDS_PROTOCOL_TYPE
@@ -364,17 +364,17 @@ typedef enum hkds_message_type
  * \def HKDS_STK_SIZE
  * \brief The Secret Token Key size for SHAKE-128 in bytes.
  */
-#	define HKDS_STK_SIZE 16
+#	define HKDS_STK_SIZE 16U
 
 /*!
  * \brief The formal algorithm name for HKDS SHAKE-128.
  */
-static const uint8_t hkds_formal_name[HKDS_NAME_SIZE] = { 0x48, 0x4B, 0x44, 0x53, 0x31, 0x32, 0x38 };
+static const uint8_t hkds_formal_name[HKDS_NAME_SIZE] = { 0x48U, 0x4BU, 0x44U, 0x53U, 0x31U, 0x32U, 0x38U };
 
 /*!
  * \brief The KMAC name for HKDS SHAKE-128.
  */
-static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75, 0x4B, 0x77, 0x65, 0x31, 0x32, 0x38 };
+static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75U, 0x4BU, 0x77U, 0x65U, 0x31U, 0x32U, 0x38U };
 
 #elif defined(HKDS_SHAKE_256)
 
@@ -382,25 +382,25 @@ static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75, 0x4B, 0x77, 0x65, 0
  * \def HKDS_BDK_SIZE
  * \brief The Base Derivation Key size for SHAKE-256 in bytes.
  */
-#	define HKDS_BDK_SIZE 32
+#	define HKDS_BDK_SIZE 32U
 
 /*!
  * \def HKDS_EDK_SIZE
  * \brief The Embedded Device Key size for SHAKE-256 in bytes.
  */
-#	define HKDS_EDK_SIZE 32
+#	define HKDS_EDK_SIZE 32U
 
 /*!
  * \def HKDS_ETOK_SIZE
  * \brief The encrypted token (server response) size for SHAKE-256 in bytes.
  */
-#	define HKDS_ETOK_SIZE 48
+#	define HKDS_ETOK_SIZE 48U
 
 /*!
  * \def HKDS_PRF_RATE
  * \brief The output length of the underlying PRF (SHAKE-256) in bytes.
  */
-#	define HKDS_PRF_RATE 136
+#	define HKDS_PRF_RATE 136U
 
 /*!
  * \def HKDS_PROTOCOL_TYPE
@@ -412,7 +412,7 @@ static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75, 0x4B, 0x77, 0x65, 0
  * \def HKDS_STK_SIZE
  * \brief The Secret Token Key size for SHAKE-256 in bytes.
  */
-#	define HKDS_STK_SIZE 32
+#	define HKDS_STK_SIZE 32U
 
 /*!
  * \brief The formal algorithm name for HKDS SHAKE-256.
@@ -430,25 +430,25 @@ static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75, 0x4B, 0x77, 0x65, 0
  * \def HKDS_BDK_SIZE
  * \brief The Base Derivation Key size for SHAKE-512 in bytes.
  */
-#	define HKDS_BDK_SIZE 64
+#	define HKDS_BDK_SIZE 64U
 
 /*!
  * \def HKDS_EDK_SIZE
  * \brief The Embedded Device Key size for SHAKE-512 in bytes.
  */
-#	define HKDS_EDK_SIZE 64
+#	define HKDS_EDK_SIZE 64U
 
 /*!
  * \def HKDS_ETOK_SIZE
  * \brief The encrypted token (server response) size for SHAKE-512 in bytes.
  */
-#	define HKDS_ETOK_SIZE 80
+#	define HKDS_ETOK_SIZE 80U
 
 /*!
  * \def HKDS_PRF_RATE
  * \brief The output length of the underlying PRF (SHAKE-512) in bytes.
  */
-#	define HKDS_PRF_RATE 72
+#	define HKDS_PRF_RATE 72U
 
 /*!
  * \def HKDS_PROTOCOL_TYPE
@@ -460,7 +460,7 @@ static const uint8_t hkds_mac_name[HKDS_NAME_SIZE] = { 0x75, 0x4B, 0x77, 0x65, 0
  * \def HKDS_STK_SIZE
  * \brief The Secret Token Key size for SHAKE-512 in bytes.
  */
-#	define HKDS_STK_SIZE 64
+#	define HKDS_STK_SIZE 64U
 
 /*!
  * \brief The formal algorithm name for HKDS SHAKE-512.
@@ -572,9 +572,9 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
-    uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The client's encrypted message */
-    uint8_t tag[HKDS_TAG_SIZE];          /*!< The optional authentication tag */
+    HKDS_SIMD_ALIGN uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
+    HKDS_SIMD_ALIGN uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The client's encrypted message */
+    HKDS_SIMD_ALIGN uint8_t tag[HKDS_TAG_SIZE];          /*!< The optional authentication tag */
 } hkds_client_message_request;
 
 /*!
@@ -590,7 +590,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
+    HKDS_SIMD_ALIGN uint8_t ksn[HKDS_KSN_SIZE];         /*!< The client's Key Serial Number (KSN) */
 } hkds_client_token_request;
 
 /*!
@@ -606,7 +606,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The server's message response */
+    HKDS_SIMD_ALIGN uint8_t message[HKDS_MESSAGE_SIZE];  /*!< The server's message response */
 } hkds_server_message_response;
 
 /*!
@@ -622,7 +622,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t etok[HKDS_ETOK_SIZE];        /*!< The server's encrypted token */
+    HKDS_SIMD_ALIGN uint8_t etok[HKDS_ETOK_SIZE];        /*!< The server's encrypted token */
 } hkds_server_token_response;
 
 /*!
@@ -638,7 +638,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t message[HKDS_ADMIN_SIZE];    /*!< The administrative message payload */
+    HKDS_SIMD_ALIGN uint8_t message[HKDS_ADMIN_SIZE];    /*!< The administrative message payload */
 } hkds_administrative_message;
 
 /*!
@@ -653,8 +653,7 @@ typedef struct
 typedef struct
 {
     hkds_packet_header header;         /*!< The HKDS packet header */
-    uint8_t message[HKDS_ERROR_SIZE];    /*!< The error message payload */
+    HKDS_SIMD_ALIGN uint8_t message[HKDS_ERROR_SIZE];    /*!< The error message payload */
 } hkds_error_message;
-
 
 #endif

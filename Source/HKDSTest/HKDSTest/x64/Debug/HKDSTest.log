@@ -1,7 +1,0 @@
-﻿  hkds_benchmark.c
-  hkds_main.c
-  hkds_test.c
-  testutils.c
-  timer.c
-  Generating Code...
-  HKDSTest.vcxproj -> C:\Users\stepp\Documents\Visual Studio 2022\Projects\C\HKDS\HKDSTest\x64\Debug\HKDSTest.exe

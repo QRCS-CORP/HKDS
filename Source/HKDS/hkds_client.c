@@ -14,7 +14,7 @@ static void hkds_client_generate_transaction_key(hkds_client_state* state, uint8
 	/* increment the index counter */
 	utils_integer_be8increment(((uint8_t*)state->ksn + HKDS_DID_SIZE), HKDS_TKC_SIZE);
 
-	if (idx == HKDS_CACHE_SIZE - 1)
+	if (idx == HKDS_CACHE_SIZE - 1U)
 	{
 		state->cache_empty = true;
 	}
@@ -29,10 +29,10 @@ static void hkds_client_get_tms(const hkds_client_state* state, uint8_t* tms)
 
 bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, uint8_t* token)
 {
-	uint8_t ctok[HKDS_CTOK_SIZE] = { 0 };
-	uint8_t mtk[HKDS_TAG_SIZE] = { 0 };
-	uint8_t tms[HKDS_TMS_SIZE] = { 0 };
-	uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t mtk[HKDS_TAG_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t tms[HKDS_TMS_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
 	uint32_t tkc;
 	bool res;
 
@@ -82,7 +82,7 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 #endif
 
 		/* decrypt the token */
-		for (size_t i = 0; i < HKDS_STK_SIZE; ++i)
+		for (size_t i = 0U; i < HKDS_STK_SIZE; ++i)
 		{
 			token[i] ^= etok[i];
 		}
@@ -103,7 +103,7 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 		hkds_client_generate_transaction_key(state, ciphertext);
 
 		/* encrypt the message */
-		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
+		for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
 		{
 			ciphertext[i] ^= plaintext[i];
 		}
@@ -116,9 +116,9 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 
 bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const uint8_t* plaintext, const uint8_t* data, size_t datalen, uint8_t* ciphertext)
 {
-	uint8_t code[HKDS_TAG_SIZE] = { 0 };
-	uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0 };
-	uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t code[HKDS_TAG_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0U };
 	bool res;
 
 	res = false;
@@ -130,7 +130,7 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 		hkds_client_generate_transaction_key(state, ctxt);
 
 		/* encrypt the message */
-		for (size_t i = 0; i < HKDS_MESSAGE_SIZE; ++i)
+		for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
 		{
 			ctxt[i] ^= plaintext[i];
 		}
@@ -162,8 +162,8 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 
 void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 {
-	uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0 };
-	uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 
 	/* combine the token and edk keys */
 	utils_memory_copy(tmpk, token, HKDS_STK_SIZE);
@@ -179,7 +179,7 @@ void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 #endif
 
 	/* copy keys to the queue */
-	for (size_t i = 0; i < HKDS_CACHE_SIZE; ++i)
+	for (size_t i = 0U; i < HKDS_CACHE_SIZE; ++i)
 	{
 		utils_memory_copy(state->tkc[i], ((uint8_t*)skey + (i * HKDS_MESSAGE_SIZE)), HKDS_MESSAGE_SIZE);
 	}

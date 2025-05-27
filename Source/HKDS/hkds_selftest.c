@@ -3,20 +3,20 @@
 #include "utils.h"
 #include <stdio.h>
 
-#define CTR_OUTPUT_LENGTH 33
-#define MONTE_CARLO_CYCLES 10000
-#define HBA_TEST_CYCLES 100
+#define CTR_OUTPUT_LENGTH 33U
+#define MONTE_CARLO_CYCLES 10000U
+#define HBA_TEST_CYCLES 100U
 
 /*** Keccak ***/
 
 static bool shake_128_kat(void)
 {
-	uint8_t exp0[512] = { 0 };
-	uint8_t exp1600[512] = { 0 };
-	uint8_t hash[hkds_keccak_rate_128 * 4] = { 0 };
-	uint8_t msg0[1] = { 0 };
-	uint8_t msg1600[200] = { 0 };
-	uint8_t output[512] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t exp0[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp1600[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_128 * 4U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg0[1U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -67,7 +67,7 @@ static bool shake_128_kat(void)
 	/* test compact api */
 
 	utils_memory_clear(output, sizeof(output));
-	hkds_shake128_compute(output, sizeof(output), msg0, 0);
+	hkds_shake128_compute(output, sizeof(output), msg0, 0U);
 
 	if (utils_memory_are_equal(output, exp0, sizeof(exp0)) == false)
 	{
@@ -89,7 +89,7 @@ static bool shake_128_kat(void)
 	utils_memory_clear(hash, sizeof(hash));
 	utils_memory_clear(state.state, HKDS_KECCAK_STATE_SIZE * sizeof(uint64_t));
 	hkds_shake_initialize(&state, hkds_keccak_rate_128, msg1600, sizeof(msg1600));
-	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_128, hash, 4);
+	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_128, hash, 4U);
 
 	if (utils_memory_are_equal(hash, exp1600, sizeof(exp1600)) == false)
 	{
@@ -102,12 +102,12 @@ static bool shake_128_kat(void)
 
 static bool shake_256_kat(void)
 {
-	uint8_t exp0[512] = { 0 };
-	uint8_t exp1600[512] = { 0 };
-	uint8_t hash[hkds_keccak_rate_256 * 4] = { 0 };
-	uint8_t msg0[1] = { 0 };
-	uint8_t msg1600[200] = { 0 };
-	uint8_t output[512] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t exp0[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp1600[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_256 * 4U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg0[1U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -158,7 +158,7 @@ static bool shake_256_kat(void)
 	/* test compact api */
 
 	utils_memory_clear(output, sizeof(output));
-	hkds_shake256_compute(output, sizeof(output), msg0, 0);
+	hkds_shake256_compute(output, sizeof(output), msg0, 0U);
 
 	if (utils_memory_are_equal(output, exp0, sizeof(exp0)) == false)
 	{
@@ -180,7 +180,7 @@ static bool shake_256_kat(void)
 	utils_memory_clear(hash, sizeof(hash));
 	utils_memory_clear(state.state, HKDS_KECCAK_STATE_SIZE * sizeof(uint64_t));
 	hkds_shake_initialize(&state, hkds_keccak_rate_256, msg1600, sizeof(msg1600));
-	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_256, hash, 4);
+	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_256, hash, 4U);
 
 	if (utils_memory_are_equal(hash, exp1600, sizeof(exp1600)) == false)
 	{
@@ -193,12 +193,12 @@ static bool shake_256_kat(void)
 
 static bool shake_512_kat(void)
 {
-	uint8_t exp1[512] = { 0 };
-	uint8_t exp2[512] = { 0 };
-	uint8_t hash[hkds_keccak_rate_512 * 8] = { 0 };
-	uint8_t msg1[64] = { 0 };
-	uint8_t msg2[200] = { 0 };
-	uint8_t output[512] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t exp1[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp2[512U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t hash[hkds_keccak_rate_512 * 8U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg2[200U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[512U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -274,7 +274,7 @@ static bool shake_512_kat(void)
 	utils_memory_clear(output, sizeof(output));
 	utils_memory_clear(state.state, HKDS_KECCAK_STATE_SIZE * sizeof(uint64_t));
 	hkds_shake_initialize(&state, hkds_keccak_rate_512, msg1, sizeof(msg1));
-	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_512, hash, 8);
+	hkds_shake_squeezeblocks(&state, hkds_keccak_rate_512, hash, 8U);
 
 	if (utils_memory_are_equal(hash, exp1, sizeof(exp1)) == false)
 	{
@@ -287,15 +287,15 @@ static bool shake_512_kat(void)
 
 static bool kmac_128_kat(void)
 {
-	uint8_t cust0[1] = { 0 };
-	uint8_t cust168[21] = { 0 };
-	uint8_t exp256a[32] = { 0 };
-	uint8_t exp256b[32] = { 0 };
-	uint8_t exp256c[32] = { 0 };
-	uint8_t msg32[4] = { 0 };
-	uint8_t msg1600[200] = { 0 };
-	uint8_t key256[32] = { 0 };
-	uint8_t output[32] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cust0[1U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t cust168[21U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256a[32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256b[32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256c[32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg32[4U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key256[32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[32U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -320,7 +320,7 @@ static bool kmac_128_kat(void)
 
 	/* test compact api */
 
-	hkds_kmac128_compute(output, sizeof(output), msg32, sizeof(msg32), key256, sizeof(key256), cust0, 0);
+	hkds_kmac128_compute(output, sizeof(output), msg32, sizeof(msg32), key256, sizeof(key256), cust0, 0U);
 
 	if (utils_memory_are_equal(output, exp256a, sizeof(exp256a)) == false)
 	{
@@ -366,15 +366,15 @@ static bool kmac_128_kat(void)
 
 static bool kmac_256_kat(void)
 {
-	uint8_t cust0[1] = { 0 };
-	uint8_t cust168[21] = { 0 };
-	uint8_t exp256a[64] = { 0 };
-	uint8_t exp256b[64] = { 0 };
-	uint8_t exp256c[64] = { 0 };
-	uint8_t msg32[4] = { 0 };
-	uint8_t msg1600[200] = { 0 };
-	uint8_t key256[32] = { 0 };
-	uint8_t output[64] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cust0[1U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t cust168[21U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256a[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256b[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp256c[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg32[4U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1600[200U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key256[32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[64U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -411,7 +411,7 @@ static bool kmac_256_kat(void)
 	}
 
 	utils_memory_clear(output, sizeof(output));
-	hkds_kmac256_compute(output, sizeof(output), msg1600, sizeof(msg1600), key256, sizeof(key256), cust0, 0);
+	hkds_kmac256_compute(output, sizeof(output), msg1600, sizeof(msg1600), key256, sizeof(key256), cust0, 0U);
 
 	if (utils_memory_are_equal(output, exp256b, sizeof(exp256b)) == false)
 	{
@@ -448,17 +448,17 @@ static bool kmac_256_kat(void)
 
 static bool kmac_512_kat(void)
 {
-	uint8_t cust0[21] = { 0 };
-	uint8_t cust1[42] = { 0 };
-	uint8_t cust2[45] = { 0 };
-	uint8_t exp0[64] = { 0 };
-	uint8_t exp1[64] = { 0 };
-	uint8_t exp2[64] = { 0 };
-	uint8_t key0[21] = { 0 };
-	uint8_t key1[60] = { 0 };
-	uint8_t msg0[42] = { 0 };
-	uint8_t msg1[84] = { 0 };
-	uint8_t output[64] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cust0[21U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t cust1[42U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t cust2[45U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp0[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp1[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp2[64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key0[21U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key1[60U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg0[42U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg1[84U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t output[64U] = { 0U };
 	hkds_keccak_state state;
 	bool status;
 
@@ -532,74 +532,74 @@ static bool kmac_512_kat(void)
 	return status;
 }
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 static bool kmac128x4_equality(void)
 {
-	uint8_t cst[4][16] = { 0 };
-	uint8_t key[4][18] = { 0 };
-	uint8_t msg[4][256] = { 0 };
-	uint8_t otp[4][16] = { 0 };
-	uint8_t exp[4][16] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[4U][16U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[4U][18U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][16U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][16U] = { 0U };
 	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 16; ++i)
+	for (i = 0U; i < 16U; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][16] = (uint8_t)1;
-	key[1][16] = (uint8_t)2;
-	key[2][16] = (uint8_t)3;
-	key[3][16] = (uint8_t)4;
+	key[0U][16] = (uint8_t)1U;
+	key[1U][16] = (uint8_t)2U;
+	key[2U][16] = (uint8_t)3U;
+	key[3U][16] = (uint8_t)4U;
 
-	for (i = 0; i < 256; ++i)
+	for (i = 0U; i < 256U; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac128_compute(exp[0], 16, msg[0], 256, key[0], 18, cst[0], 16);
+	hkds_kmac128_compute(exp[0U], 16, msg[0U], 256, key[0U], 18, cst[0U], 16U);
 
-	hkds_kmac_128x4(otp[0], otp[1], otp[2], otp[3], 16, key[0], key[1], key[2], key[3], 18,
-		cst[0], cst[1], cst[2], cst[3], 16, msg[0], msg[1], msg[2], msg[3], 256);
+	hkds_kmac_128x4(otp[0U], otp[1U], otp[2U], otp[3U], 16U, key[0U], key[1U], key[2U], key[3U], 18U,
+		cst[0U], cst[1U], cst[2U], cst[3U], 16U, msg[0U], msg[1U], msg[2U], msg[3U], 256U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[1], 16, msg[1], 256, key[1], 18, cst[1], 16);
+	hkds_kmac128_compute(exp[1U], 16, msg[1U], 256, key[1U], 18U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[2], 16, msg[2], 256, key[2], 18, cst[2], 16);
+	hkds_kmac128_compute(exp[2U], 16U, msg[2U], 256U, key[2U], 18U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[3], 16, msg[3], 256, key[3], 18, cst[3], 16);
+	hkds_kmac128_compute(exp[3U], 16, msg[3U], 256U, key[3U], 18U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -610,71 +610,71 @@ static bool kmac128x4_equality(void)
 
 static bool kmac256x4_equality(void)
 {
-	uint8_t cst[4][32] = { 0 };
-	uint8_t key[4][34] = { 0 };
-	uint8_t msg[4][256] = { 0 };
-	uint8_t otp[4][32] = { 0 };
-	uint8_t exp[4][32] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[4U][32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[4U][34U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][32U] = { 0U };
 	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 32; ++i)
+	for (i = 0U; i < 32U; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][32] = (uint8_t)1;
-	key[1][32] = (uint8_t)2;
-	key[2][32] = (uint8_t)3;
-	key[3][32] = (uint8_t)4;
+	key[0U][32U] = (uint8_t)1U;
+	key[1U][32U] = (uint8_t)2U;
+	key[2U][32U] = (uint8_t)3U;
+	key[3U][32U] = (uint8_t)4U;
 
 	for (i = 0; i < 256; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac_256x4(otp[0], otp[1], otp[2], otp[3], 32, key[0], key[1], key[2], key[3], 34,
-		cst[0], cst[1], cst[2], cst[3], 16, msg[0], msg[1], msg[2], msg[3], 256);
+	hkds_kmac_256x4(otp[0U], otp[1U], otp[2U], otp[3U], 32U, key[0U], key[1U], key[2U], key[3U], 34U,
+		cst[0U], cst[1U], cst[2U], cst[3U], 16U, msg[0U], msg[1U], msg[2U], msg[3U], 256U);
 
-	hkds_kmac256_compute(exp[0], 32, msg[0], 256, key[0], 34, cst[0], 16);
+	hkds_kmac256_compute(exp[0U], 32, msg[0U], 256, key[0U], 34, cst[0U], 16);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[1], 32, msg[1], 256, key[1], 34, cst[1], 16);
+	hkds_kmac256_compute(exp[1U], 32U, msg[1U], 256U, key[1U], 34U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[2], 32, msg[2], 256, key[2], 34, cst[2], 16);
+	hkds_kmac256_compute(exp[2U], 32U, msg[2U], 256U, key[2U], 34U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[3], 32, msg[3], 256, key[3], 34, cst[3], 16);
+	hkds_kmac256_compute(exp[3U], 32U, msg[3U], 256U, key[3U], 34U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -685,71 +685,71 @@ static bool kmac256x4_equality(void)
 
 static bool kmac512x4_equality(void)
 {
-	uint8_t cst[4][64] = { 0 };
-	uint8_t key[4][66] = { 0 };
-	uint8_t msg[4][256] = { 0 };
-	uint8_t otp[4][64] = { 0 };
-	uint8_t exp[4][64] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[4U][64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[4U][66U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[4U][256U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][64U] = { 0U };
 	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 64; ++i)
+	for (i = 0U; i < 64U; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][64] = (uint8_t)1;
-	key[1][64] = (uint8_t)2;
-	key[2][64] = (uint8_t)3;
-	key[3][64] = (uint8_t)4;
+	key[0U][64U] = (uint8_t)1U;
+	key[1U][64U] = (uint8_t)2U;
+	key[2U][64U] = (uint8_t)3U;
+	key[3U][64U] = (uint8_t)4U;
 
-	for (i = 0; i < 256; ++i)
+	for (i = 0U; i < 256U; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac_512x4(otp[0], otp[1], otp[2], otp[3], 64, key[0], key[1], key[2], key[3], 66,
-		cst[0], cst[1], cst[2], cst[3], 16, msg[0], msg[1], msg[2], msg[3], 256);
+	hkds_kmac_512x4(otp[0U], otp[1U], otp[2U], otp[3U], 64U, key[0U], key[1U], key[2U], key[3U], 66U,
+		cst[0U], cst[1U], cst[2U], cst[3U], 16, msg[0U], msg[1U], msg[2U], msg[3U], 256);
 
-	hkds_kmac512_compute(exp[0], 64, msg[0], 256, key[0], 66, cst[0], 16);
+	hkds_kmac512_compute(exp[0U], 64U, msg[0U], 256U, key[0U], 66, cst[0U], 16U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[1], 64, msg[1], 256, key[1], 66, cst[1], 16);
+	hkds_kmac512_compute(exp[1U], 64U, msg[1U], 256U, key[1U], 66U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[2], 64, msg[2], 256, key[2], 66, cst[2], 16);
+	hkds_kmac512_compute(exp[2U], 64U, msg[2U], 256U, key[2U], 66U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[3], 64, msg[3], 256, key[3], 66, cst[3], 16);
+	hkds_kmac512_compute(exp[3U], 64U, msg[3U], 256U, key[3U], 66U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -760,55 +760,55 @@ static bool kmac512x4_equality(void)
 
 static bool shake128x4_equality(void)
 {
-	uint8_t key[4][18] = { 0 };
-	uint8_t otp[4][168] = { 0 };
-	uint8_t exp[4][168] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[4U][18U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][168] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][168] = { 0U };
 	bool status;
 
 	status = true;
 
 	for (size_t i = 0; i < 16; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][16] = (uint8_t)1;
-	key[1][16] = (uint8_t)2;
-	key[2][16] = (uint8_t)3;
-	key[3][16] = (uint8_t)4;
+	key[0U][16U] = (uint8_t)1U;
+	key[1U][16U] = (uint8_t)2U;
+	key[2U][16U] = (uint8_t)3U;
+	key[3U][16U] = (uint8_t)4U;
 
-	hkds_shake_128x4(otp[0], otp[1], otp[2], otp[3], 168, key[0], key[1], key[2], key[3], 18);
+	hkds_shake_128x4(otp[0U], otp[1U], otp[2U], otp[3U], 168, key[0U], key[1U], key[2U], key[3U], 18U);
 
-	hkds_shake128_compute(exp[0], 168, key[0], 18);
+	hkds_shake128_compute(exp[0U], 168, key[0U], 18U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[1], 168, key[1], 18);
+	hkds_shake128_compute(exp[1U], 168U, key[1U], 18U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[2], 168, key[2], 18);
+	hkds_shake128_compute(exp[2U], 168U, key[2U], 18U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[3], 168, key[3], 18);
+	hkds_shake128_compute(exp[3U], 168U, key[3U], 18U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake128x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -819,55 +819,55 @@ static bool shake128x4_equality(void)
 
 static bool shake256x4_equality(void)
 {
-	uint8_t key[4][34] = { 0 };
-	uint8_t otp[4][136] = { 0 };
-	uint8_t exp[4][136] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[4U][34U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][136U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][136U] = { 0U };
 	bool status;
 
 	status = true;
 
 	for (size_t i = 0; i < 32; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][32] = (uint8_t)1;
-	key[1][32] = (uint8_t)2;
-	key[2][32] = (uint8_t)3;
-	key[3][32] = (uint8_t)4;
+	key[0U][32U] = (uint8_t)1U;
+	key[1U][32U] = (uint8_t)2U;
+	key[2U][32U] = (uint8_t)3U;
+	key[3U][32U] = (uint8_t)4U;
 
-	hkds_shake_256x4(otp[0], otp[1], otp[2], otp[3], 136, key[0], key[1], key[2], key[3], 34);
+	hkds_shake_256x4(otp[0U], otp[1U], otp[2U], otp[3U], 136, key[0U], key[1U], key[2U], key[3U], 34U);
 
-	hkds_shake256_compute(exp[0], 136, key[0], 34);
+	hkds_shake256_compute(exp[0U], 136U, key[0U], 34U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[1], 136, key[1], 34);
+	hkds_shake256_compute(exp[1U], 136U, key[1U], 34U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[2], 136, key[2], 34);
+	hkds_shake256_compute(exp[2U], 136U, key[2U], 34U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[3], 136, key[3], 34);
+	hkds_shake256_compute(exp[3U], 136U, key[3U], 34U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake256x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -878,55 +878,55 @@ static bool shake256x4_equality(void)
 
 static bool shake512x4_equality(void)
 {
-	uint8_t key[4][66] = { 0 };
-	uint8_t otp[4][72] = { 0 };
-	uint8_t exp[4][72] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[4U][66U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[4U][72U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[4U][72U] = { 0U };
 	bool status;
 
 	status = true;
 
-	for (size_t i = 0; i < 64; ++i)
+	for (size_t i = 0U; i < 64U; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
 	}
 
-	key[0][64] = (uint8_t)1;
-	key[1][64] = (uint8_t)2;
-	key[2][64] = (uint8_t)3;
-	key[3][64] = (uint8_t)4;
+	key[0U][64U] = (uint8_t)1U;
+	key[1U][64U] = (uint8_t)2U;
+	key[2U][64U] = (uint8_t)3U;
+	key[3U][64U] = (uint8_t)4U;
 
-	hkds_shake_512x4(otp[0], otp[1], otp[2], otp[3], 72, key[0], key[1], key[2], key[3], 66);
+	hkds_shake_512x4(otp[0U], otp[1U], otp[2U], otp[3U], 72, key[0U], key[1U], key[2U], key[3U], 66U);
 
-	hkds_shake512_compute(exp[0], 72, key[0], 66);
+	hkds_shake512_compute(exp[0U], 72U, key[0U], 66U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[1], 72, key[1], 66);
+	hkds_shake512_compute(exp[1U], 72U, key[1U], 66U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[2], 72, key[2], 66);
+	hkds_shake512_compute(exp[2U], 72U, key[2U], 66U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[3], 72, key[3], 66);
+	hkds_shake512_compute(exp[3U], 72U, key[3U], 66U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake512x4_equality: output does not match the known answer -KP4 \n");
 		status = false;
@@ -936,14 +936,14 @@ static bool shake512x4_equality(void)
 }
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 static bool kmac128x8_equality(void)
 {
-	uint8_t cst[8][16] = { 0 };
-	uint8_t key[8][18] = { 0 };
-	uint8_t msg[8][256] = { 0 };
-	uint8_t otp[8][16] = { 0 };
-	uint8_t exp[8][16] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[8U][16U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[8U][18U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[8U][256U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][16U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][16U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -951,109 +951,109 @@ static bool kmac128x8_equality(void)
 
 	for (i = 0; i < 16; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		cst[4][i] = (uint8_t)i;
-		cst[5][i] = (uint8_t)i;
-		cst[6][i] = (uint8_t)i;
-		cst[7][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		cst[4U][i] = (uint8_t)i;
+		cst[5U][i] = (uint8_t)i;
+		cst[6U][i] = (uint8_t)i;
+		cst[7U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][16] = (uint8_t)1;
-	key[1][16] = (uint8_t)2;
-	key[2][16] = (uint8_t)3;
-	key[3][16] = (uint8_t)4;
-	key[4][16] = (uint8_t)1;
-	key[5][16] = (uint8_t)2;
-	key[6][16] = (uint8_t)3;
-	key[7][16] = (uint8_t)4;
+	key[0U][16U] = (uint8_t)1U;
+	key[1U][16U] = (uint8_t)2U;
+	key[2U][16U] = (uint8_t)3U;
+	key[3U][16U] = (uint8_t)4U;
+	key[4U][16U] = (uint8_t)1U;
+	key[5U][16U] = (uint8_t)2U;
+	key[6U][16U] = (uint8_t)3U;
+	key[7U][16U] = (uint8_t)4U;
 
 	for (i = 0; i < 256; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
-		msg[4][i] = (uint8_t)i;
-		msg[5][i] = (uint8_t)i;
-		msg[6][i] = (uint8_t)i;
-		msg[7][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
+		msg[4U][i] = (uint8_t)i;
+		msg[5U][i] = (uint8_t)i;
+		msg[6U][i] = (uint8_t)i;
+		msg[7U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac_128x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 16,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 18,
-		cst[0], cst[1], cst[2], cst[3], cst[4], cst[5], cst[6], cst[7], 16,
-		msg[0], msg[1], msg[2], msg[3], msg[4], msg[5], msg[6], msg[7], 256);
+	hkds_kmac_128x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 16U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 18U,
+		cst[0U], cst[1U], cst[2U], cst[3U], cst[4U], cst[5U], cst[6U], cst[7U], 16U,
+		msg[0U], msg[1U], msg[2U], msg[3U], msg[4U], msg[5U], msg[6U], msg[7U], 256U);
 
-	hkds_kmac128_compute(exp[0], 16, msg[0], 256, key[0], 18, cst[0], 16);
+	hkds_kmac128_compute(exp[0U], 16, msg[0U], 256, key[0U], 18, cst[0U], 16U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[1], 16, msg[1], 256, key[1], 18, cst[1], 16);
+	hkds_kmac128_compute(exp[1U], 16U, msg[1U], 256U, key[1U], 18U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[2], 16, msg[2], 256, key[2], 18, cst[2], 16);
+	hkds_kmac128_compute(exp[2U], 16U, msg[2U], 256U, key[2U], 18U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[3], 16, msg[3], 256, key[3], 18, cst[3], 16);
+	hkds_kmac128_compute(exp[3U], 16U, msg[3U], 256U, key[3U], 18U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[4], 16, msg[4], 256, key[4], 18, cst[4], 16);
+	hkds_kmac128_compute(exp[4U], 16U, msg[4U], 256U, key[4U], 18U, cst[4U], 16U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[5], 16, msg[5], 256, key[5], 18, cst[5], 16);
+	hkds_kmac128_compute(exp[5U], 16U, msg[5U], 256U, key[5U], 18U, cst[5U], 16U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[6], 16, msg[6], 256, key[6], 18, cst[6], 16);
+	hkds_kmac128_compute(exp[6U], 16U, msg[6U], 256U, key[6U], 18U, cst[6U], 16U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_kmac128_compute(exp[7], 16, msg[7], 256, key[7], 18, cst[7], 16);
+	hkds_kmac128_compute(exp[7U], 16U, msg[7U], 256U, key[7U], 18U, cst[7U], 16U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! kmac128x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1064,121 +1064,121 @@ static bool kmac128x8_equality(void)
 
 static bool kmac256x8_equality(void)
 {
-	uint8_t cst[8][32] = { 0 };
-	uint8_t key[8][34] = { 0 };
-	uint8_t msg[8][256] = { 0 };
-	uint8_t otp[8][32] = { 0 };
-	uint8_t exp[8][32] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[8U][32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[8U][34U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[8U][25U6] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][32U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][32U] = { 0U };
 	size_t i;
 	bool status;
 
 	status = true;
 
-	for (i = 0; i < 32; ++i)
+	for (i = 0U; i < 32U; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		cst[4][i] = (uint8_t)i;
-		cst[5][i] = (uint8_t)i;
-		cst[6][i] = (uint8_t)i;
-		cst[7][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		cst[4U][i] = (uint8_t)i;
+		cst[5U][i] = (uint8_t)i;
+		cst[6U][i] = (uint8_t)i;
+		cst[7U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][32] = (uint8_t)1;
-	key[1][32] = (uint8_t)2;
-	key[2][32] = (uint8_t)3;
-	key[3][32] = (uint8_t)4;
-	key[4][32] = (uint8_t)4;
-	key[5][32] = (uint8_t)5;
-	key[6][32] = (uint8_t)6;
-	key[7][32] = (uint8_t)7;
+	key[0U][32U] = (uint8_t)1U;
+	key[1U][32U] = (uint8_t)2U;
+	key[2U][32U] = (uint8_t)3U;
+	key[3U][32U] = (uint8_t)4U;
+	key[4U][32U] = (uint8_t)4U;
+	key[5U][32U] = (uint8_t)5U;
+	key[6U][32U] = (uint8_t)6U;
+	key[7U][32U] = (uint8_t)7U;
 
 	for (i = 0; i < 256; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
-		msg[4][i] = (uint8_t)i;
-		msg[5][i] = (uint8_t)i;
-		msg[6][i] = (uint8_t)i;
-		msg[7][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
+		msg[4U][i] = (uint8_t)i;
+		msg[5U][i] = (uint8_t)i;
+		msg[6U][i] = (uint8_t)i;
+		msg[7U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac_256x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 32,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 34,
-		cst[0], cst[1], cst[2], cst[3], cst[4], cst[5], cst[6], cst[7], 16,
-		msg[0], msg[1], msg[2], msg[3], msg[4], msg[5], msg[6], msg[7], 256);
+	hkds_kmac_256x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 32U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 34U,
+		cst[0U], cst[1U], cst[2U], cst[3U], cst[4U], cst[5U], cst[6U], cst[7U], 16U,
+		msg[0U], msg[1U], msg[2U], msg[3U], msg[4U], msg[5U], msg[6U], msg[7U], 256U);
 
-	hkds_kmac256_compute(exp[0], 32, msg[0], 256, key[0], 34, cst[0], 16);
+	hkds_kmac256_compute(exp[0U], 32U, msg[0U], 256U, key[0U], 34U, cst[0U], 16U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[1], 32, msg[1], 256, key[1], 34, cst[1], 16);
+	hkds_kmac256_compute(exp[1U], 32U, msg[1U], 256U, key[1U], 34U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[2], 32, msg[2], 256, key[2], 34, cst[2], 16);
+	hkds_kmac256_compute(exp[2U], 32U, msg[2U], 256U, key[2U], 34U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[3], 32, msg[3], 256, key[3], 34, cst[3], 16);
+	hkds_kmac256_compute(exp[3U], 32U, msg[3U], 256U, key[3U], 34U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[4], 32, msg[4], 256, key[4], 34, cst[4], 16);
+	hkds_kmac256_compute(exp[4U], 32U, msg[4U], 256U, key[4U], 34U, cst[4U], 16U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[5], 32, msg[5], 256, key[5], 34, cst[5], 16);
+	hkds_kmac256_compute(exp[5U], 32U, msg[5U], 256U, key[5U], 34U, cst[5U], 16U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[6], 32, msg[6], 256, key[6], 34, cst[6], 16);
+	hkds_kmac256_compute(exp[6U], 32U, msg[6U], 256U, key[6U], 34U, cst[6U], 16U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_kmac256_compute(exp[7], 32, msg[7], 256, key[7], 34, cst[7], 16);
+	hkds_kmac256_compute(exp[7U], 32U, msg[7U], 256U, key[7U], 34U, cst[7U], 16U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! kmac256x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1189,11 +1189,11 @@ static bool kmac256x8_equality(void)
 
 static bool kmac512x8_equality(void)
 {
-	uint8_t cst[8][64] = { 0 };
-	uint8_t key[8][66] = { 0 };
-	uint8_t msg[8][256] = { 0 };
-	uint8_t otp[8][64] = { 0 };
-	uint8_t exp[8][64] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t cst[8U][64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t key[8U][66U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t msg[8U][256U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][64U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][64U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1201,109 +1201,109 @@ static bool kmac512x8_equality(void)
 
 	for (i = 0; i < 64; ++i)
 	{
-		cst[0][i] = (uint8_t)i;
-		cst[1][i] = (uint8_t)i;
-		cst[2][i] = (uint8_t)i;
-		cst[3][i] = (uint8_t)i;
-		cst[4][i] = (uint8_t)i;
-		cst[5][i] = (uint8_t)i;
-		cst[6][i] = (uint8_t)i;
-		cst[7][i] = (uint8_t)i;
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		cst[0U][i] = (uint8_t)i;
+		cst[1U][i] = (uint8_t)i;
+		cst[2U][i] = (uint8_t)i;
+		cst[3U][i] = (uint8_t)i;
+		cst[4U][i] = (uint8_t)i;
+		cst[5U][i] = (uint8_t)i;
+		cst[6U][i] = (uint8_t)i;
+		cst[7U][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][64] = (uint8_t)1;
-	key[1][64] = (uint8_t)2;
-	key[2][64] = (uint8_t)3;
-	key[3][64] = (uint8_t)4;
-	key[4][64] = (uint8_t)5;
-	key[5][64] = (uint8_t)6;
-	key[6][64] = (uint8_t)7;
-	key[7][64] = (uint8_t)8;
+	key[0U][64U] = (uint8_t)1U;
+	key[1U][64U] = (uint8_t)2U;
+	key[2U][64U] = (uint8_t)3U;
+	key[3U][64U] = (uint8_t)4U;
+	key[4U][64U] = (uint8_t)5U;
+	key[5U][64U] = (uint8_t)6U;
+	key[6U][64U] = (uint8_t)7U;
+	key[7U][64U] = (uint8_t)8U;
 
 	for (i = 0; i < 256; ++i)
 	{
-		msg[0][i] = (uint8_t)i;
-		msg[1][i] = (uint8_t)i;
-		msg[2][i] = (uint8_t)i;
-		msg[3][i] = (uint8_t)i;
-		msg[4][i] = (uint8_t)i;
-		msg[5][i] = (uint8_t)i;
-		msg[6][i] = (uint8_t)i;
-		msg[7][i] = (uint8_t)i;
+		msg[0U][i] = (uint8_t)i;
+		msg[1U][i] = (uint8_t)i;
+		msg[2U][i] = (uint8_t)i;
+		msg[3U][i] = (uint8_t)i;
+		msg[4U][i] = (uint8_t)i;
+		msg[5U][i] = (uint8_t)i;
+		msg[6U][i] = (uint8_t)i;
+		msg[7U][i] = (uint8_t)i;
 	}
 
-	hkds_kmac_512x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 64,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 66,
-		cst[0], cst[1], cst[2], cst[3], cst[4], cst[5], cst[6], cst[7], 16,
-		msg[0], msg[1], msg[2], msg[3], msg[4], msg[5], msg[6], msg[7], 256);
+	hkds_kmac_512x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 64U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 66U,
+		cst[0U], cst[1U], cst[2U], cst[3U], cst[4U], cst[5U], cst[6U], cst[7U], 16U,
+		msg[0U], msg[1U], msg[2U], msg[3U], msg[4U], msg[5U], msg[6U], msg[7U], 256U);
 
-	hkds_kmac512_compute(exp[0], 64, msg[0], 256, key[0], 66, cst[0], 16);
+	hkds_kmac512_compute(exp[0U], 64U, msg[0U], 256U, key[0U], 66U, cst[0U], 16U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[1], 64, msg[1], 256, key[1], 66, cst[1], 16);
+	hkds_kmac512_compute(exp[1U], 64U, msg[1U], 256U, key[1U], 66U, cst[1U], 16U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[2], 64, msg[2], 256, key[2], 66, cst[2], 16);
+	hkds_kmac512_compute(exp[2U], 64U, msg[2U], 256U, key[2U], 66U, cst[2U], 16U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[3], 64, msg[3], 256, key[3], 66, cst[3], 16);
+	hkds_kmac512_compute(exp[3U], 64U, msg[3U], 256U, key[3U], 66U, cst[3U], 16U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[4], 64, msg[4], 256, key[4], 66, cst[4], 16);
+	hkds_kmac512_compute(exp[4U], 64U, msg[4U], 256U, key[4U], 66U, cst[4U], 16U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[5], 64, msg[5], 256, key[5], 66, cst[5], 16);
+	hkds_kmac512_compute(exp[5U], 64U, msg[5U], 256U, key[5U], 66U, cst[5U], 16U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[6], 64, msg[6], 256, key[6], 66, cst[6], 16);
+	hkds_kmac512_compute(exp[6U], 64U, msg[6U], 256U, key[6U], 66U, cst[6U], 16U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_kmac512_compute(exp[7], 64, msg[7], 256, key[7], 66, cst[7], 16);
+	hkds_kmac512_compute(exp[7U], 64U, msg[7U], 256U, key[7U], 66U, cst[7U], 16U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! kmac512x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1314,9 +1314,9 @@ static bool kmac512x8_equality(void)
 
 static bool shake128x8_equality(void)
 {
-	uint8_t key[8][18] = { 0 };
-	uint8_t otp[8][168] = { 0 };
-	uint8_t exp[8][168] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[8U][18U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][168U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][168U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1324,87 +1324,87 @@ static bool shake128x8_equality(void)
 
 	for (i = 0; i < 16; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][16] = (uint8_t)1;
-	key[1][16] = (uint8_t)2;
-	key[2][16] = (uint8_t)3;
-	key[3][16] = (uint8_t)4;
-	key[4][16] = (uint8_t)1;
-	key[5][16] = (uint8_t)2;
-	key[6][16] = (uint8_t)3;
-	key[7][16] = (uint8_t)4;
+	key[0U][16U] = (uint8_t)1U;
+	key[1U][16U] = (uint8_t)2U;
+	key[2U][16U] = (uint8_t)3U;
+	key[3U][16U] = (uint8_t)4U;
+	key[4U][16U] = (uint8_t)1U;
+	key[5U][16U] = (uint8_t)2U;
+	key[6U][16U] = (uint8_t)3U;
+	key[7U][16U] = (uint8_t)4U;
 
-	hkds_shake_128x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 168,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 18);
+	hkds_shake_128x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 168U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 18U);
 
-	hkds_shake128_compute(exp[0], 168, key[0], 18);
+	hkds_shake128_compute(exp[0U], 168U, key[0U], 18U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[1], 168, key[1], 18);
+	hkds_shake128_compute(exp[1U], 168U, key[1U], 18U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[2], 168, key[2], 18);
+	hkds_shake128_compute(exp[2U], 168U, key[2U], 18U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[3], 168, key[3], 18);
+	hkds_shake128_compute(exp[3U], 168U, key[3U], 18U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[4], 168, key[4], 18);
+	hkds_shake128_compute(exp[4U], 168U, key[4U], 18U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[5], 168, key[5], 18);
+	hkds_shake128_compute(exp[5U], 168U, key[5U], 18U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[6], 168, key[6], 18);
+	hkds_shake128_compute(exp[6U], 168U, key[6U], 18U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_shake128_compute(exp[7], 168, key[7], 18);
+	hkds_shake128_compute(exp[7U], 168U, key[7U], 18U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! shake128x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1415,9 +1415,9 @@ static bool shake128x8_equality(void)
 
 static bool shake256x8_equality(void)
 {
-	uint8_t key[8][34] = { 0 };
-	uint8_t otp[8][136] = { 0 };
-	uint8_t exp[8][136] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[8U][34U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][136U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][136U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1425,87 +1425,87 @@ static bool shake256x8_equality(void)
 
 	for (i = 0; i < 32; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][32] = (uint8_t)1;
-	key[1][32] = (uint8_t)2;
-	key[2][32] = (uint8_t)3;
-	key[3][32] = (uint8_t)4;
-	key[4][32] = (uint8_t)1;
-	key[5][32] = (uint8_t)2;
-	key[6][32] = (uint8_t)3;
-	key[7][32] = (uint8_t)4;
+	key[0U][32U] = (uint8_t)1U;
+	key[1U][32U] = (uint8_t)2U;
+	key[2U][32U] = (uint8_t)3U;
+	key[3U][32U] = (uint8_t)4U;
+	key[4U][32U] = (uint8_t)1U;
+	key[5U][32U] = (uint8_t)2U;
+	key[6U][32U] = (uint8_t)3U;
+	key[7U][32U] = (uint8_t)4U;
 
-	hkds_shake_256x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 136,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 34);
+	hkds_shake_256x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 136U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 34U);
 
-	hkds_shake256_compute(exp[0], 136, key[0], 34);
+	hkds_shake256_compute(exp[0U], 136U, key[0U], 34U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[1], 136, key[1], 34);
+	hkds_shake256_compute(exp[1U], 136U, key[1U], 34U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[2], 136, key[2], 34);
+	hkds_shake256_compute(exp[2U], 136U, key[2U], 34U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[3], 136, key[3], 34);
+	hkds_shake256_compute(exp[3U], 136U, key[3U], 34U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[4], 136, key[4], 34);
+	hkds_shake256_compute(exp[4U], 136U, key[4U], 34U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[5], 136, key[5], 34);
+	hkds_shake256_compute(exp[5U], 136U, key[5U], 34U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[6], 136, key[6], 34);
+	hkds_shake256_compute(exp[6U], 136U, key[6U], 34U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_shake256_compute(exp[7], 136, key[7], 34);
+	hkds_shake256_compute(exp[7U], 136U, key[7U], 34U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! shake256x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1516,9 +1516,9 @@ static bool shake256x8_equality(void)
 
 static bool shake512x8_equality(void)
 {
-	uint8_t key[8][66] = { 0 };
-	uint8_t otp[8][72] = { 0 };
-	uint8_t exp[8][72] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t key[8U][66U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t otp[8U][72U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t exp[8U][72U] = { 0U };
 	size_t i;
 	bool status;
 
@@ -1526,87 +1526,87 @@ static bool shake512x8_equality(void)
 
 	for (i = 0; i < 64; ++i)
 	{
-		key[0][i] = (uint8_t)i;
-		key[1][i] = (uint8_t)i;
-		key[2][i] = (uint8_t)i;
-		key[3][i] = (uint8_t)i;
-		key[4][i] = (uint8_t)i;
-		key[5][i] = (uint8_t)i;
-		key[6][i] = (uint8_t)i;
-		key[7][i] = (uint8_t)i;
+		key[0U][i] = (uint8_t)i;
+		key[1U][i] = (uint8_t)i;
+		key[2U][i] = (uint8_t)i;
+		key[3U][i] = (uint8_t)i;
+		key[4U][i] = (uint8_t)i;
+		key[5U][i] = (uint8_t)i;
+		key[6U][i] = (uint8_t)i;
+		key[7U][i] = (uint8_t)i;
 	}
 
-	key[0][64] = (uint8_t)1;
-	key[1][64] = (uint8_t)2;
-	key[2][64] = (uint8_t)3;
-	key[3][64] = (uint8_t)4;
-	key[4][64] = (uint8_t)1;
-	key[5][64] = (uint8_t)2;
-	key[6][64] = (uint8_t)3;
-	key[7][64] = (uint8_t)4;
+	key[0U][64U] = (uint8_t)1U;
+	key[1U][64U] = (uint8_t)2U;
+	key[2U][64U] = (uint8_t)3U;
+	key[3U][64U] = (uint8_t)4U;
+	key[4U][64U] = (uint8_t)1U;
+	key[5U][64U] = (uint8_t)2U;
+	key[6U][64U] = (uint8_t)3U;
+	key[7U][64U] = (uint8_t)4U;
 
-	hkds_shake_512x8(otp[0], otp[1], otp[2], otp[3], otp[4], otp[5], otp[6], otp[7], 72,
-		key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], 66);
+	hkds_shake_512x8(otp[0U], otp[1U], otp[2U], otp[3U], otp[4U], otp[5U], otp[6U], otp[7U], 72U,
+		key[0U], key[1U], key[2U], key[3U], key[4U], key[5U], key[6U], key[7U], 66U);
 
-	hkds_shake512_compute(exp[0], 72, key[0], 66);
+	hkds_shake512_compute(exp[0U], 72U, key[0U], 66U);
 
-	if (utils_memory_are_equal(exp[0], otp[0], sizeof(exp[0])) == false)
+	if (utils_memory_are_equal(exp[0U], otp[0U], sizeof(exp[0U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP1 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[1], 72, key[1], 66);
+	hkds_shake512_compute(exp[1U], 72U, key[1U], 66U);
 
-	if (utils_memory_are_equal(exp[1], otp[1], sizeof(exp[1])) == false)
+	if (utils_memory_are_equal(exp[1U], otp[1U], sizeof(exp[1U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP2 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[2], 72, key[2], 66);
+	hkds_shake512_compute(exp[2U], 72U, key[2U], 66U);
 
-	if (utils_memory_are_equal(exp[2], otp[2], sizeof(exp[2])) == false)
+	if (utils_memory_are_equal(exp[2U], otp[2U], sizeof(exp[2U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP3 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[3], 72, key[3], 66);
+	hkds_shake512_compute(exp[3U], 72U, key[3U], 66U);
 
-	if (utils_memory_are_equal(exp[3], otp[3], sizeof(exp[3])) == false)
+	if (utils_memory_are_equal(exp[3U], otp[3U], sizeof(exp[3U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP4 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[4], 72, key[4], 66);
+	hkds_shake512_compute(exp[4U], 72U, key[4U], 66U);
 
-	if (utils_memory_are_equal(exp[4], otp[4], sizeof(exp[4])) == false)
+	if (utils_memory_are_equal(exp[4U], otp[4U], sizeof(exp[4U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP5 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[5], 72, key[5], 66);
+	hkds_shake512_compute(exp[5U], 72U, key[5U], 66U);
 
-	if (utils_memory_are_equal(exp[5], otp[5], sizeof(exp[5])) == false)
+	if (utils_memory_are_equal(exp[5U], otp[5U], sizeof(exp[5U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP6 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[6], 72, key[6], 66);
+	hkds_shake512_compute(exp[6U], 72U, key[6U], 66U);
 
-	if (utils_memory_are_equal(exp[6], otp[6], sizeof(exp[6])) == false)
+	if (utils_memory_are_equal(exp[6U], otp[6U], sizeof(exp[6U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP7 \n");
 		status = false;
 	}
 
-	hkds_shake512_compute(exp[7], 72, key[7], 66);
+	hkds_shake512_compute(exp[7U], 72U, key[7U], 66U);
 
-	if (utils_memory_are_equal(exp[7], otp[7], sizeof(exp[7])) == false)
+	if (utils_memory_are_equal(exp[7U], otp[7U], sizeof(exp[7U])) == false)
 	{
 		utils_print_safe("Failure! shake512x8_equality: output does not match the known answer -KP8 \n");
 		status = false;
@@ -1644,7 +1644,7 @@ static bool hkds_selftest_sha3_test(void)
 	}
 
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 	if (kmac128x4_equality() == false)
 	{
@@ -1673,7 +1673,7 @@ static bool hkds_selftest_sha3_test(void)
 
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 	if (kmac128x8_equality() == false)
 	{

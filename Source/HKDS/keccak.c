@@ -26,10 +26,10 @@ static const uint64_t KECCAK_ROUND_CONSTANTS[HKDS_KECCAK_PERMUTATION_MAX_ROUNDS]
 
 static void keccak_fast_absorb(uint64_t* state, const uint8_t* message, size_t msglen)
 {
-#if defined(SYSTEM_IS_LITTLE_ENDIAN)
+#if defined(HKDS_SYSTEM_IS_LITTLE_ENDIAN)
 	utils_memory_xor((uint8_t*)state, message, msglen);
 #else
-	for (size_t i = 0; i < msglen / sizeof(uint64_t); ++i)
+	for (size_t i = 0U; i < msglen / sizeof(uint64_t); ++i)
 	{
 		state[i] ^= utils_integer_le8to64((message + (sizeof(uint64_t) * i)));
 	}
@@ -41,21 +41,21 @@ static size_t keccak_left_encode(uint8_t* buffer, size_t value)
 	size_t n;
 	size_t v;
 
-	for (v = value, n = 0; v != 0 && n < sizeof(size_t); ++n, v >>= 8) { /* increments n */ }
+	for (v = value, n = 0U; v != 0U && n < sizeof(size_t); ++n, v >>= 8U) { /* increments n */ }
 
-	if (n == 0)
+	if (n == 0U)
 	{
-		n = 1;
+		n = 1U;
 	}
 
-	for (size_t i = 1; i <= n; ++i)
+	for (size_t i = 1U; i <= n; ++i)
 	{
-		buffer[i] = (uint8_t)(value >> (8 * (n - i)));
+		buffer[i] = (uint8_t)(value >> (8U * (n - i)));
 	}
 
-	buffer[0] = (uint8_t)n;
+	buffer[0U] = (uint8_t)n;
 
-	return n + 1;
+	return n + 1U;
 }
 
 static size_t keccak_right_encode(uint8_t* buffer, size_t value)
@@ -63,29 +63,28 @@ static size_t keccak_right_encode(uint8_t* buffer, size_t value)
 	size_t n;
 	size_t v;
 
-	for (v = value, n = 0; v != 0 && (n < sizeof(size_t)); ++n, v >>= 8) { /* increments n */ }
+	for (v = value, n = 0U; v != 0U && (n < sizeof(size_t)); ++n, v >>= 8U) { /* increments n */ }
 
-	if (n == 0)
+	if (n == 0U)
 	{
-		n = 1;
+		n = 1U;
 	}
 
-	for (size_t i = 1; i <= n; ++i)
+	for (size_t i = 1U; i <= n; ++i)
 	{
-		buffer[i - 1] = (uint8_t)(value >> (8 * (n - i)));
+		buffer[i - 1U] = (uint8_t)(value >> (8U * (n - i)));
 	}
 
 	buffer[n] = (uint8_t)n;
 
-	return n + 1;
+	return n + 1U;
 }
 
-#if defined(SYSTEM_HAS_AVX512)
-#	if defined(HKDS_KECCAK_UNROLLED_PERMUTATION)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
-void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
+static void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
 {
-	assert(rounds % 2 == 0);
+	HKDS_ASSERT(rounds % 2U == 0U);
 
 	__m512i a0;
 	__m512i a1;
@@ -149,33 +148,33 @@ void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t r
 	__m512i e24;
 	size_t i;
 
-	a0 = state[0];
-	a1 = state[1];
-	a2 = state[2];
-	a3 = state[3];
-	a4 = state[4];
-	a5 = state[5];
-	a6 = state[6];
-	a7 = state[7];
-	a8 = state[8];
-	a9 = state[9];
-	a10 = state[10];
-	a11 = state[11];
-	a12 = state[12];
-	a13 = state[13];
-	a14 = state[14];
-	a15 = state[15];
-	a16 = state[16];
-	a17 = state[17];
-	a18 = state[18];
-	a19 = state[19];
-	a20 = state[20];
-	a21 = state[21];
-	a22 = state[22];
-	a23 = state[23];
-	a24 = state[24];
+	a0 = state[0U];
+	a1 = state[1U];
+	a2 = state[2U];
+	a3 = state[3U];
+	a4 = state[4U];
+	a5 = state[5U];
+	a6 = state[6U];
+	a7 = state[7U];
+	a8 = state[8U];
+	a9 = state[9U];
+	a10 = state[10U];
+	a11 = state[11U];
+	a12 = state[12U];
+	a13 = state[13U];
+	a14 = state[14U];
+	a15 = state[15U];
+	a16 = state[16U];
+	a17 = state[17U];
+	a18 = state[18U];
+	a19 = state[19U];
+	a20 = state[20U];
+	a21 = state[21U];
+	a22 = state[22U];
+	a23 = state[23U];
+	a24 = state[24U];
 
-	for (i = 0; i < rounds; i += 2)
+	for (i = 0U; i < rounds; i += 2U)
 	{
 		/* round n */
 		c0 = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a0, a5), _mm512_xor_si512(a10, a15)), a20);
@@ -286,7 +285,7 @@ void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t r
 		e24 = _mm512_xor_si512(e24, d4);
 		c4 = _mm512_or_si512(_mm512_slli_epi64(e24, 14), _mm512_srli_epi64(e24, 64 - 14));
 		a0 = _mm512_xor_si512(c0, _mm512_and_si512(_mm512_xor_epi64(c1, _mm512_set1_epi64(-1)), c2));
-		a0 = _mm512_xor_si512(a0, _mm512_set1_epi64(KECCAK_ROUND_CONSTANTS[i + 1]));
+		a0 = _mm512_xor_si512(a0, _mm512_set1_epi64(KECCAK_ROUND_CONSTANTS[i + 1U]));
 		a1 = _mm512_xor_si512(c1, _mm512_and_si512(_mm512_xor_epi64(c2, _mm512_set1_epi64(-1)), c3));
 		a2 = _mm512_xor_si512(c2, _mm512_and_si512(_mm512_xor_epi64(c3, _mm512_set1_epi64(-1)), c4));
 		a3 = _mm512_xor_si512(c3, _mm512_and_si512(_mm512_xor_epi64(c4, _mm512_set1_epi64(-1)), c0));
@@ -353,244 +352,40 @@ void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t r
 		a24 = _mm512_xor_si512(c4, _mm512_and_si512(_mm512_xor_epi64(c0, _mm512_set1_epi64(-1)), c1));
 	}
 
-	state[0] = a0;
-	state[1] = a1;
-	state[2] = a2;
-	state[3] = a3;
-	state[4] = a4;
-	state[5] = a5;
-	state[6] = a6;
-	state[7] = a7;
-	state[8] = a8;
-	state[9] = a9;
-	state[10] = a10;
-	state[11] = a11;
-	state[12] = a12;
-	state[13] = a13;
-	state[14] = a14;
-	state[15] = a15;
-	state[16] = a16;
-	state[17] = a17;
-	state[18] = a18;
-	state[19] = a19;
-	state[20] = a20;
-	state[21] = a21;
-	state[22] = a22;
-	state[23] = a23;
-	state[24] = a24;
+	state[0U] = a0;
+	state[1U] = a1;
+	state[2U] = a2;
+	state[3U] = a3;
+	state[4U] = a4;
+	state[5U] = a5;
+	state[6U] = a6;
+	state[7U] = a7;
+	state[8U] = a8;
+	state[9U] = a9;
+	state[10U] = a10;
+	state[11U] = a11;
+	state[12U] = a12;
+	state[13U] = a13;
+	state[14U] = a14;
+	state[15U] = a15;
+	state[16U] = a16;
+	state[17U] = a17;
+	state[18U] = a18;
+	state[19U] = a19;
+	state[20U] = a20;
+	state[21U] = a21;
+	state[22U] = a22;
+	state[23U] = a23;
+	state[24U] = a24;
 }
 
-#	else
-
-void hkds_keccak_permute_p8x1600(__m512i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
-{
-	assert(rounds % 2 == 0);
-
-	__m512i a[25] = { 0 };
-	__m512i c[5] = { 0 };
-	__m512i d[5] = { 0 };
-	__m512i e[25] = { 0 };
-	size_t i;
-
-	for (i = 0; i < HKDS_KECCAK_STATE_SIZE; ++i)
-	{
-		a[i] = state[i];
-	}
-
-	for (i = 0; i < rounds; i += 2)
-	{
-		/* round n */
-		c[0] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a[0], a[5]), _mm512_xor_si512(a[10], a[15])), a[20]);
-		c[1] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a[1], a[6]), _mm512_xor_si512(a[11], a[16])), a[21]);
-		c[2] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a[2], a[7]), _mm512_xor_si512(a[12], a[17])), a[22]);
-		c[3] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a[3], a[8]), _mm512_xor_si512(a[13], a[18])), a[23]);
-		c[4] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(a[4], a[9]), _mm512_xor_si512(a[14], a[19])), a[24]);
-		d[0] = _mm512_xor_si512(c[4], _mm512_or_si512(_mm512_slli_epi64(c[1], 1), _mm512_srli_epi64(c[1], 64 - 1)));
-		d[1] = _mm512_xor_si512(c[0], _mm512_or_si512(_mm512_slli_epi64(c[2], 1), _mm512_srli_epi64(c[2], 64 - 1)));
-		d[2] = _mm512_xor_si512(c[1], _mm512_or_si512(_mm512_slli_epi64(c[3], 1), _mm512_srli_epi64(c[3], 64 - 1)));
-		d[3] = _mm512_xor_si512(c[2], _mm512_or_si512(_mm512_slli_epi64(c[4], 1), _mm512_srli_epi64(c[4], 64 - 1)));
-		d[4] = _mm512_xor_si512(c[3], _mm512_or_si512(_mm512_slli_epi64(c[0], 1), _mm512_srli_epi64(c[0], 64 - 1)));
-		a[0] = _mm512_xor_si512(a[0], d[0]);
-		c[0] = a[0];
-		a[6] = _mm512_xor_si512(a[6], d[1]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(a[6], 44), _mm512_srli_epi64(a[6], 64 - 44));
-		a[12] = _mm512_xor_si512(a[12], d[2]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(a[12], 43), _mm512_srli_epi64(a[12], 64 - 43));
-		a[18] = _mm512_xor_si512(a[18], d[3]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(a[18], 21), _mm512_srli_epi64(a[18], 64 - 21));
-		a[24] = _mm512_xor_si512(a[24], d[4]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(a[24], 14), _mm512_srli_epi64(a[24], 64 - 14));
-		e[0] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		e[0] = _mm512_xor_si512(e[0], _mm512_set1_epi64(KECCAK_ROUND_CONSTANTS[i]));
-		e[1] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		e[2] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		e[3] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		e[4] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		a[3] = _mm512_xor_si512(a[3], d[3]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(a[3], 28), _mm512_srli_epi64(a[3], 64 - 28));
-		a[9] = _mm512_xor_si512(a[9], d[4]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(a[9], 20), _mm512_srli_epi64(a[9], 64 - 20));
-		a[10] = _mm512_xor_si512(a[10], d[0]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(a[10], 3), _mm512_srli_epi64(a[10], 64 - 3));
-		a[16] = _mm512_xor_si512(a[16], d[1]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(a[16], 45), _mm512_srli_epi64(a[16], 64 - 45));
-		a[22] = _mm512_xor_si512(a[22], d[2]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(a[22], 61), _mm512_srli_epi64(a[22], 64 - 61));
-		e[5] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		e[6] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		e[7] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		e[8] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		e[9] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		a[1] = _mm512_xor_si512(a[1], d[1]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(a[1], 1), _mm512_srli_epi64(a[1], 64 - 1));
-		a[7] = _mm512_xor_si512(a[7], d[2]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(a[7], 6), _mm512_srli_epi64(a[7], 64 - 6));
-		a[13] = _mm512_xor_si512(a[13], d[3]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(a[13], 25), _mm512_srli_epi64(a[13], 64 - 25));
-		a[19] = _mm512_xor_si512(a[19], d[4]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(a[19], 8), _mm512_srli_epi64(a[19], 64 - 8));
-		a[20] = _mm512_xor_si512(a[20], d[0]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(a[20], 18), _mm512_srli_epi64(a[20], 64 - 18));
-		e[10] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		e[11] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		e[12] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		e[13] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		e[14] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		a[4] = _mm512_xor_si512(a[4], d[4]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(a[4], 27), _mm512_srli_epi64(a[4], 64 - 27));
-		a[5] = _mm512_xor_si512(a[5], d[0]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(a[5], 36), _mm512_srli_epi64(a[5], 64 - 36));
-		a[11] = _mm512_xor_si512(a[11], d[1]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(a[11], 10), _mm512_srli_epi64(a[11], 64 - 10));
-		a[17] = _mm512_xor_si512(a[17], d[2]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(a[17], 15), _mm512_srli_epi64(a[17], 64 - 15));
-		a[23] = _mm512_xor_si512(a[23], d[3]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(a[23], 56), _mm512_srli_epi64(a[23], 64 - 56));
-		e[15] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		e[16] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		e[17] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		e[18] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		e[19] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		a[2] = _mm512_xor_si512(a[2], d[2]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(a[2], 62), _mm512_srli_epi64(a[2], 64 - 62));
-		a[8] = _mm512_xor_si512(a[8], d[3]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(a[8], 55), _mm512_srli_epi64(a[8], 64 - 55));
-		a[14] = _mm512_xor_si512(a[14], d[4]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(a[14], 39), _mm512_srli_epi64(a[14], 64 - 39));
-		a[15] = _mm512_xor_si512(a[15], d[0]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(a[15], 41), _mm512_srli_epi64(a[15], 64 - 41));
-		a[21] = _mm512_xor_si512(a[21], d[1]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(a[21], 2), _mm512_srli_epi64(a[21], 64 - 2));
-		e[20] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		e[21] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		e[22] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		e[23] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		e[24] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-
-		/* round n + 1 */
-		c[0] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(e[0], e[5]), _mm512_xor_si512(e[10], e[15])), e[20]);
-		c[1] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(e[1], e[6]), _mm512_xor_si512(e[11], e[16])), e[21]);
-		c[2] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(e[2], e[7]), _mm512_xor_si512(e[12], e[17])), e[22]);
-		c[3] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(e[3], e[8]), _mm512_xor_si512(e[13], e[18])), e[23]);
-		c[4] = _mm512_xor_si512(_mm512_xor_si512(_mm512_xor_si512(e[4], e[9]), _mm512_xor_si512(e[14], e[19])), e[24]);
-		d[0] = _mm512_xor_si512(c[4], _mm512_or_si512(_mm512_slli_epi64(c[1], 1), _mm512_srli_epi64(c[1], 64 - 1)));
-		d[1] = _mm512_xor_si512(c[0], _mm512_or_si512(_mm512_slli_epi64(c[2], 1), _mm512_srli_epi64(c[2], 64 - 1)));
-		d[2] = _mm512_xor_si512(c[1], _mm512_or_si512(_mm512_slli_epi64(c[3], 1), _mm512_srli_epi64(c[3], 64 - 1)));
-		d[3] = _mm512_xor_si512(c[2], _mm512_or_si512(_mm512_slli_epi64(c[4], 1), _mm512_srli_epi64(c[4], 64 - 1)));
-		d[4] = _mm512_xor_si512(c[3], _mm512_or_si512(_mm512_slli_epi64(c[0], 1), _mm512_srli_epi64(c[0], 64 - 1)));
-		e[0] = _mm512_xor_si512(e[0], d[0]);
-		c[0] = e[0];
-		e[6] = _mm512_xor_si512(e[6], d[1]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(e[6], 44), _mm512_srli_epi64(e[6], 64 - 44));
-		e[12] = _mm512_xor_si512(e[12], d[2]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(e[12], 43), _mm512_srli_epi64(e[12], 64 - 43));
-		e[18] = _mm512_xor_si512(e[18], d[3]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(e[18], 21), _mm512_srli_epi64(e[18], 64 - 21));
-		e[24] = _mm512_xor_si512(e[24], d[4]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(e[24], 14), _mm512_srli_epi64(e[24], 64 - 14));
-		a[0] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		a[0] = _mm512_xor_si512(a[0], _mm512_set1_epi64(KECCAK_ROUND_CONSTANTS[i + 1]));
-		a[1] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		a[2] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		a[3] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		a[4] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		e[3] = _mm512_xor_si512(e[3], d[3]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(e[3], 28), _mm512_srli_epi64(e[3], 64 - 28));
-		e[9] = _mm512_xor_si512(e[9], d[4]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(e[9], 20), _mm512_srli_epi64(e[9], 64 - 20));
-		e[10] = _mm512_xor_si512(e[10], d[0]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(e[10], 3), _mm512_srli_epi64(e[10], 64 - 3));
-		e[16] = _mm512_xor_si512(e[16], d[1]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(e[16], 45), _mm512_srli_epi64(e[16], 64 - 45));
-		e[22] = _mm512_xor_si512(e[22], d[2]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(e[22], 61), _mm512_srli_epi64(e[22], 64 - 61));
-		a[5] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		a[6] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		a[7] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		a[8] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		a[9] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		e[1] = _mm512_xor_si512(e[1], d[1]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(e[1], 1), _mm512_srli_epi64(e[1], 64 - 1));
-		e[7] = _mm512_xor_si512(e[7], d[2]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(e[7], 6), _mm512_srli_epi64(e[7], 64 - 6));
-		e[13] = _mm512_xor_si512(e[13], d[3]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(e[13], 25), _mm512_srli_epi64(e[13], 64 - 25));
-		e[19] = _mm512_xor_si512(e[19], d[4]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(e[19], 8), _mm512_srli_epi64(e[19], 64 - 8));
-		e[20] = _mm512_xor_si512(e[20], d[0]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(e[20], 18), _mm512_srli_epi64(e[20], 64 - 18));
-		a[10] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		a[11] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		a[12] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		a[13] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		a[14] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		e[4] = _mm512_xor_si512(e[4], d[4]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(e[4], 27), _mm512_srli_epi64(e[4], 64 - 27));
-		e[5] = _mm512_xor_si512(e[5], d[0]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(e[5], 36), _mm512_srli_epi64(e[5], 64 - 36));
-		e[11] = _mm512_xor_si512(e[11], d[1]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(e[11], 10), _mm512_srli_epi64(e[11], 64 - 10));
-		e[17] = _mm512_xor_si512(e[17], d[2]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(e[17], 15), _mm512_srli_epi64(e[17], 64 - 15));
-		e[23] = _mm512_xor_si512(e[23], d[3]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(e[23], 56), _mm512_srli_epi64(e[23], 64 - 56));
-		a[15] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		a[16] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		a[17] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		a[18] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		a[19] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-		e[2] = _mm512_xor_si512(e[2], d[2]);
-		c[0] = _mm512_or_si512(_mm512_slli_epi64(e[2], 62), _mm512_srli_epi64(e[2], 64 - 62));
-		e[8] = _mm512_xor_si512(e[8], d[3]);
-		c[1] = _mm512_or_si512(_mm512_slli_epi64(e[8], 55), _mm512_srli_epi64(e[8], 64 - 55));
-		e[14] = _mm512_xor_si512(e[14], d[4]);
-		c[2] = _mm512_or_si512(_mm512_slli_epi64(e[14], 39), _mm512_srli_epi64(e[14], 64 - 39));
-		e[15] = _mm512_xor_si512(e[15], d[0]);
-		c[3] = _mm512_or_si512(_mm512_slli_epi64(e[15], 41), _mm512_srli_epi64(e[15], 64 - 41));
-		e[21] = _mm512_xor_si512(e[21], d[1]);
-		c[4] = _mm512_or_si512(_mm512_slli_epi64(e[21], 2), _mm512_srli_epi64(e[21], 64 - 2));
-		a[20] = _mm512_xor_si512(c[0], _mm512_and_si512(_mm512_xor_epi64(c[1], _mm512_set1_epi64(-1)), c[2]));
-		a[21] = _mm512_xor_si512(c[1], _mm512_and_si512(_mm512_xor_epi64(c[2], _mm512_set1_epi64(-1)), c[3]));
-		a[22] = _mm512_xor_si512(c[2], _mm512_and_si512(_mm512_xor_epi64(c[3], _mm512_set1_epi64(-1)), c[4]));
-		a[23] = _mm512_xor_si512(c[3], _mm512_and_si512(_mm512_xor_epi64(c[4], _mm512_set1_epi64(-1)), c[0]));
-		a[24] = _mm512_xor_si512(c[4], _mm512_and_si512(_mm512_xor_epi64(c[0], _mm512_set1_epi64(-1)), c[1]));
-	}
-
-	for (i = 0; i < HKDS_KECCAK_STATE_SIZE; ++i)
-	{
-		state[i] = a[i];
-	}
-}
-
-#	endif
 #endif
 
-#if defined(SYSTEM_HAS_AVX2)
-#	if defined(HKDS_KECCAK_UNROLLED_PERMUTATION)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
-void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
+static void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
 {
-	assert(rounds % 2 == 0);
+	HKDS_ASSERT(rounds % 2U == 0U);
 
 	__m256i a0;
 	__m256i a1;
@@ -656,33 +451,33 @@ void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t r
 
 	size_t i;
 
-	a0 = state[0];
-	a1 = state[1];
-	a2 = state[2];
-	a3 = state[3];
-	a4 = state[4];
-	a5 = state[5];
-	a6 = state[6];
-	a7 = state[7];
-	a8 = state[8];
-	a9 = state[9];
-	a10 = state[10];
-	a11 = state[11];
-	a12 = state[12];
-	a13 = state[13];
-	a14 = state[14];
-	a15 = state[15];
-	a16 = state[16];
-	a17 = state[17];
-	a18 = state[18];
-	a19 = state[19];
-	a20 = state[20];
-	a21 = state[21];
-	a22 = state[22];
-	a23 = state[23];
-	a24 = state[24];
+	a0 = state[0U];
+	a1 = state[1U];
+	a2 = state[2U];
+	a3 = state[3U];
+	a4 = state[4U];
+	a5 = state[5U];
+	a6 = state[6U];
+	a7 = state[7U];
+	a8 = state[8U];
+	a9 = state[9U];
+	a10 = state[10U];
+	a11 = state[11U];
+	a12 = state[12U];
+	a13 = state[13U];
+	a14 = state[14U];
+	a15 = state[15U];
+	a16 = state[16U];
+	a17 = state[17U];
+	a18 = state[18U];
+	a19 = state[19U];
+	a20 = state[20U];
+	a21 = state[21U];
+	a22 = state[22U];
+	a23 = state[23U];
+	a24 = state[24U];
 
-	for (i = 0; i < rounds; i += 2)
+	for (i = 0U; i < rounds; i += 2U)
 	{
 		/* round n */
 		c0 = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a0, a5), _mm256_xor_si256(a10, a15)), a20);
@@ -793,7 +588,7 @@ void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t r
 		e24 = _mm256_xor_si256(e24, d4);
 		c4 = _mm256_or_si256(_mm256_slli_epi64(e24, 14), _mm256_srli_epi64(e24, 64 - 14));
 		a0 = _mm256_xor_si256(c0, _mm256_and_si256(_mm256_xor_si256(c1, _mm256_set1_epi64x(-1)), c2));
-		a0 = _mm256_xor_si256(a0, _mm256_set1_epi64x(KECCAK_ROUND_CONSTANTS[i + 1]));
+		a0 = _mm256_xor_si256(a0, _mm256_set1_epi64x(KECCAK_ROUND_CONSTANTS[i + 1U]));
 		a1 = _mm256_xor_si256(c1, _mm256_and_si256(_mm256_xor_si256(c2, _mm256_set1_epi64x(-1)), c3));
 		a2 = _mm256_xor_si256(c2, _mm256_and_si256(_mm256_xor_si256(c3, _mm256_set1_epi64x(-1)), c4));
 		a3 = _mm256_xor_si256(c3, _mm256_and_si256(_mm256_xor_si256(c4, _mm256_set1_epi64x(-1)), c0));
@@ -860,255 +655,52 @@ void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t r
 		a24 = _mm256_xor_si256(c4, _mm256_and_si256(_mm256_xor_si256(c0, _mm256_set1_epi64x(-1)), c1));
 	}
 
-	state[0] = a0;
-	state[1] = a1;
-	state[2] = a2;
-	state[3] = a3;
-	state[4] = a4;
-	state[5] = a5;
-	state[6] = a6;
-	state[7] = a7;
-	state[8] = a8;
-	state[9] = a9;
-	state[10] = a10;
-	state[11] = a11;
-	state[12] = a12;
-	state[13] = a13;
-	state[14] = a14;
-	state[15] = a15;
-	state[16] = a16;
-	state[17] = a17;
-	state[18] = a18;
-	state[19] = a19;
-	state[20] = a20;
-	state[21] = a21;
-	state[22] = a22;
-	state[23] = a23;
-	state[24] = a24;
+	state[0U] = a0;
+	state[1U] = a1;
+	state[2U] = a2;
+	state[3U] = a3;
+	state[4U] = a4;
+	state[5U] = a5;
+	state[6U] = a6;
+	state[7U] = a7;
+	state[8U] = a8;
+	state[9U] = a9;
+	state[10U] = a10;
+	state[11U] = a11;
+	state[12U] = a12;
+	state[13U] = a13;
+	state[14U] = a14;
+	state[15U] = a15;
+	state[16U] = a16;
+	state[17U] = a17;
+	state[18U] = a18;
+	state[19U] = a19;
+	state[20U] = a20;
+	state[21U] = a21;
+	state[22U] = a22;
+	state[23U] = a23;
+	state[24U] = a24;
 }
 
-#	else
-
-void hkds_keccak_permute_p4x1600(__m256i state[HKDS_KECCAK_STATE_SIZE], size_t rounds)
-{
-	assert(rounds % 2 == 0);
-
-	__m256i a[25] = { 0 };
-	__m256i c[5] = { 0 };
-	__m256i d[5] = { 0 };
-	__m256i e[25] = { 0 };
-	size_t i;
-
-	for (i = 0; i < HKDS_KECCAK_STATE_SIZE; ++i)
-	{
-		a[i] = state[i];
-	}
-
-	for (i = 0; i < rounds; i += 2)
-	{
-		/* round n */
-		c[0] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a[0], a[5]), _mm256_xor_si256(a[10], a[15])), a[20]);
-		c[1] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a[1], a[6]), _mm256_xor_si256(a[11], a[16])), a[21]);
-		c[2] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a[2], a[7]), _mm256_xor_si256(a[12], a[17])), a[22]);
-		c[3] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a[3], a[8]), _mm256_xor_si256(a[13], a[18])), a[23]);
-		c[4] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(a[4], a[9]), _mm256_xor_si256(a[14], a[19])), a[24]);
-		d[0] = _mm256_xor_si256(c[4], _mm256_or_si256(_mm256_slli_epi64(c[1], 1), _mm256_srli_epi64(c[1], 64 - 1)));
-		d[1] = _mm256_xor_si256(c[0], _mm256_or_si256(_mm256_slli_epi64(c[2], 1), _mm256_srli_epi64(c[2], 64 - 1)));
-		d[2] = _mm256_xor_si256(c[1], _mm256_or_si256(_mm256_slli_epi64(c[3], 1), _mm256_srli_epi64(c[3], 64 - 1)));
-		d[3] = _mm256_xor_si256(c[2], _mm256_or_si256(_mm256_slli_epi64(c[4], 1), _mm256_srli_epi64(c[4], 64 - 1)));
-		d[4] = _mm256_xor_si256(c[3], _mm256_or_si256(_mm256_slli_epi64(c[0], 1), _mm256_srli_epi64(c[0], 64 - 1)));
-		a[0] = _mm256_xor_si256(a[0], d[0]);
-		c[0] = a[0];
-		a[6] = _mm256_xor_si256(a[6], d[1]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(a[6], 44), _mm256_srli_epi64(a[6], 64 - 44));
-		a[12] = _mm256_xor_si256(a[12], d[2]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(a[12], 43), _mm256_srli_epi64(a[12], 64 - 43));
-		a[18] = _mm256_xor_si256(a[18], d[3]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(a[18], 21), _mm256_srli_epi64(a[18], 64 - 21));
-		a[24] = _mm256_xor_si256(a[24], d[4]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(a[24], 14), _mm256_srli_epi64(a[24], 64 - 14));
-		e[0] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		e[0] = _mm256_xor_si256(e[0], _mm256_set1_epi64x(KECCAK_ROUND_CONSTANTS[i]));
-		e[1] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		e[2] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		e[3] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		e[4] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		a[3] = _mm256_xor_si256(a[3], d[3]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(a[3], 28), _mm256_srli_epi64(a[3], 64 - 28));
-		a[9] = _mm256_xor_si256(a[9], d[4]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(a[9], 20), _mm256_srli_epi64(a[9], 64 - 20));
-		a[10] = _mm256_xor_si256(a[10], d[0]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(a[10], 3), _mm256_srli_epi64(a[10], 64 - 3));
-		a[16] = _mm256_xor_si256(a[16], d[1]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(a[16], 45), _mm256_srli_epi64(a[16], 64 - 45));
-		a[22] = _mm256_xor_si256(a[22], d[2]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(a[22], 61), _mm256_srli_epi64(a[22], 64 - 61));
-		e[5] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		e[6] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		e[7] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		e[8] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		e[9] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		a[1] = _mm256_xor_si256(a[1], d[1]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(a[1], 1), _mm256_srli_epi64(a[1], 64 - 1));
-		a[7] = _mm256_xor_si256(a[7], d[2]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(a[7], 6), _mm256_srli_epi64(a[7], 64 - 6));
-		a[13] = _mm256_xor_si256(a[13], d[3]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(a[13], 25), _mm256_srli_epi64(a[13], 64 - 25));
-		a[19] = _mm256_xor_si256(a[19], d[4]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(a[19], 8), _mm256_srli_epi64(a[19], 64 - 8));
-		a[20] = _mm256_xor_si256(a[20], d[0]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(a[20], 18), _mm256_srli_epi64(a[20], 64 - 18));
-		e[10] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		e[11] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		e[12] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		e[13] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		e[14] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		a[4] = _mm256_xor_si256(a[4], d[4]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(a[4], 27), _mm256_srli_epi64(a[4], 64 - 27));
-		a[5] = _mm256_xor_si256(a[5], d[0]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(a[5], 36), _mm256_srli_epi64(a[5], 64 - 36));
-		a[11] = _mm256_xor_si256(a[11], d[1]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(a[11], 10), _mm256_srli_epi64(a[11], 64 - 10));
-		a[17] = _mm256_xor_si256(a[17], d[2]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(a[17], 15), _mm256_srli_epi64(a[17], 64 - 15));
-		a[23] = _mm256_xor_si256(a[23], d[3]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(a[23], 56), _mm256_srli_epi64(a[23], 64 - 56));
-		e[15] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		e[16] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		e[17] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		e[18] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		e[19] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		a[2] = _mm256_xor_si256(a[2], d[2]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(a[2], 62), _mm256_srli_epi64(a[2], 64 - 62));
-		a[8] = _mm256_xor_si256(a[8], d[3]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(a[8], 55), _mm256_srli_epi64(a[8], 64 - 55));
-		a[14] = _mm256_xor_si256(a[14], d[4]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(a[14], 39), _mm256_srli_epi64(a[14], 64 - 39));
-		a[15] = _mm256_xor_si256(a[15], d[0]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(a[15], 41), _mm256_srli_epi64(a[15], 64 - 41));
-		a[21] = _mm256_xor_si256(a[21], d[1]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(a[21], 2), _mm256_srli_epi64(a[21], 64 - 2));
-		e[20] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		e[21] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		e[22] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		e[23] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		e[24] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-
-		/* round n + 1 */
-		c[0] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(e[0], e[5]), _mm256_xor_si256(e[10], e[15])), e[20]);
-		c[1] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(e[1], e[6]), _mm256_xor_si256(e[11], e[16])), e[21]);
-		c[2] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(e[2], e[7]), _mm256_xor_si256(e[12], e[17])), e[22]);
-		c[3] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(e[3], e[8]), _mm256_xor_si256(e[13], e[18])), e[23]);
-		c[4] = _mm256_xor_si256(_mm256_xor_si256(_mm256_xor_si256(e[4], e[9]), _mm256_xor_si256(e[14], e[19])), e[24]);
-		d[0] = _mm256_xor_si256(c[4], _mm256_or_si256(_mm256_slli_epi64(c[1], 1), _mm256_srli_epi64(c[1], 64 - 1)));
-		d[1] = _mm256_xor_si256(c[0], _mm256_or_si256(_mm256_slli_epi64(c[2], 1), _mm256_srli_epi64(c[2], 64 - 1)));
-		d[2] = _mm256_xor_si256(c[1], _mm256_or_si256(_mm256_slli_epi64(c[3], 1), _mm256_srli_epi64(c[3], 64 - 1)));
-		d[3] = _mm256_xor_si256(c[2], _mm256_or_si256(_mm256_slli_epi64(c[4], 1), _mm256_srli_epi64(c[4], 64 - 1)));
-		d[4] = _mm256_xor_si256(c[3], _mm256_or_si256(_mm256_slli_epi64(c[0], 1), _mm256_srli_epi64(c[0], 64 - 1)));
-		e[0] = _mm256_xor_si256(e[0], d[0]);
-		c[0] = e[0];
-		e[6] = _mm256_xor_si256(e[6], d[1]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(e[6], 44), _mm256_srli_epi64(e[6], 64 - 44));
-		e[12] = _mm256_xor_si256(e[12], d[2]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(e[12], 43), _mm256_srli_epi64(e[12], 64 - 43));
-		e[18] = _mm256_xor_si256(e[18], d[3]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(e[18], 21), _mm256_srli_epi64(e[18], 64 - 21));
-		e[24] = _mm256_xor_si256(e[24], d[4]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(e[24], 14), _mm256_srli_epi64(e[24], 64 - 14));
-		a[0] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		a[0] = _mm256_xor_si256(a[0], _mm256_set1_epi64x(KECCAK_ROUND_CONSTANTS[i + 1]));
-		a[1] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		a[2] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		a[3] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		a[4] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		e[3] = _mm256_xor_si256(e[3], d[3]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(e[3], 28), _mm256_srli_epi64(e[3], 64 - 28));
-		e[9] = _mm256_xor_si256(e[9], d[4]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(e[9], 20), _mm256_srli_epi64(e[9], 64 - 20));
-		e[10] = _mm256_xor_si256(e[10], d[0]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(e[10], 3), _mm256_srli_epi64(e[10], 64 - 3));
-		e[16] = _mm256_xor_si256(e[16], d[1]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(e[16], 45), _mm256_srli_epi64(e[16], 64 - 45));
-		e[22] = _mm256_xor_si256(e[22], d[2]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(e[22], 61), _mm256_srli_epi64(e[22], 64 - 61));
-		a[5] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		a[6] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		a[7] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		a[8] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		a[9] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		e[1] = _mm256_xor_si256(e[1], d[1]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(e[1], 1), _mm256_srli_epi64(e[1], 64 - 1));
-		e[7] = _mm256_xor_si256(e[7], d[2]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(e[7], 6), _mm256_srli_epi64(e[7], 64 - 6));
-		e[13] = _mm256_xor_si256(e[13], d[3]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(e[13], 25), _mm256_srli_epi64(e[13], 64 - 25));
-		e[19] = _mm256_xor_si256(e[19], d[4]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(e[19], 8), _mm256_srli_epi64(e[19], 64 - 8));
-		e[20] = _mm256_xor_si256(e[20], d[0]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(e[20], 18), _mm256_srli_epi64(e[20], 64 - 18));
-		a[10] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		a[11] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		a[12] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		a[13] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		a[14] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		e[4] = _mm256_xor_si256(e[4], d[4]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(e[4], 27), _mm256_srli_epi64(e[4], 64 - 27));
-		e[5] = _mm256_xor_si256(e[5], d[0]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(e[5], 36), _mm256_srli_epi64(e[5], 64 - 36));
-		e[11] = _mm256_xor_si256(e[11], d[1]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(e[11], 10), _mm256_srli_epi64(e[11], 64 - 10));
-		e[17] = _mm256_xor_si256(e[17], d[2]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(e[17], 15), _mm256_srli_epi64(e[17], 64 - 15));
-		e[23] = _mm256_xor_si256(e[23], d[3]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(e[23], 56), _mm256_srli_epi64(e[23], 64 - 56));
-		a[15] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		a[16] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		a[17] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		a[18] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		a[19] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-		e[2] = _mm256_xor_si256(e[2], d[2]);
-		c[0] = _mm256_or_si256(_mm256_slli_epi64(e[2], 62), _mm256_srli_epi64(e[2], 64 - 62));
-		e[8] = _mm256_xor_si256(e[8], d[3]);
-		c[1] = _mm256_or_si256(_mm256_slli_epi64(e[8], 55), _mm256_srli_epi64(e[8], 64 - 55));
-		e[14] = _mm256_xor_si256(e[14], d[4]);
-		c[2] = _mm256_or_si256(_mm256_slli_epi64(e[14], 39), _mm256_srli_epi64(e[14], 64 - 39));
-		e[15] = _mm256_xor_si256(e[15], d[0]);
-		c[3] = _mm256_or_si256(_mm256_slli_epi64(e[15], 41), _mm256_srli_epi64(e[15], 64 - 41));
-		e[21] = _mm256_xor_si256(e[21], d[1]);
-		c[4] = _mm256_or_si256(_mm256_slli_epi64(e[21], 2), _mm256_srli_epi64(e[21], 64 - 2));
-		a[20] = _mm256_xor_si256(c[0], _mm256_and_si256(_mm256_xor_si256(c[1], _mm256_set1_epi64x(-1)), c[2]));
-		a[21] = _mm256_xor_si256(c[1], _mm256_and_si256(_mm256_xor_si256(c[2], _mm256_set1_epi64x(-1)), c[3]));
-		a[22] = _mm256_xor_si256(c[2], _mm256_and_si256(_mm256_xor_si256(c[3], _mm256_set1_epi64x(-1)), c[4]));
-		a[23] = _mm256_xor_si256(c[3], _mm256_and_si256(_mm256_xor_si256(c[4], _mm256_set1_epi64x(-1)), c[0]));
-		a[24] = _mm256_xor_si256(c[4], _mm256_and_si256(_mm256_xor_si256(c[0], _mm256_set1_epi64x(-1)), c[1]));
-	}
-
-	for (i = 0; i < HKDS_KECCAK_STATE_SIZE; ++i)
-	{
-		state[i] = a[i];
-	}
-}
-
-#	endif
 #endif
 
 /* Keccak */
 
 void hkds_keccak_absorb(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* message, size_t msglen, uint8_t domain, size_t rounds)
 {
-	assert(ctx != NULL);
-	assert(message != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(message != NULL);
+
+	HKDS_SIMD_ALIGN uint8_t msg[HKDS_KECCAK_STATE_BYTE_SIZE];
 
 	if (ctx != NULL && message != NULL)
 	{
-		uint8_t msg[HKDS_KECCAK_STATE_BYTE_SIZE];
-
 		while (msglen >= (size_t)rate)
 		{
-#if defined(SYSTEM_IS_LITTLE_ENDIAN)
+#if defined(HKDS_SYSTEM_IS_LITTLE_ENDIAN)
 			utils_memory_xor((uint8_t*)ctx->state, message, rate);
 #else
-			for (size_t i = 0; i < rate / sizeof(uint64_t); ++i)
+			for (size_t i = 0U; i < rate / sizeof(uint64_t); ++i)
 			{
 				ctx->state[i] ^= utils_integer_le8to64((message + (sizeof(uint64_t) * i)));
 			}
@@ -1120,107 +712,57 @@ void hkds_keccak_absorb(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uin
 
 		utils_memory_copy(msg, message, msglen);
 		msg[msglen] = domain;
-		utils_memory_clear((msg + msglen + 1), rate - msglen + 1);
-		msg[rate - 1] |= 128U;
+		utils_memory_clear((msg + msglen + 1U), rate - msglen + 1U);
+		msg[rate - 1U] |= 128U;
 
-#if defined(SYSTEM_IS_LITTLE_ENDIAN)
+#if defined(HKDS_SYSTEM_IS_LITTLE_ENDIAN)
 		utils_memory_xor((uint8_t*)ctx->state, msg, rate);
 #else
-		for (size_t i = 0; i < rate / 8; ++i)
+		for (size_t i = 0U; i < rate / 8; ++i)
 		{
-			ctx->state[i] ^= utils_integer_le8to64((msg + (8 * i)));
+			ctx->state[i] ^= utils_integer_le8to64((msg + (8U * i)));
 		}
 #endif
 	}
 }
 
-void hkds_keccak_absorb_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* custom, size_t custlen, const uint8_t* name, size_t namelen, size_t rounds)
+static void hkds_keccak_absorb_key_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen, const uint8_t* name, size_t namelen, size_t rounds)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
-	uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
-	size_t i;
-	size_t oft;
-
-	oft = keccak_left_encode(pad, rate);
-	oft += keccak_left_encode((pad + oft), namelen * 8);
-
-	if (name != NULL)
-	{
-		for (i = 0; i < namelen; ++i)
-		{
-			if (oft == rate)
-			{
-				keccak_fast_absorb(ctx->state, pad, rate);
-				hkds_keccak_permute(ctx, rounds);
-				oft = 0;
-			}
-
-			pad[oft] = name[i];
-			++oft;
-		}
-	}
-
-	oft += keccak_left_encode((pad + oft), custlen * 8);
-
-	if (custom != NULL)
-	{
-		for (i = 0; i < custlen; ++i)
-		{
-			if (oft == rate)
-			{
-				keccak_fast_absorb(ctx->state, pad, rate);
-				hkds_keccak_permute(ctx, rounds);
-				oft = 0;
-			}
-
-			pad[oft] = custom[i];
-			++oft;
-		}
-	}
-
-	utils_memory_clear((pad + oft), rate - oft);
-	keccak_fast_absorb(ctx->state, pad, rate);
-	hkds_keccak_permute(ctx, rounds);
-}
-
-void hkds_keccak_absorb_key_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen, const uint8_t* name, size_t namelen, size_t rounds)
-{
-	assert(ctx != NULL);
-
-	uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t oft;
 	size_t i;
 
 	utils_memory_clear((uint8_t*)ctx->state, sizeof(ctx->state));
 	utils_memory_clear(ctx->buffer, sizeof(ctx->buffer));
-	ctx->position = 0;
+	ctx->position = 0U;
 
 	/* stage 1: name + custom */
 
 	oft = keccak_left_encode(pad, rate);
-	oft += keccak_left_encode((pad + oft), namelen * 8);
+	oft += keccak_left_encode((pad + oft), namelen * 8U);
 
 	if (name != NULL)
 	{
-		for (i = 0; i < namelen; ++i)
+		for (i = 0U; i < namelen; ++i)
 		{
 			pad[oft + i] = name[i];
 		}
 	}
 
 	oft += namelen;
-	oft += keccak_left_encode((pad + oft), custlen * 8);
+	oft += keccak_left_encode((pad + oft), custlen * 8U);
 
 	if (custom != NULL)
 	{
-		for (i = 0; i < custlen; ++i)
+		for (i = 0U; i < custlen; ++i)
 		{
 			if (oft == rate)
 			{
 				keccak_fast_absorb(ctx->state, pad, rate);
 				hkds_keccak_permute(ctx, rounds);
-				oft = 0;
+				oft = 0U;
 			}
 
 			pad[oft] = custom[i];
@@ -1238,17 +780,17 @@ void hkds_keccak_absorb_key_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate
 	utils_memory_clear(pad, rate);
 
 	oft = keccak_left_encode(pad, rate);
-	oft += keccak_left_encode((pad + oft), keylen * 8);
+	oft += keccak_left_encode((pad + oft), keylen * 8U);
 
 	if (key != NULL)
 	{
-		for (i = 0; i < keylen; ++i)
+		for (i = 0U; i < keylen; ++i)
 		{
 			if (oft == rate)
 			{
 				keccak_fast_absorb(ctx->state, pad, rate);
 				hkds_keccak_permute(ctx, rounds);
-				oft = 0;
+				oft = 0U;
 			}
 
 			pad[oft] = key[i];
@@ -1263,241 +805,66 @@ void hkds_keccak_absorb_key_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate
 
 void hkds_keccak_dispose(hkds_keccak_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
 		utils_memory_clear((uint8_t*)ctx->state, sizeof(ctx->state));
 		utils_memory_clear(ctx->buffer, sizeof(ctx->buffer));
-		ctx->position = 0;
+		ctx->position = 0U;
 	}
 }
 
 void hkds_keccak_finalize(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t* output, size_t outlen, uint8_t domain, size_t rounds)
 {
-	assert(ctx != NULL);
-	assert(output != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(output != NULL);
 
-	uint8_t buf[sizeof(size_t) + 1] = { 0 };
-	uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	HKDS_SIMD_ALIGN uint8_t buf[sizeof(size_t) + 1U] = { 0U };
+	HKDS_SIMD_ALIGN uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t bitlen;
 
-	utils_memory_copy(pad, ctx->buffer, ctx->position);
-	bitlen = keccak_right_encode(buf, outlen * 8);
-
-	if (ctx->position + bitlen >= (size_t)rate)
+	if (ctx != NULL && output != NULL)
 	{
-		keccak_fast_absorb(ctx->state, pad, ctx->position);
-		hkds_keccak_permute(ctx, rounds);
-		ctx->position = 0;
-	}
+		utils_memory_copy(pad, ctx->buffer, ctx->position);
+		bitlen = keccak_right_encode(buf, outlen * 8U);
 
-	utils_memory_copy((pad + ctx->position), buf, bitlen);
-
-	pad[ctx->position + bitlen] = domain;
-	pad[rate - 1] |= 128U;
-	keccak_fast_absorb(ctx->state, pad, rate);
-
-	while (outlen >= (size_t)rate)
-	{
-		hkds_keccak_squeezeblocks(ctx, pad, 1, rate, rounds);
-		utils_memory_copy(output, pad, rate);
-		output += rate;
-		outlen -= rate;
-	}
-
-	if (outlen > 0)
-	{
-		hkds_keccak_squeezeblocks(ctx, pad, 1, rate, rounds);
-		utils_memory_copy(output, pad, outlen);
-	}
-
-	utils_memory_clear(ctx->buffer, sizeof(ctx->buffer));
-	ctx->position = 0;
-}
-
-void hkds_keccak_incremental_absorb(hkds_keccak_state* ctx, uint32_t rate, const uint8_t* message, size_t msglen)
-{
-	assert(ctx != NULL);
-	assert(message != NULL);
-
-	uint8_t t[8] = { 0 };
-	size_t i;
-
-	if ((ctx->position & 7) > 0)
-	{
-		i = ctx->position & 7;
-
-		while (i < 8 && msglen > 0)
+		if (ctx->position + bitlen >= (size_t)rate)
 		{
-			t[i] = *message;
-			message++;
-			i++;
-			msglen--;
-			ctx->position++;
+			keccak_fast_absorb(ctx->state, pad, ctx->position);
+			hkds_keccak_permute(ctx, rounds);
+			ctx->position = 0U;
 		}
 
-		ctx->state[(ctx->position - i) / 8] ^= utils_integer_le8to64(t);
-	}
+		utils_memory_copy((pad + ctx->position), buf, bitlen);
 
-	if (ctx->position && msglen >= rate - ctx->position)
-	{
-		for (i = 0; i < (rate - ctx->position) / 8; ++i)
+		pad[ctx->position + bitlen] = domain;
+		pad[rate - 1U] |= 128U;
+		keccak_fast_absorb(ctx->state, pad, rate);
+
+		while (outlen >= (size_t)rate)
 		{
-			ctx->state[(ctx->position / 8) + i] ^= utils_integer_le8to64(message + (8 * i));
+			hkds_keccak_squeezeblocks(ctx, pad, 1U, rate, rounds);
+			utils_memory_copy(output, pad, rate);
+			output += rate;
+			outlen -= rate;
 		}
 
-		message += rate - ctx->position;
-		msglen -= rate - ctx->position;
-		ctx->position = 0;
-		hkds_keccak_permute_p1600c(ctx->state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-	}
-
-	while (msglen >= rate)
-	{
-		for (i = 0; i < rate / 8; i++)
+		if (outlen > 0U)
 		{
-			ctx->state[i] ^= utils_integer_le8to64(message + (8 * i));
+			hkds_keccak_squeezeblocks(ctx, pad, 1U, rate, rounds);
+			utils_memory_copy(output, pad, outlen);
 		}
 
-		message += rate;
-		msglen -= rate;
-		hkds_keccak_permute_p1600c(ctx->state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-	}
-
-	for (i = 0; i < msglen / 8; ++i)
-	{
-		ctx->state[(ctx->position / 8) + i] ^= utils_integer_le8to64(message + (8 * i));
-	}
-
-	message += 8 * i;
-	msglen -= 8 * i;
-	ctx->position += 8 * i;
-
-	if (msglen > 0)
-	{
-		for (i = 0; i < 8; ++i)
-		{
-			t[i] = 0;
-		}
-
-		for (i = 0; i < msglen; ++i)
-		{
-			t[i] = message[i];
-		}
-
-		ctx->state[ctx->position / 8] ^= utils_integer_le8to64(t);
-		ctx->position += msglen;
+		utils_memory_clear(ctx->buffer, sizeof(ctx->buffer));
+		ctx->position = 0U;
 	}
 }
 
-void hkds_keccak_incremental_finalize(hkds_keccak_state* ctx, uint32_t rate, uint8_t domain)
+static void hkds_keccak_permute_p1600c(uint64_t* state, size_t rounds)
 {
-	assert(ctx != NULL);
-	
-	size_t i;
-	size_t j;
-
-	i = ctx->position >> 3;
-	j = ctx->position & 7;
-	ctx->state[i] ^= ((uint64_t)domain << (8 * j));
-	ctx->state[(rate / 8) - 1] ^= 1ULL << 63;
-	ctx->position = 0;
-}
-
-void hkds_keccak_incremental_squeeze(hkds_keccak_state* ctx, size_t rate, uint8_t* output, size_t outlen)
-{
-	assert(ctx != NULL);
-	assert(output != NULL);
-
-	size_t i;
-	uint8_t t[8];
-
-	if ((ctx->position & 7) > 0)
-	{
-		utils_integer_le64to8(t, ctx->state[ctx->position / 8]);
-		i = ctx->position & 7;
-
-		while (i < 8 && outlen > 0)
-		{
-			*output = t[i];
-			output++;
-			i++;
-			outlen--;
-			ctx->position++;
-		}
-	}
-
-	if (ctx->position && outlen >= rate - ctx->position)
-	{
-		for (i = 0; i < (rate - ctx->position) / 8; ++i)
-		{
-			utils_integer_le64to8(output + (8 * i), ctx->state[(ctx->position / 8) + i]);
-		}
-
-		output += rate - ctx->position;
-		outlen -= rate - ctx->position;
-		ctx->position = 0;
-	}
-
-	while (outlen >= rate)
-	{
-		hkds_keccak_permute_p1600c(ctx->state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-
-		for (i = 0; i < rate / 8; ++i)
-		{
-			utils_integer_le64to8(output + (8 * i), ctx->state[i]);
-		}
-
-		output += rate;
-		outlen -= rate;
-	}
-
-	if (outlen > 0)
-	{
-		if (ctx->position == 0)
-		{
-			hkds_keccak_permute_p1600c(ctx->state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-		}
-
-		for (i = 0; i < outlen / 8; ++i)
-		{
-			utils_integer_le64to8(output + (8 * i), ctx->state[(ctx->position / 8) + i]);
-		}
-
-		output += 8 * i;
-		outlen -= 8 * i;
-		ctx->position += 8 * i;
-
-		utils_integer_le64to8(t, ctx->state[ctx->position / 8]);
-
-		for (i = 0; i < outlen; ++i)
-		{
-			output[i] = t[i];
-		}
-
-		ctx->position += outlen;
-	}
-}
-
-void hkds_keccak_permute(hkds_keccak_state* ctx, size_t rounds)
-{
-	assert(ctx != NULL);
-
-	if (ctx != NULL)
-	{
-#if defined(HKDS_KECCAK_UNROLLED_PERMUTATION)
-		hkds_keccak_permute_p1600u(ctx->state)
-#else
-		hkds_keccak_permute_p1600c(ctx->state, rounds);
-#endif
-	}
-}
-
-void hkds_keccak_permute_p1600c(uint64_t* state, size_t rounds)
-{
-	assert(state != NULL);
-	assert(rounds % 2 == 0);
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(rounds % 2 == 0);
 
 	uint64_t Aba;
 	uint64_t Abe;
@@ -1561,33 +928,33 @@ void hkds_keccak_permute_p1600c(uint64_t* state, size_t rounds)
 	uint64_t Esu;
 
 	/* copyFromState(A, state) */
-	Aba = state[0];
-	Abe = state[1];
-	Abi = state[2];
-	Abo = state[3];
-	Abu = state[4];
-	Aga = state[5];
-	Age = state[6];
-	Agi = state[7];
-	Ago = state[8];
-	Agu = state[9];
-	Aka = state[10];
-	Ake = state[11];
-	Aki = state[12];
-	Ako = state[13];
-	Aku = state[14];
-	Ama = state[15];
-	Ame = state[16];
-	Ami = state[17];
-	Amo = state[18];
-	Amu = state[19];
-	Asa = state[20];
-	Ase = state[21];
-	Asi = state[22];
-	Aso = state[23];
-	Asu = state[24];
+	Aba = state[0U];
+	Abe = state[1U];
+	Abi = state[2U];
+	Abo = state[3U];
+	Abu = state[4U];
+	Aga = state[5U];
+	Age = state[6U];
+	Agi = state[7U];
+	Ago = state[8U];
+	Agu = state[9U];
+	Aka = state[10U];
+	Ake = state[11U];
+	Aki = state[12U];
+	Ako = state[13U];
+	Aku = state[14U];
+	Ama = state[15U];
+	Ame = state[16U];
+	Ami = state[17U];
+	Amo = state[18U];
+	Amu = state[19U];
+	Asa = state[20U];
+	Ase = state[21U];
+	Asi = state[22U];
+	Aso = state[23U];
+	Asu = state[24U];
 
-	for (size_t i = 0; i < rounds; i += 2)
+	for (size_t i = 0U; i < rounds; i += 2)
 	{
 		/* prepareTheta */
 		BCa = Aba ^ Aga ^ Aka ^ Ama ^ Asa;
@@ -1781,36 +1148,36 @@ void hkds_keccak_permute_p1600c(uint64_t* state, size_t rounds)
 	}
 
 	/* copy to state */
-	state[0] = Aba;
-	state[1] = Abe;
-	state[2] = Abi;
-	state[3] = Abo;
-	state[4] = Abu;
-	state[5] = Aga;
-	state[6] = Age;
-	state[7] = Agi;
-	state[8] = Ago;
-	state[9] = Agu;
-	state[10] = Aka;
-	state[11] = Ake;
-	state[12] = Aki;
-	state[13] = Ako;
-	state[14] = Aku;
-	state[15] = Ama;
-	state[16] = Ame;
-	state[17] = Ami;
-	state[18] = Amo;
-	state[19] = Amu;
-	state[20] = Asa;
-	state[21] = Ase;
-	state[22] = Asi;
-	state[23] = Aso;
-	state[24] = Asu;
+	state[0U] = Aba;
+	state[1U] = Abe;
+	state[2U] = Abi;
+	state[3U] = Abo;
+	state[4U] = Abu;
+	state[5U] = Aga;
+	state[6U] = Age;
+	state[7U] = Agi;
+	state[8U] = Ago;
+	state[9U] = Agu;
+	state[10U] = Aka;
+	state[11U] = Ake;
+	state[12U] = Aki;
+	state[13U] = Ako;
+	state[14U] = Aku;
+	state[15U] = Ama;
+	state[16U] = Ame;
+	state[17U] = Ami;
+	state[18U] = Amo;
+	state[19U] = Amu;
+	state[20U] = Asa;
+	state[21U] = Ase;
+	state[22U] = Asi;
+	state[23U] = Aso;
+	state[24U] = Asu;
 }
 
-void hkds_keccak_permute_p1600u(uint64_t* state)
+static void hkds_keccak_permute_p1600u(uint64_t* state)
 {
-	assert(state != NULL);
+	HKDS_ASSERT(state != NULL);
 
 	uint64_t Aba;
 	uint64_t Abe;
@@ -1873,31 +1240,31 @@ void hkds_keccak_permute_p1600u(uint64_t* state)
 	uint64_t Eso;
 	uint64_t Esu;
 
-	Aba = state[0];
-	Abe = state[1];
-	Abi = state[2];
-	Abo = state[3];
-	Abu = state[4];
-	Aga = state[5];
-	Age = state[6];
-	Agi = state[7];
-	Ago = state[8];
-	Agu = state[9];
-	Aka = state[10];
-	Ake = state[11];
-	Aki = state[12];
-	Ako = state[13];
-	Aku = state[14];
-	Ama = state[15];
-	Ame = state[16];
-	Ami = state[17];
-	Amo = state[18];
-	Amu = state[19];
-	Asa = state[20];
-	Ase = state[21];
-	Asi = state[22];
-	Aso = state[23];
-	Asu = state[24];
+	Aba = state[0U];
+	Abe = state[1U];
+	Abi = state[2U];
+	Abo = state[3U];
+	Abu = state[4U];
+	Aga = state[5U];
+	Age = state[6U];
+	Agi = state[7U];
+	Ago = state[8U];
+	Agu = state[9U];
+	Aka = state[10U];
+	Ake = state[11U];
+	Aki = state[12U];
+	Ako = state[13U];
+	Aku = state[14U];
+	Ama = state[15U];
+	Ame = state[16U];
+	Ami = state[17U];
+	Amo = state[18U];
+	Amu = state[19U];
+	Asa = state[20U];
+	Ase = state[21U];
+	Asi = state[22U];
+	Aso = state[23U];
+	Asu = state[24U];
 
 	/* round 1 */
 	Ca = Aba ^ Aga ^ Aka ^ Ama ^ Asa;
@@ -3988,37 +3355,51 @@ void hkds_keccak_permute_p1600u(uint64_t* state)
 	Aso = Co ^ ((~Cu) & Ca);
 	Asu = Cu ^ ((~Ca) & Ce);
 
-	state[0] = Aba;
-	state[1] = Abe;
-	state[2] = Abi;
-	state[3] = Abo;
-	state[4] = Abu;
-	state[5] = Aga;
-	state[6] = Age;
-	state[7] = Agi;
-	state[8] = Ago;
-	state[9] = Agu;
-	state[10] = Aka;
-	state[11] = Ake;
-	state[12] = Aki;
-	state[13] = Ako;
-	state[14] = Aku;
-	state[15] = Ama;
-	state[16] = Ame;
-	state[17] = Ami;
-	state[18] = Amo;
-	state[19] = Amu;
-	state[20] = Asa;
-	state[21] = Ase;
-	state[22] = Asi;
-	state[23] = Aso;
-	state[24] = Asu;
+	state[0U] = Aba;
+	state[1U] = Abe;
+	state[2U] = Abi;
+	state[3U] = Abo;
+	state[4U] = Abu;
+	state[5U] = Aga;
+	state[6U] = Age;
+	state[7U] = Agi;
+	state[8U] = Ago;
+	state[9U] = Agu;
+	state[10U] = Aka;
+	state[11U] = Ake;
+	state[12U] = Aki;
+	state[13U] = Ako;
+	state[14U] = Aku;
+	state[15U] = Ama;
+	state[16U] = Ame;
+	state[17U] = Ami;
+	state[18U] = Amo;
+	state[19U] = Amu;
+	state[20U] = Asa;
+	state[21U] = Ase;
+	state[22U] = Asi;
+	state[23U] = Aso;
+	state[24U] = Asu;
+}
+
+void hkds_keccak_permute(hkds_keccak_state* ctx, size_t rounds)
+{
+	HKDS_ASSERT(ctx != NULL);
+
+	if (ctx != NULL)
+	{
+#if defined(HKDS_KECCAK_UNROLLED_PERMUTATION)
+		hkds_keccak_permute_p1600u(ctx->state)
+#else
+		hkds_keccak_permute_p1600c(ctx->state, rounds);
+#endif
+	}
 }
 
 void hkds_keccak_squeezeblocks(hkds_keccak_state* ctx, uint8_t* output, size_t nblocks, hkds_keccak_rate rate, size_t rounds)
 {
-	assert(ctx != NULL);
-	assert(output != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(output != NULL);
 
 	if (ctx != NULL && output != NULL)
 	{
@@ -4026,12 +3407,12 @@ void hkds_keccak_squeezeblocks(hkds_keccak_state* ctx, uint8_t* output, size_t n
 		{
 			hkds_keccak_permute(ctx, rounds);
 
-#if defined(SYSTEM_IS_LITTLE_ENDIAN)
+#if defined(HKDS_SYSTEM_IS_LITTLE_ENDIAN)
 			utils_memory_copy(output, (uint8_t*)ctx->state, rate);
 #else
-			for (size_t i = 0; i < (rate >> 3); ++i)
+			for (size_t i = 0U; i < (rate >> 3); ++i)
 			{
-				utils_integer_le64to8((output + sizeof(uint64_t) * i), ctx->state[i]);
+				utils_integer_le64to8(output + (i * sizeof(uint64_t)), ctx->state[i]);
 			}
 #endif
 			output += rate;
@@ -4042,35 +3423,35 @@ void hkds_keccak_squeezeblocks(hkds_keccak_state* ctx, uint8_t* output, size_t n
 
 void hkds_keccak_initialize_state(hkds_keccak_state* ctx)
 {
-	assert(ctx != NULL);
+	HKDS_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
 		utils_memory_clear((uint8_t*)ctx->state, sizeof(ctx->state));
 		utils_memory_clear(ctx->buffer, sizeof(ctx->buffer));
-		ctx->position = 0;
+		ctx->position = 0U;
 	}
 }
 
 void hkds_keccak_update(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* message, size_t msglen, size_t rounds)
 {
-	assert(ctx != NULL);
-	assert(message != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(message != NULL);
 
-	if (ctx != NULL && message != NULL && msglen != 0)
+	if (ctx != NULL && message != NULL && msglen != 0U)
 	{
-		if (ctx->position != 0 && (ctx->position + msglen >= (size_t)rate))
+		if (ctx->position != 0U && (ctx->position + msglen >= (size_t)rate))
 		{
 			const size_t RMDLEN = rate - ctx->position;
 
-			if (RMDLEN != 0)
+			if (RMDLEN != 0U)
 			{
 				utils_memory_copy((ctx->buffer + ctx->position), message, RMDLEN);
 			}
 
 			keccak_fast_absorb(ctx->state, ctx->buffer, (size_t)rate);
 			hkds_keccak_permute(ctx, rounds);
-			ctx->position = 0;
+			ctx->position = 0U;
 			message += RMDLEN;
 			msglen -= RMDLEN;
 		}
@@ -4085,7 +3466,7 @@ void hkds_keccak_update(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uin
 		}
 
 		/* store unaligned bytes */
-		if (msglen != 0)
+		if (msglen != 0U)
 		{
 			utils_memory_copy((ctx->buffer + ctx->position), message, msglen);
 			ctx->position += msglen;
@@ -4097,77 +3478,86 @@ void hkds_keccak_update(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uin
 
 void hkds_shake128_compute(uint8_t* output, size_t outlen, const uint8_t* key, size_t keylen)
 {
-	assert(output != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(key != NULL);
 
+	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_128_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_128_RATE;
 	hkds_keccak_state ctx;
-	uint8_t hash[HKDS_KECCAK_128_RATE] = { 0 };
 
-	hkds_shake_initialize(&ctx, hkds_keccak_rate_128, key, keylen);
-	hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_128, output, nblocks);
-	output += (nblocks * HKDS_KECCAK_128_RATE);
-	outlen -= (nblocks * HKDS_KECCAK_128_RATE);
-
-	if (outlen != 0)
+	if (output != NULL && key != NULL)
 	{
-		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_128, hash, 1);
-		utils_memory_copy(output, hash, outlen);
-	}
+		hkds_shake_initialize(&ctx, hkds_keccak_rate_128, key, keylen);
+		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_128, output, nblocks);
+		output += (nblocks * HKDS_KECCAK_128_RATE);
+		outlen -= (nblocks * HKDS_KECCAK_128_RATE);
 
-	hkds_keccak_dispose(&ctx);
+		if (outlen != 0U)
+		{
+			hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_128, hash, 1U);
+			utils_memory_copy(output, hash, outlen);
+		}
+
+		hkds_keccak_dispose(&ctx);
+	}
 }
 
 void hkds_shake256_compute(uint8_t* output, size_t outlen, const uint8_t* key, size_t keylen)
 {
-	assert(output != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(key != NULL);
 
+	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_256_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_256_RATE;
 	hkds_keccak_state ctx;
-	uint8_t hash[HKDS_KECCAK_256_RATE] = { 0 };
 
-	hkds_shake_initialize(&ctx, hkds_keccak_rate_256, key, keylen);
-	hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_256, output, nblocks);
-	output += (nblocks * HKDS_KECCAK_256_RATE);
-	outlen -= (nblocks * HKDS_KECCAK_256_RATE);
-
-	if (outlen != 0)
+	if (output != NULL && key != NULL)
 	{
-		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_256, hash, 1);
-		utils_memory_copy(output, hash, outlen);
-	}
+		hkds_shake_initialize(&ctx, hkds_keccak_rate_256, key, keylen);
+		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_256, output, nblocks);
+		output += (nblocks * HKDS_KECCAK_256_RATE);
+		outlen -= (nblocks * HKDS_KECCAK_256_RATE);
 
-	hkds_keccak_dispose(&ctx);
+		if (outlen != 0U)
+		{
+			hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_256, hash, 1U);
+			utils_memory_copy(output, hash, outlen);
+		}
+
+		hkds_keccak_dispose(&ctx);
+	}
 }
 
 void hkds_shake512_compute(uint8_t* output, size_t outlen, const uint8_t* key, size_t keylen)
 {
-	assert(output != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(key != NULL);
 
+	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_512_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_512_RATE;
 	hkds_keccak_state ctx;
-	uint8_t hash[HKDS_KECCAK_512_RATE] = { 0 };
 
-	hkds_shake_initialize(&ctx, hkds_keccak_rate_512, key, keylen);
-	hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_512, output, nblocks);
-	output += (nblocks * HKDS_KECCAK_512_RATE);
-	outlen -= (nblocks * HKDS_KECCAK_512_RATE);
-
-	if (outlen != 0)
+	if (output != NULL && key != NULL)
 	{
-		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_512, hash, 1);
-		utils_memory_copy(output, hash, outlen);
-	}
+		hkds_shake_initialize(&ctx, hkds_keccak_rate_512, key, keylen);
+		hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_512, output, nblocks);
+		output += (nblocks * HKDS_KECCAK_512_RATE);
+		outlen -= (nblocks * HKDS_KECCAK_512_RATE);
 
-	hkds_keccak_dispose(&ctx);
+		if (outlen != 0U)
+		{
+			hkds_shake_squeezeblocks(&ctx, hkds_keccak_rate_512, hash, 1U);
+			utils_memory_copy(output, hash, outlen);
+		}
+
+		hkds_keccak_dispose(&ctx);
+	}
 }
 
 void hkds_shake_initialize(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* key, size_t keylen)
 {
-	assert(ctx != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(key != NULL);
 
 	hkds_keccak_initialize_state(ctx);
 	hkds_keccak_absorb(ctx, rate, key, keylen, HKDS_KECCAK_SHAKE_DOMAIN_ID, HKDS_KECCAK_PERMUTATION_ROUNDS);
@@ -4175,8 +3565,8 @@ void hkds_shake_initialize(hkds_keccak_state* ctx, hkds_keccak_rate rate, const 
 
 void hkds_shake_squeezeblocks(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t* output, size_t nblocks)
 {
-	assert(ctx != NULL);
-	assert(output != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(output != NULL);
 
 	hkds_keccak_squeezeblocks(ctx, output, nblocks, rate, HKDS_KECCAK_PERMUTATION_ROUNDS);
 }
@@ -4185,9 +3575,9 @@ void hkds_shake_squeezeblocks(hkds_keccak_state* ctx, hkds_keccak_rate rate, uin
 
 void hkds_kmac128_compute(uint8_t* output, size_t outlen, const uint8_t* message, size_t msglen, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen)
 {
-	assert(output != NULL);
-	assert(message != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(message != NULL);
+	HKDS_ASSERT(key != NULL);
 
 	hkds_keccak_state ctx;
 
@@ -4198,9 +3588,9 @@ void hkds_kmac128_compute(uint8_t* output, size_t outlen, const uint8_t* message
 
 void hkds_kmac256_compute(uint8_t* output, size_t outlen, const uint8_t* message, size_t msglen, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen)
 {
-	assert(output != NULL);
-	assert(message != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(message != NULL);
+	HKDS_ASSERT(key != NULL);
 
 	hkds_keccak_state ctx;
 
@@ -4211,9 +3601,9 @@ void hkds_kmac256_compute(uint8_t* output, size_t outlen, const uint8_t* message
 
 void hkds_kmac512_compute(uint8_t* output, size_t outlen, const uint8_t* message, size_t msglen, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen)
 {
-	assert(output != NULL);
-	assert(message != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(output != NULL);
+	HKDS_ASSERT(message != NULL);
+	HKDS_ASSERT(key != NULL);
 
 	hkds_keccak_state ctx;
 
@@ -4229,138 +3619,152 @@ void hkds_kmac_finalize(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t* 
 
 void hkds_kmac_initialize(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen)
 {
-	assert(ctx != NULL);
-	assert(key != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(key != NULL);
 
-	const uint8_t name[4] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_SIMD_ALIGN const uint8_t name[4U] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	hkds_keccak_absorb_key_custom(ctx, rate, key, keylen, custom, custlen, name, sizeof(name), HKDS_KECCAK_PERMUTATION_ROUNDS);
 }
 
 void hkds_kmac_update(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* message, size_t msglen)
 {
-	assert(ctx != NULL);
-	assert(message != NULL);
+	HKDS_ASSERT(ctx != NULL);
+	HKDS_ASSERT(message != NULL);
 
 	hkds_keccak_update(ctx, rate, message, msglen, HKDS_KECCAK_PERMUTATION_ROUNDS);
 }
 
 /* parallel SHAKE x4 */
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 void hkds_keccakx4_absorb(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rate rate,
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3, size_t inplen, uint8_t domain)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
 
-	__m256i t;
-	__m256i idx = { 0 };
-	int64_t p0;
-	int64_t p1;
-	int64_t p2;
-	int64_t p3;
-	size_t pos;
-	size_t i;
-
-	pos = 0;
-	p0 = (int64_t)inp0;
-	p1 = (int64_t)inp1;
-	p2 = (int64_t)inp2;
-	p3 = (int64_t)inp3;
-
-	idx = _mm256_set_epi64x(p3, p2, p1, p0);
-
-	while (inplen >= (size_t)rate)
+	if (inp0 != NULL && inp1 != NULL && inp2 != NULL && inp3 != NULL)
 	{
-		for (i = 0; i < (size_t)rate / sizeof(uint64_t); ++i)
+		__m256i t;
+		uint64_t v0;
+		uint64_t v1;
+		uint64_t v2;
+		uint64_t v3;
+		size_t pos;
+		size_t i;
+
+		pos = 0U;
+
+		/* process full blocks */
+		while (inplen >= (size_t)rate)
 		{
-			t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
-			state[i] = _mm256_xor_si256(state[i], t);
-			pos += sizeof(uint64_t);
+			for (i = 0U; i < (size_t)rate / sizeof(uint64_t); ++i)
+			{
+				v0 = *(const uint64_t*)(inp0 + pos);
+				v1 = *(const uint64_t*)(inp1 + pos);
+				v2 = *(const uint64_t*)(inp2 + pos);
+				v3 = *(const uint64_t*)(inp3 + pos);
+
+				t = _mm256_set_epi64x(v3, v2, v1, v0);
+				state[i] = _mm256_xor_si256(state[i], t);
+
+				pos += sizeof(uint64_t);
+			}
+
+			hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
+			inplen -= (size_t)rate;
 		}
 
-		hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-		inplen -= rate;
-	}
+		i = 0U;
 
-	i = 0;
+		/* process remaining input */
+		while (inplen >= sizeof(uint64_t))
+		{
+			v0 = *(const uint64_t*)(inp0 + pos);
+			v1 = *(const uint64_t*)(inp1 + pos);
+			v2 = *(const uint64_t*)(inp2 + pos);
+			v3 = *(const uint64_t*)(inp3 + pos);
 
-	while (inplen >= sizeof(uint64_t))
-	{
-		t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
+			t = _mm256_set_epi64x(v3, v2, v1, v0);
+			state[i] = _mm256_xor_si256(state[i], t);
+
+			++i;
+			pos += sizeof(uint64_t);
+			inplen -= sizeof(uint64_t);
+		}
+
+		/* partial block */
+		if (inplen != 0U)
+		{
+			v0 = 0U;
+			v1 = 0U;
+			v2 = 0U;
+			v3 = 0U;
+
+			/* copy remaining bytes into temporary variables */
+			for (size_t j = 0U; j < inplen; ++j)
+			{
+				((uint8_t*)&v0)[j] = inp0[pos + j];
+				((uint8_t*)&v1)[j] = inp1[pos + j];
+				((uint8_t*)&v2)[j] = inp2[pos + j];
+				((uint8_t*)&v3)[j] = inp3[pos + j];
+			}
+
+			t = _mm256_set_epi64x(v3, v2, v1, v0);
+			state[i] = _mm256_xor_si256(state[i], t);
+		}
+
+		/* apply domain separation and padding */
+		t = _mm256_set1_epi64x((int64_t)domain << (sizeof(uint64_t) * inplen));
 		state[i] = _mm256_xor_si256(state[i], t);
-
-		i++;
-		pos += sizeof(uint64_t);
-		inplen -= sizeof(uint64_t);
+		t = _mm256_set1_epi64x(1ULL << 63);
+		state[((size_t)rate / sizeof(uint64_t)) - 1U] = _mm256_xor_si256(state[((size_t)rate / sizeof(uint64_t)) - 1U], t);
 	}
-
-	if (inplen != 0)
-	{
-		t = _mm256_i64gather_epi64((long long*)pos, idx, 1);
-		idx = _mm256_set1_epi64x((1ULL << (sizeof(uint64_t) * inplen)) - 1);
-		t = _mm256_and_si256(t, idx);
-		state[i] = _mm256_xor_si256(state[i], t);
-	}
-
-	t = _mm256_set1_epi64x((int64_t)domain << (sizeof(uint64_t) * inplen));
-	state[i] = _mm256_xor_si256(state[i], t);
-	t = _mm256_set1_epi64x(1ULL << 63);
-	state[(rate / sizeof(uint64_t)) - 1] = _mm256_xor_si256(state[(rate / sizeof(uint64_t)) - 1], t);
 }
 
 void hkds_keccakx4_squeezeblocks(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rate rate,
 	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t nblocks)
 {
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
 
-	uint64_t f0;
-	uint64_t f1;
-	uint64_t f2;
-	uint64_t f3;
+	HKDS_ALIGN(32) uint64_t tmp[4U] = { 0 };
 
-	while (nblocks > 0)
+	if (out0 != NULL && out1 != NULL && out2 != NULL && out3 != NULL)
 	{
-		hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-
-		for (size_t i = 0; i < (size_t)rate / sizeof(uint64_t); ++i)
+		while (nblocks > 0U)
 		{
-#if defined(SYSTEM_ISWIN64)
-			f0 = _mm256_extract_epi64(state[i], 0);
-			f1 = _mm256_extract_epi64(state[i], 1);
-			f2 = _mm256_extract_epi64(state[i], 2);
-			f3 = _mm256_extract_epi64(state[i], 3);
-#else
-			f0 = (uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 0) | ((uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 1) << 32);
-			f1 = (uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 2) | ((uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 3) << 32);
-			f2 = (uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 4) | ((uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 5) << 32);
-			f3 = (uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 6) | ((uint64_t)(uint32_t)_mm256_extract_epi32(state[i], 7) << 32);
-#endif
-			utils_integer_le64to8(out0, f0);
-			utils_integer_le64to8(out1, f1);
-			utils_integer_le64to8(out2, f2);
-			utils_integer_le64to8(out3, f3);
+			hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 
-			out0 += sizeof(uint64_t);
-			out1 += sizeof(uint64_t);
-			out2 += sizeof(uint64_t);
-			out3 += sizeof(uint64_t);
+			for (size_t i = 0U; i < (size_t)rate / sizeof(uint64_t); ++i)
+			{
+				_mm256_store_si256((__m256i*)tmp, state[i]);
+
+				utils_integer_le64to8(out0, tmp[0U]);
+				utils_integer_le64to8(out1, tmp[1U]);
+				utils_integer_le64to8(out2, tmp[2U]);
+				utils_integer_le64to8(out3, tmp[3U]);
+
+				out0 += sizeof(uint64_t);
+				out1 += sizeof(uint64_t);
+				out2 += sizeof(uint64_t);
+				out3 += sizeof(uint64_t);
+			}
+
+			--nblocks;
 		}
-
-		--nblocks;
 	}
 }
 
 #endif
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 #define _mm512_extract_epi64x(b, i) ( \
         _mm_extract_epi64(_mm512_extracti64x2_epi64(b, i / 2), i % 2))
@@ -4369,157 +3773,163 @@ void hkds_keccakx8_absorb(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rat
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
 	const uint8_t* inp4, const uint8_t* inp5, const uint8_t* inp6, const uint8_t* inp7, size_t inplen, uint8_t domain)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(inp4 != NULL);
-	assert(inp5 != NULL);
-	assert(inp6 != NULL);
-	assert(inp7 != NULL);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(inp4 != NULL);
+	HKDS_ASSERT(inp5 != NULL);
+	HKDS_ASSERT(inp6 != NULL);
+	HKDS_ASSERT(inp7 != NULL);
 
-	__m512i t;
-	__m512i idx;
-	int64_t p0;
-	int64_t p1;
-	int64_t p2;
-	int64_t p3;
-	int64_t p4;
-	int64_t p5;
-	int64_t p6;
-	int64_t p7;
-	size_t i;
-	size_t pos;
-
-	pos = 0;
-	p0 = (int64_t)inp0;
-	p1 = (int64_t)inp1;
-	p2 = (int64_t)inp2;
-	p3 = (int64_t)inp3;
-	p4 = (int64_t)inp4;
-	p5 = (int64_t)inp5;
-	p6 = (int64_t)inp6;
-	p7 = (int64_t)inp7;
-
-	idx = _mm512_set_epi64(p7, p6, p5, p4, p3, p2, p1, p0);
-
-	while (inplen >= (size_t)rate)
+	if (inp0 != NULL && inp1 != NULL && inp2 != NULL && inp3 != NULL &&
+		inp4 != NULL && inp5 != NULL && inp6 != NULL && inp7 != NULL) 
 	{
-		for (i = 0; i < (size_t)rate / sizeof(uint64_t); ++i)
+		__m512i t;
+		uint64_t v0;
+		uint64_t v1;
+		uint64_t v2;
+		uint64_t v3;
+		uint64_t v4;
+		uint64_t v5;
+		uint64_t v6;
+		uint64_t v7;
+		size_t pos;
+		size_t i;
+
+		pos = 0U;
+
+		/* process full blocks */
+		while (inplen >= (size_t)rate)
 		{
-			t = _mm512_i64gather_epi64(idx, (int64_t*)pos, 1);
-			state[i] = _mm512_xor_si512(state[i], t);
-			pos += sizeof(uint64_t);
+			for (i = 0U; i < (size_t)rate / sizeof(uint64_t); ++i)
+			{
+				v0 = *(const uint64_t*)(inp0 + pos);
+				v1 = *(const uint64_t*)(inp1 + pos);
+				v2 = *(const uint64_t*)(inp2 + pos);
+				v3 = *(const uint64_t*)(inp3 + pos);
+				v4 = *(const uint64_t*)(inp4 + pos);
+				v5 = *(const uint64_t*)(inp5 + pos);
+				v6 = *(const uint64_t*)(inp6 + pos);
+				v7 = *(const uint64_t*)(inp7 + pos);
+
+				t = _mm512_set_epi64(v7, v6, v5, v4, v3, v2, v1, v0);
+				state[i] = _mm512_xor_si512(state[i], t);
+
+				pos += sizeof(uint64_t);
+			}
+
+			hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
+			inplen -= (size_t)rate;
 		}
 
-		hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-		inplen -= rate;
-	}
+		i = 0U;
 
-	i = 0;
+		/* process remaining input */
+		while (inplen >= sizeof(uint64_t))
+		{
+			v0 = *(const uint64_t*)(inp0 + pos);
+			v1 = *(const uint64_t*)(inp1 + pos);
+			v2 = *(const uint64_t*)(inp2 + pos);
+			v3 = *(const uint64_t*)(inp3 + pos);
+			v4 = *(const uint64_t*)(inp4 + pos);
+			v5 = *(const uint64_t*)(inp5 + pos);
+			v6 = *(const uint64_t*)(inp6 + pos);
+			v7 = *(const uint64_t*)(inp7 + pos);
 
-	while (inplen >= sizeof(uint64_t))
-	{
-		t = _mm512_i64gather_epi64(idx, (int64_t*)pos, 1);
+			t = _mm512_set_epi64(v7, v6, v5, v4, v3, v2, v1, v0);
+			state[i] = _mm512_xor_si512(state[i], t);
+
+			i++;
+			pos += sizeof(uint64_t);
+			inplen -= sizeof(uint64_t);
+		}
+
+		/* handle the remaining partial block */
+		if (inplen != 0U)
+		{
+			v0 = 0U;
+			v1 = 0U;
+			v2 = 0U;
+			v3 = 0U;
+			v4 = 0U;
+			v5 = 0U;
+			v6 = 0U;
+			v7 = 0U;
+
+			/* copy remaining bytes into temporary variables*/
+			for (size_t j = 0U; j < inplen; ++j)
+			{
+				((uint8_t*)&v0)[j] = inp0[pos + j];
+				((uint8_t*)&v1)[j] = inp1[pos + j];
+				((uint8_t*)&v2)[j] = inp2[pos + j];
+				((uint8_t*)&v3)[j] = inp3[pos + j];
+				((uint8_t*)&v4)[j] = inp4[pos + j];
+				((uint8_t*)&v5)[j] = inp5[pos + j];
+				((uint8_t*)&v6)[j] = inp6[pos + j];
+				((uint8_t*)&v7)[j] = inp7[pos + j];
+			}
+
+			t = _mm512_set_epi64(v7, v6, v5, v4, v3, v2, v1, v0);
+			state[i] = _mm512_xor_si512(state[i], t);
+		}
+
+		/* apply domain separation and padding */
+		t = _mm512_set1_epi64((int64_t)domain << (sizeof(uint64_t) * inplen));
 		state[i] = _mm512_xor_si512(state[i], t);
-
-		i++;
-		pos += sizeof(uint64_t);
-		inplen -= sizeof(uint64_t);
+		t = _mm512_set1_epi64(1ULL << 63);
+		state[((size_t)rate / sizeof(uint64_t)) - 1U] = _mm512_xor_si512(state[((size_t)rate / sizeof(uint64_t)) - 1U], t);
 	}
-
-	if (inplen != 0)
-	{
-		t = _mm512_i64gather_epi64(idx, (int64_t*)pos, 1);
-		idx = _mm512_set1_epi64((1ULL << (sizeof(uint64_t) * inplen)) - 1);
-		t = _mm512_and_si512(t, idx);
-		state[i] = _mm512_xor_si512(state[i], t);
-	}
-
-	t = _mm512_set1_epi64((int64_t)domain << (sizeof(uint64_t) * inplen));
-	state[i] = _mm512_xor_si512(state[i], t);
-	t = _mm512_set1_epi64(1ULL << 63);
-	state[(rate / sizeof(uint64_t)) - 1] = _mm512_xor_si512(state[(rate / sizeof(uint64_t)) - 1], t);
 }
 
 void hkds_keccakx8_squeezeblocks(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_rate rate,
 	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, uint8_t* out4,
 	uint8_t* out5, uint8_t* out6, uint8_t* out7, size_t nblocks)
 {
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
 
-	__m128i x;
-	uint64_t f0;
-	uint64_t f1;
-	uint64_t f2;
-	uint64_t f3;
-	uint64_t f4;
-	uint64_t f5;
-	uint64_t f6;
-	uint64_t f7;
 	size_t i;
 
-	while (nblocks > 0)
+	if (out0 != NULL && out1 != NULL && out2 != NULL && out3 != NULL && out4 != NULL && out5 != NULL && out6 != NULL && out7 != NULL)
 	{
-		hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-
-		for (i = 0; i < (size_t)rate / sizeof(uint64_t); ++i)
+		while (nblocks > 0U)
 		{
-#if defined(SYSTEM_ISWIN64)
-			x = _mm512_extracti64x2_epi64(state[i], 0);
-			f0 = _mm_extract_epi64(x, 0);
-			f0 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 1) << 32;
-			f1 = _mm_extract_epi64(x, 1);
-			x = _mm512_extracti64x2_epi64(state[i], 1);
-			f2 = _mm_extract_epi64(x, 0);
-			f3 = _mm_extract_epi64(x, 1);
-			x = _mm512_extracti64x2_epi64(state[i], 2);
-			f4 = _mm_extract_epi64(x, 0);
-			f5 = _mm_extract_epi64(x, 1);
-			x = _mm512_extracti64x2_epi64(state[i], 3);
-			f6 = _mm_extract_epi64(x, 0);
-			f7 = _mm_extract_epi64(x, 1);
-#else
-			x = _mm512_extracti64x2_epi64(state[i], 0);
-			f0 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 1) << 32;
-			f1 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 2) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 3) << 32;
-			x = _mm512_extracti64x2_epi64(state[i], 1);
-			f2 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 1) << 32;
-			f3 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 2) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 3) << 32;
-			x = _mm512_extracti64x2_epi64(state[i], 2);
-			f4 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 1) << 32;
-			f5 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 2) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 3) << 32;
-			x = _mm512_extracti64x2_epi64(state[i], 3);
-			f6 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 1) << 32;
-			f7 = (uint64_t)(uint32_t)_mm_extract_epi32(x, 2) | (uint64_t)(uint32_t)_mm_extract_epi32(x, 3) << 32;
-#endif
-			utils_integer_le64to8(out0, f0);
-			utils_integer_le64to8(out1, f1);
-			utils_integer_le64to8(out2, f2);
-			utils_integer_le64to8(out3, f3);
-			utils_integer_le64to8(out4, f4);
-			utils_integer_le64to8(out5, f5);
-			utils_integer_le64to8(out6, f6);
-			utils_integer_le64to8(out7, f7);
+			hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 
-			out0 += sizeof(uint64_t);
-			out1 += sizeof(uint64_t);
-			out2 += sizeof(uint64_t);
-			out3 += sizeof(uint64_t);
-			out4 += sizeof(uint64_t);
-			out5 += sizeof(uint64_t);
-			out6 += sizeof(uint64_t);
-			out7 += sizeof(uint64_t);
+			HKDS_ALIGN(64) uint64_t tmp[8U] = { 0U };
+
+			for (i = 0U; i < (size_t)rate / sizeof(uint64_t); ++i)
+			{
+				_mm512_store_si512((__m512i*)tmp, state[i]);
+
+				utils_integer_le64to8(out0, tmp[0U]);
+				utils_integer_le64to8(out1, tmp[1U]);
+				utils_integer_le64to8(out2, tmp[2U]);
+				utils_integer_le64to8(out3, tmp[3U]);
+				utils_integer_le64to8(out4, tmp[4U]);
+				utils_integer_le64to8(out5, tmp[5U]);
+				utils_integer_le64to8(out6, tmp[6U]);
+				utils_integer_le64to8(out7, tmp[7U]);
+
+				out0 += sizeof(uint64_t);
+				out1 += sizeof(uint64_t);
+				out2 += sizeof(uint64_t);
+				out3 += sizeof(uint64_t);
+				out4 += sizeof(uint64_t);
+				out5 += sizeof(uint64_t);
+				out6 += sizeof(uint64_t);
+				out7 += sizeof(uint64_t);
+			}
+
+			--nblocks;
 		}
-
-		--nblocks;
 	}
 }
 
@@ -4528,23 +3938,23 @@ void hkds_keccakx8_squeezeblocks(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_kec
 void hkds_shake_128x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t outlen,
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 	size_t i;
 	size_t nblocks = outlen / HKDS_KECCAK_128_RATE;
-	uint8_t t[4][HKDS_KECCAK_128_RATE] = { 0 };
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(32) uint8_t t[4U][HKDS_KECCAK_128_RATE] = { 0U };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx4_absorb(state, hkds_keccak_rate_128, inp0, inp1, inp2, inp3, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4559,16 +3969,16 @@ void hkds_shake_128x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_128_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_128, t[0], t[1], t[2], t[3], 1);
+		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_128, t[0U], t[1U], t[2U], t[3U], 1U);
 
-		for (i = 0; i < outlen; ++i)
+		for (i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
 		}
 	}
 
@@ -4585,22 +3995,22 @@ void hkds_shake_128x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 void hkds_shake_256x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t outlen,
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 	size_t nblocks = outlen / HKDS_KECCAK_256_RATE;
-	uint8_t t[4][HKDS_KECCAK_256_RATE] = { 0 };
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(32) uint8_t t[4U][HKDS_KECCAK_256_RATE] = { 0U };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx4_absorb(state, hkds_keccak_rate_256, inp0, inp1, inp2, inp3, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4615,16 +4025,16 @@ void hkds_shake_256x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_256_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_256, t[0], t[1], t[2], t[3], 1);
+		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_256, t[0U], t[1U], t[2U], t[3U], 1U);
 
-		for (size_t i = 0; i < outlen; ++i)
+		for (size_t i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
 		}
 	}
 
@@ -4641,22 +4051,22 @@ void hkds_shake_256x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 void hkds_shake_512x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t outlen,
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 	size_t nblocks = outlen / HKDS_KECCAK_512_RATE;
-	uint8_t t[4][HKDS_KECCAK_512_RATE] = { 0 };
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(32) uint8_t t[4U][HKDS_KECCAK_512_RATE] = { 0U };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx4_absorb(state, hkds_keccak_rate_512, inp0, inp1, inp2, inp3, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4671,16 +4081,16 @@ void hkds_shake_512x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_512_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_512, t[0], t[1], t[2], t[3], 1);
+		hkds_keccakx4_squeezeblocks(state, hkds_keccak_rate_512, t[0U], t[1U], t[2U], t[3U], 1U);
 
-		for (size_t i = 0; i < outlen; ++i)
+		for (size_t i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
 		}
 	}
 
@@ -4701,30 +4111,30 @@ void hkds_shake_128x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
 	const uint8_t* inp4, const uint8_t* inp5, const uint8_t* inp6, const uint8_t* inp7, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(inp4 != NULL);
-	assert(inp5 != NULL);
-	assert(inp6 != NULL);
-	assert(inp7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(inp4 != NULL);
+	HKDS_ASSERT(inp5 != NULL);
+	HKDS_ASSERT(inp6 != NULL);
+	HKDS_ASSERT(inp7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 	size_t nblocks = outlen / HKDS_KECCAK_128_RATE;
-	uint8_t t[8][HKDS_KECCAK_128_RATE] = { 0 };
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(64) uint8_t t[8U][HKDS_KECCAK_128_RATE] = { 0U };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx8_absorb(state, hkds_keccak_rate_128, inp0, inp1, inp2, inp3, inp4, inp5, inp6, inp7, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4743,24 +4153,24 @@ void hkds_shake_128x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_128_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_128, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], 1);
+		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_128, t[0U], t[1U], t[2U], t[3U], t[4U], t[5U], t[6U], t[7U], 1U);
 
-		for (size_t i = 0; i < outlen; ++i)
+		for (size_t i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
-			out4[i] = t[4][i];
-			out5[i] = t[5][i];
-			out6[i] = t[6][i];
-			out7[i] = t[7][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
+			out4[i] = t[4U][i];
+			out5[i] = t[5U][i];
+			out6[i] = t[6U][i];
+			out7[i] = t[7U][i];
 		}
 	}
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_shake_128x4(out0, out1, out2, out3, outlen, inp0, inp1, inp2, inp3, inplen);
 	hkds_shake_128x4(out4, out5, out6, out7, outlen, inp4, inp5, inp6, inp7, inplen);
@@ -4784,30 +4194,30 @@ void hkds_shake_256x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
 	const uint8_t* inp4, const uint8_t* inp5, const uint8_t* inp6, const uint8_t* inp7, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(inp4 != NULL);
-	assert(inp5 != NULL);
-	assert(inp6 != NULL);
-	assert(inp7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(inp4 != NULL);
+	HKDS_ASSERT(inp5 != NULL);
+	HKDS_ASSERT(inp6 != NULL);
+	HKDS_ASSERT(inp7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 	size_t nblocks = outlen / HKDS_KECCAK_256_RATE;
-	uint8_t t[8][HKDS_KECCAK_256_RATE] = { 0 };
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(64) uint8_t t[8U][HKDS_KECCAK_256_RATE] = { 0U };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx8_absorb(state, hkds_keccak_rate_256, inp0, inp1, inp2, inp3, inp4, inp5, inp6, inp7, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4826,24 +4236,24 @@ void hkds_shake_256x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_256_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_256, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], 1);
+		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_256, t[0U], t[1U], t[2U], t[3U], t[4U], t[5U], t[6U], t[7U], 1);
 
-		for (size_t i = 0; i < outlen; ++i)
+		for (size_t i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
-			out4[i] = t[4][i];
-			out5[i] = t[5][i];
-			out6[i] = t[6][i];
-			out7[i] = t[7][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
+			out4[i] = t[4U][i];
+			out5[i] = t[5U][i];
+			out6[i] = t[6U][i];
+			out7[i] = t[7U][i];
 		}
 	}
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_shake_256x4(out0, out1, out2, out3, outlen, inp0, inp1, inp2, inp3, inplen);
 	hkds_shake_256x4(out4, out5, out6, out7, outlen, inp4, inp5, inp6, inp7, inplen);
@@ -4867,30 +4277,30 @@ void hkds_shake_512x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
 	const uint8_t* inp4, const uint8_t* inp5, const uint8_t* inp6, const uint8_t* inp7, size_t inplen)
 {
-	assert(inp0 != NULL);
-	assert(inp1 != NULL);
-	assert(inp2 != NULL);
-	assert(inp3 != NULL);
-	assert(inp4 != NULL);
-	assert(inp5 != NULL);
-	assert(inp6 != NULL);
-	assert(inp7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(inplen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(inp0 != NULL);
+	HKDS_ASSERT(inp1 != NULL);
+	HKDS_ASSERT(inp2 != NULL);
+	HKDS_ASSERT(inp3 != NULL);
+	HKDS_ASSERT(inp4 != NULL);
+	HKDS_ASSERT(inp5 != NULL);
+	HKDS_ASSERT(inp6 != NULL);
+	HKDS_ASSERT(inp7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(inplen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 	size_t nblocks = outlen / HKDS_KECCAK_512_RATE;
-	uint8_t t[8][HKDS_KECCAK_512_RATE] = { 0 };
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
+	HKDS_ALIGN(64) uint8_t t[8U][HKDS_KECCAK_512_RATE] = { 0U };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
 
 	hkds_keccakx8_absorb(state, hkds_keccak_rate_512, inp0, inp1, inp2, inp3, inp4, inp5, inp6, inp7, inplen, HKDS_KECCAK_SHAKE_DOMAIN_ID);
 
@@ -4909,24 +4319,24 @@ void hkds_shake_512x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 		outlen -= nblocks * HKDS_KECCAK_512_RATE;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_512, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], 1);
+		hkds_keccakx8_squeezeblocks(state, hkds_keccak_rate_512, t[0U], t[1U], t[2U], t[3U], t[4U], t[5U], t[6U], t[7U], 1U);
 
-		for (size_t i = 0; i < outlen; ++i)
+		for (size_t i = 0U; i < outlen; ++i)
 		{
-			out0[i] = t[0][i];
-			out1[i] = t[1][i];
-			out2[i] = t[2][i];
-			out3[i] = t[3][i];
-			out4[i] = t[4][i];
-			out5[i] = t[5][i];
-			out6[i] = t[6][i];
-			out7[i] = t[7][i];
+			out0[i] = t[0U][i];
+			out1[i] = t[1U][i];
+			out2[i] = t[2U][i];
+			out3[i] = t[3U][i];
+			out4[i] = t[4U][i];
+			out5[i] = t[5U][i];
+			out6[i] = t[6U][i];
+			out7[i] = t[7U][i];
 		}
 	}
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_shake_512x4(out0, out1, out2, out3, outlen, inp0, inp1, inp2, inp3, inplen);
 	hkds_shake_512x4(out4, out5, out6, out7, outlen, inp4, inp5, inp6, inp7, inplen);
@@ -4947,27 +4357,27 @@ void hkds_shake_512x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3
 
 /* parallel kmac x4 */
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 static void kmacx4_fast_absorb(__m256i state[HKDS_KECCAK_STATE_SIZE], const uint8_t* inp0, const uint8_t* inp1,
 	const uint8_t* inp2, const uint8_t* inp3, size_t inplen)
 {
 	__m256i t;
-	uint64_t tmps[4] = { 0 };
+	HKDS_ALIGN(32) uint64_t tmps[4U] = { 0U };
 	size_t pos;
 
-	pos = 0;
+	pos = 0U;
 
-	for (size_t i = 0; i < inplen / sizeof(uint64_t); ++i)
+	for (size_t i = 0U; i < inplen / sizeof(uint64_t); ++i)
 	{
-		tmps[0] = utils_integer_le8to64(inp0 + pos);
-		tmps[1] = utils_integer_le8to64(inp1 + pos);
-		tmps[2] = utils_integer_le8to64(inp2 + pos);
-		tmps[3] = utils_integer_le8to64(inp3 + pos);
+		tmps[0U] = utils_integer_le8to64(inp0 + pos);
+		tmps[1U] = utils_integer_le8to64(inp1 + pos);
+		tmps[2U] = utils_integer_le8to64(inp2 + pos);
+		tmps[3U] = utils_integer_le8to64(inp3 + pos);
 
 		t = _mm256_loadu_si256((const __m256i*)tmps);
 		state[i] = _mm256_xor_si256(state[i], t);
-		pos += 8;
+		pos += 8U;
 	}
 }
 
@@ -4976,80 +4386,80 @@ static void kmacx4_customize(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_
 	const uint8_t* cst0, const uint8_t* cst1, const uint8_t* cst2, const uint8_t* cst3, size_t cstlen,
 	const uint8_t* name, size_t nmelen)
 {
-	uint8_t pad[4][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	HKDS_ALIGN(32) uint8_t pad[4U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t oft;
 	size_t i;
 
 	/* stage 1: name + custom */
 
-	oft = keccak_left_encode(pad[0], (size_t)rate);
-	oft += keccak_left_encode((pad[0] + oft), nmelen * 8);
+	oft = keccak_left_encode(pad[0U], (size_t)rate);
+	oft += keccak_left_encode((pad[0U] + oft), nmelen * 8U);
 
-	for (i = 0; i < nmelen; ++i)
+	for (i = 0U; i < nmelen; ++i)
 	{
-		pad[0][oft + i] = name[i];
+		pad[0U][oft + i] = name[i];
 	}
 
 	oft += nmelen;
-	oft += keccak_left_encode((pad[0] + oft), cstlen * 8);
-	utils_memory_copy(pad[1], pad[0], oft);
-	utils_memory_copy(pad[2], pad[0], oft);
-	utils_memory_copy(pad[3], pad[0], oft);
+	oft += keccak_left_encode((pad[0U] + oft), cstlen * 8U);
+	utils_memory_copy(pad[1U], pad[0U], oft);
+	utils_memory_copy(pad[2U], pad[0U], oft);
+	utils_memory_copy(pad[3U], pad[0U], oft);
 
-	for (i = 0; i < cstlen; ++i)
+	for (i = 0U; i < cstlen; ++i)
 	{
 		if (oft == rate)
 		{
-			kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], (size_t)rate);
+			kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], (size_t)rate);
 			hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-			oft = 0;
+			oft = 0U;
 		}
 
-		pad[0][oft] = cst0[i];
-		pad[1][oft] = cst1[i];
-		pad[2][oft] = cst2[i];
-		pad[3][oft] = cst3[i];
+		pad[0U][oft] = cst0[i];
+		pad[1U][oft] = cst1[i];
+		pad[2U][oft] = cst2[i];
+		pad[3U][oft] = cst3[i];
 		++oft;
 	}
 
-	kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
+	kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
 	hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 
 	/* stage 2: key */
 
-	utils_memory_clear(pad[0], oft);
-	utils_memory_clear(pad[1], oft);
-	utils_memory_clear(pad[2], oft);
-	utils_memory_clear(pad[3], oft);
+	utils_memory_clear(pad[0U], oft);
+	utils_memory_clear(pad[1U], oft);
+	utils_memory_clear(pad[2U], oft);
+	utils_memory_clear(pad[3U], oft);
 
-	oft = keccak_left_encode(pad[0], (size_t)rate);
-	oft += keccak_left_encode((pad[0] + oft), keylen * 8);
-	utils_memory_copy(pad[1], pad[0], oft);
-	utils_memory_copy(pad[2], pad[0], oft);
-	utils_memory_copy(pad[3], pad[0], oft);
+	oft = keccak_left_encode(pad[0U], (size_t)rate);
+	oft += keccak_left_encode((pad[0U] + oft), keylen * 8U);
+	utils_memory_copy(pad[1U], pad[0U], oft);
+	utils_memory_copy(pad[2U], pad[0U], oft);
+	utils_memory_copy(pad[3U], pad[0U], oft);
 
-	for (i = 0; i < keylen; ++i)
+	for (i = 0U; i < keylen; ++i)
 	{
 		if (oft == rate)
 		{
-			kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], (size_t)rate);
+			kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], (size_t)rate);
 			hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-			oft = 0;
+			oft = 0U;
 		}
 
-		pad[0][oft] = key0[i];
-		pad[1][oft] = key1[i];
-		pad[2][oft] = key2[i];
-		pad[3][oft] = key3[i];
+		pad[0U][oft] = key0[i];
+		pad[1U][oft] = key1[i];
+		pad[2U][oft] = key2[i];
+		pad[3U][oft] = key3[i];
 		++oft;
 	}
 
-	utils_memory_clear((pad[0] + oft), (size_t)rate - oft);
-	utils_memory_clear((pad[1] + oft), (size_t)rate - oft);
-	utils_memory_clear((pad[2] + oft), (size_t)rate - oft);
-	utils_memory_clear((pad[3] + oft), (size_t)rate - oft);
+	utils_memory_clear((pad[0U] + oft), (size_t)rate - oft);
+	utils_memory_clear((pad[1U] + oft), (size_t)rate - oft);
+	utils_memory_clear((pad[2U] + oft), (size_t)rate - oft);
+	utils_memory_clear((pad[3U] + oft), (size_t)rate - oft);
 
-	kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
+	kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
 	hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 }
 
@@ -5057,15 +4467,15 @@ static void kmacx4_finalize(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3, size_t msglen,
 	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t outlen)
 {
-	uint8_t tmps[4][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
-	uint8_t buf[sizeof(size_t) + 1] = { 0 };
-	uint8_t pad[4][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	HKDS_ALIGN(32) uint8_t tmps[4U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
+	HKDS_ALIGN(32) uint8_t buf[sizeof(size_t) + 1] = { 0U };
+	HKDS_ALIGN(32) uint8_t pad[4U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	const size_t BLKCNT = outlen / (size_t)rate;
 	size_t bitlen;
 	size_t i;
 	size_t pos;
 
-	pos = 0;
+	pos = 0U;
 
 	while (msglen >= (size_t)rate)
 	{
@@ -5075,32 +4485,32 @@ static void kmacx4_finalize(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 		msglen -= (size_t)rate;
 	}
 
-	if (msglen > 0)
+	if (msglen > 0U)
 	{
-		utils_memory_copy(pad[0], (msg0 + pos), msglen);
-		utils_memory_copy(pad[1], (msg1 + pos), msglen);
-		utils_memory_copy(pad[2], (msg2 + pos), msglen);
-		utils_memory_copy(pad[3], (msg3 + pos), msglen);
+		utils_memory_copy(pad[0U], (msg0 + pos), msglen);
+		utils_memory_copy(pad[1U], (msg1 + pos), msglen);
+		utils_memory_copy(pad[2U], (msg2 + pos), msglen);
+		utils_memory_copy(pad[3U], (msg3 + pos), msglen);
 	}
 
 	pos = msglen;
-	bitlen = keccak_right_encode(buf, outlen * 8);
+	bitlen = keccak_right_encode(buf, outlen * 8U);
 
 	if (pos + bitlen >= (size_t)rate)
 	{
-		kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], (size_t)rate);
+		kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], (size_t)rate);
 		hkds_keccak_permute_p4x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-		pos = 0;
+		pos = 0U;
 	}
 
-	utils_memory_copy((pad[0] + pos), buf, bitlen);
-	pad[0][pos + bitlen] = HKDS_KECCAK_KMAC_DOMAIN_ID;
-	pad[0][rate - 1] |= 128U;
-	utils_memory_copy((pad[1] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[2] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[3] + pos), (pad[0] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[0U] + pos), buf, bitlen);
+	pad[0U][pos + bitlen] = HKDS_KECCAK_KMAC_DOMAIN_ID;
+	pad[0U][rate - 1U] |= 128U;
+	utils_memory_copy((pad[1U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[2U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[3U] + pos), (pad[0U] + pos), (size_t)rate - pos);
 
-	kmacx4_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], (size_t)rate);
+	kmacx4_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], (size_t)rate);
 
 	if (outlen > (size_t)rate)
 	{
@@ -5113,16 +4523,16 @@ static void kmacx4_finalize(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 		outlen -= BLKCNT * (size_t)rate;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx4_squeezeblocks(state, rate, tmps[0], tmps[1], tmps[2], tmps[3], 1);
+		hkds_keccakx4_squeezeblocks(state, rate, tmps[0U], tmps[1U], tmps[2U], tmps[3U], 1U);
 
-		for (i = 0; i < outlen; ++i)
+		for (i = 0U; i < outlen; ++i)
 		{
-			out0[i] = tmps[0][i];
-			out1[i] = tmps[1][i];
-			out2[i] = tmps[2][i];
-			out3[i] = tmps[3][i];
+			out0[i] = tmps[0U][i];
+			out1[i] = tmps[1U][i];
+			out2[i] = tmps[2U][i];
+			out3[i] = tmps[3U][i];
 		}
 	}
 }
@@ -5134,26 +4544,26 @@ void hkds_kmac_128x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* cst0, const uint8_t* cst1, const uint8_t* cst2, const uint8_t* cst3, size_t cstlen,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const HKDS_ALIGN(32) uint8_t name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx4_customize(state, hkds_keccak_rate_128, key0, key1, key2, key3, keylen, cst0, cst1, cst2, cst3, cstlen, name, sizeof(name));
 	kmacx4_finalize(state, hkds_keccak_rate_128, msg0, msg1, msg2, msg3, msglen, out0, out1, out2, out3, outlen);
@@ -5173,26 +4583,26 @@ void hkds_kmac_256x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* cst0, const uint8_t* cst1, const uint8_t* cst2, const uint8_t* cst3, size_t cstlen,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const uint8_t HKDS_ALIGN(32) name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx4_customize(state, hkds_keccak_rate_256, key0, key1, key2, key3, keylen, cst0, cst1, cst2, cst3, cstlen, name, sizeof(name));
 	kmacx4_finalize(state, hkds_keccak_rate_256, msg0, msg1, msg2, msg3, msglen, out0, out1, out2, out3, outlen);
@@ -5212,26 +4622,26 @@ void hkds_kmac_512x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* cst0, const uint8_t* cst1, const uint8_t* cst2, const uint8_t* cst3, size_t cstlen,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
-	__m256i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(32) __m256i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const HKDS_ALIGN(32) uint8_t name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx4_customize(state, hkds_keccak_rate_512, key0, key1, key2, key3, keylen, cst0, cst1, cst2, cst3, cstlen, name, sizeof(name));
 	kmacx4_finalize(state, hkds_keccak_rate_512, msg0, msg1, msg2, msg3, msglen, out0, out1, out2, out3, outlen);
@@ -5248,7 +4658,7 @@ void hkds_kmac_512x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 
 /* parallel kmac x8 */
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 static void kmacx8_fast_absorb(__m512i state[HKDS_KECCAK_STATE_SIZE],
 	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
@@ -5256,21 +4666,21 @@ static void kmacx8_fast_absorb(__m512i state[HKDS_KECCAK_STATE_SIZE],
 	size_t inplen)
 {
 	__m512i t;
-	uint64_t tmps[8] = { 0 };
+	HKDS_ALIGN(64) uint64_t tmps[8U] = { 0U };
 	size_t pos;
 
-	pos = 0;
+	pos = 0U;
 
-	for (size_t i = 0; i < inplen / sizeof(uint64_t); ++i)
+	for (size_t i = 0U; i < inplen / sizeof(uint64_t); ++i)
 	{
-		tmps[0] = utils_integer_le8to64((inp0 + pos));
-		tmps[1] = utils_integer_le8to64((inp1 + pos));
-		tmps[2] = utils_integer_le8to64((inp2 + pos));
-		tmps[3] = utils_integer_le8to64((inp3 + pos));
-		tmps[4] = utils_integer_le8to64((inp4 + pos));
-		tmps[5] = utils_integer_le8to64((inp5 + pos));
-		tmps[6] = utils_integer_le8to64((inp6 + pos));
-		tmps[7] = utils_integer_le8to64((inp7 + pos));
+		tmps[0U] = utils_integer_le8to64((inp0 + pos));
+		tmps[1U] = utils_integer_le8to64((inp1 + pos));
+		tmps[2U] = utils_integer_le8to64((inp2 + pos));
+		tmps[3U] = utils_integer_le8to64((inp3 + pos));
+		tmps[4U] = utils_integer_le8to64((inp4 + pos));
+		tmps[5U] = utils_integer_le8to64((inp5 + pos));
+		tmps[6U] = utils_integer_le8to64((inp6 + pos));
+		tmps[7U] = utils_integer_le8to64((inp7 + pos));
 
 		t = _mm512_loadu_si512((const __m512i*)tmps);
 		state[i] = _mm512_xor_si512(state[i], t);
@@ -5285,95 +4695,95 @@ static void kmacx8_customize(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_
 	const uint8_t* cst4, const uint8_t* cst5, const uint8_t* cst6, const uint8_t* cst7, size_t cstlen,
 	const uint8_t* name, size_t nmelen)
 {
-	uint8_t pad[8][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	HKDS_ALIGN(64) uint8_t pad[8U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t oft;
 	size_t i;
 
 	/* stage 1: name + custom */
 
-	oft = keccak_left_encode(pad[0], rate);
-	oft += keccak_left_encode((pad[0] + oft), nmelen * 8);
+	oft = keccak_left_encode(pad[0U], rate);
+	oft += keccak_left_encode((pad[0U] + oft), nmelen * 8U);
 
-	for (i = 0; i < nmelen; ++i)
+	for (i = 0U; i < nmelen; ++i)
 	{
-		pad[0][oft + i] = name[i];
+		pad[0U][oft + i] = name[i];
 	}
 
 	oft += nmelen;
-	oft += keccak_left_encode((pad[0] + oft), cstlen * 8);
-	utils_memory_copy(pad[1], pad[0], oft);
-	utils_memory_copy(pad[2], pad[0], oft);
-	utils_memory_copy(pad[3], pad[0], oft);
-	utils_memory_copy(pad[4], pad[0], oft);
-	utils_memory_copy(pad[5], pad[0], oft);
-	utils_memory_copy(pad[6], pad[0], oft);
-	utils_memory_copy(pad[7], pad[0], oft);
+	oft += keccak_left_encode((pad[0U] + oft), cstlen * 8U);
+	utils_memory_copy(pad[1U], pad[0U], oft);
+	utils_memory_copy(pad[2U], pad[0U], oft);
+	utils_memory_copy(pad[3U], pad[0U], oft);
+	utils_memory_copy(pad[4U], pad[0U], oft);
+	utils_memory_copy(pad[5U], pad[0U], oft);
+	utils_memory_copy(pad[6U], pad[0U], oft);
+	utils_memory_copy(pad[7U], pad[0U], oft);
 
-	for (i = 0; i < cstlen; ++i)
+	for (i = 0U; i < cstlen; ++i)
 	{
 		if (oft == rate)
 		{
-			kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], (size_t)rate);
+			kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], (size_t)rate);
 			hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-			oft = 0;
+			oft = 0U;
 		}
 
-		pad[0][oft] = cst0[i];
-		pad[1][oft] = cst1[i];
-		pad[2][oft] = cst2[i];
-		pad[3][oft] = cst3[i];
-		pad[4][oft] = cst4[i];
-		pad[5][oft] = cst5[i];
-		pad[6][oft] = cst6[i];
-		pad[7][oft] = cst7[i];
+		pad[0U][oft] = cst0[i];
+		pad[1U][oft] = cst1[i];
+		pad[2U][oft] = cst2[i];
+		pad[3U][oft] = cst3[i];
+		pad[4U][oft] = cst4[i];
+		pad[5U][oft] = cst5[i];
+		pad[6U][oft] = cst6[i];
+		pad[7U][oft] = cst7[i];
 		++oft;
 	}
 
-	kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
+	kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
 	hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 
 	/* stage 2: key */
 
-	utils_memory_clear(pad[0], oft);
-	utils_memory_clear(pad[1], oft);
-	utils_memory_clear(pad[2], oft);
-	utils_memory_clear(pad[3], oft);
-	utils_memory_clear(pad[4], oft);
-	utils_memory_clear(pad[5], oft);
-	utils_memory_clear(pad[6], oft);
-	utils_memory_clear(pad[7], oft);
+	utils_memory_clear(pad[0U], oft);
+	utils_memory_clear(pad[1U], oft);
+	utils_memory_clear(pad[2U], oft);
+	utils_memory_clear(pad[3U], oft);
+	utils_memory_clear(pad[4U], oft);
+	utils_memory_clear(pad[5U], oft);
+	utils_memory_clear(pad[6U], oft);
+	utils_memory_clear(pad[7U], oft);
 
-	oft = keccak_left_encode(pad[0], rate);
-	oft += keccak_left_encode((pad[0] + oft), keylen * 8);
-	utils_memory_copy(pad[1], pad[0], oft);
-	utils_memory_copy(pad[2], pad[0], oft);
-	utils_memory_copy(pad[3], pad[0], oft);
-	utils_memory_copy(pad[4], pad[0], oft);
-	utils_memory_copy(pad[5], pad[0], oft);
-	utils_memory_copy(pad[6], pad[0], oft);
-	utils_memory_copy(pad[7], pad[0], oft);
+	oft = keccak_left_encode(pad[0U], rate);
+	oft += keccak_left_encode((pad[0U] + oft), keylen * 8);
+	utils_memory_copy(pad[1U], pad[0U], oft);
+	utils_memory_copy(pad[2U], pad[0U], oft);
+	utils_memory_copy(pad[3U], pad[0U], oft);
+	utils_memory_copy(pad[4U], pad[0U], oft);
+	utils_memory_copy(pad[5U], pad[0U], oft);
+	utils_memory_copy(pad[6U], pad[0U], oft);
+	utils_memory_copy(pad[7U], pad[0U], oft);
 
-	for (i = 0; i < keylen; ++i)
+	for (i = 0U; i < keylen; ++i)
 	{
 		if (oft == rate)
 		{
-			kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], rate);
+			kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], rate);
 			hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-			oft = 0;
+			oft = 0U;
 		}
 
-		pad[0][oft] = key0[i];
-		pad[1][oft] = key1[i];
-		pad[2][oft] = key2[i];
-		pad[3][oft] = key3[i];
-		pad[4][oft] = key4[i];
-		pad[5][oft] = key5[i];
-		pad[6][oft] = key6[i];
-		pad[7][oft] = key7[i];
+		pad[0U][oft] = key0[i];
+		pad[1U][oft] = key1[i];
+		pad[2U][oft] = key2[i];
+		pad[3U][oft] = key3[i];
+		pad[4U][oft] = key4[i];
+		pad[5U][oft] = key5[i];
+		pad[6U][oft] = key6[i];
+		pad[7U][oft] = key7[i];
 		++oft;
 	}
 
-	kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
+	kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], oft + (sizeof(uint64_t) - oft % sizeof(uint64_t)));
 	hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
 }
 
@@ -5383,15 +4793,15 @@ static void kmacx8_finalize(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	uint8_t* out4, uint8_t* out5, uint8_t* out6, uint8_t* out7, size_t outlen)
 {
-	uint8_t tmps[8][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
-	uint8_t buf[sizeof(size_t) + 1] = { 0 };
-	uint8_t pad[8][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0 };
+	HKDS_ALIGN(64) uint8_t tmps[8U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
+	HKDS_ALIGN(64) uint8_t buf[sizeof(size_t) + 1] = { 0U };
+	HKDS_ALIGN(64) uint8_t pad[8U][HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	const size_t BLKCNT = outlen / (size_t)rate;
 	size_t bitlen;
 	size_t i;
 	size_t pos;
 
-	pos = 0;
+	pos = 0U;
 
 	while (msglen >= (size_t)rate)
 	{
@@ -5403,41 +4813,41 @@ static void kmacx8_finalize(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 		msglen -= (size_t)rate;
 	}
 
-	if (msglen > 0)
+	if (msglen > 0U)
 	{
-		utils_memory_copy(pad[0], (msg0 + pos), msglen);
-		utils_memory_copy(pad[1], (msg1 + pos), msglen);
-		utils_memory_copy(pad[2], (msg2 + pos), msglen);
-		utils_memory_copy(pad[3], (msg3 + pos), msglen);
-		utils_memory_copy(pad[4], (msg4 + pos), msglen);
-		utils_memory_copy(pad[5], (msg5 + pos), msglen);
-		utils_memory_copy(pad[6], (msg6 + pos), msglen);
-		utils_memory_copy(pad[7], (msg7 + pos), msglen);
+		utils_memory_copy(pad[0U], (msg0 + pos), msglen);
+		utils_memory_copy(pad[1U], (msg1 + pos), msglen);
+		utils_memory_copy(pad[2U], (msg2 + pos), msglen);
+		utils_memory_copy(pad[3U], (msg3 + pos), msglen);
+		utils_memory_copy(pad[4U], (msg4 + pos), msglen);
+		utils_memory_copy(pad[5U], (msg5 + pos), msglen);
+		utils_memory_copy(pad[6U], (msg6 + pos), msglen);
+		utils_memory_copy(pad[7U], (msg7 + pos), msglen);
 	}
 
 	pos = msglen;
-	bitlen = keccak_right_encode(buf, outlen * 8);
+	bitlen = keccak_right_encode(buf, outlen * 8U);
 
 	if (pos + bitlen >= (size_t)rate)
 	{
-		kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], (size_t)rate);
+		kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], (size_t)rate);
 		hkds_keccak_permute_p8x1600(state, HKDS_KECCAK_PERMUTATION_ROUNDS);
-		pos = 0;
+		pos = 0U;
 	}
 
-	utils_memory_copy((pad[0] + pos), buf, bitlen);
-	pad[0][pos + bitlen] = HKDS_KECCAK_KMAC_DOMAIN_ID;
-	pad[0][rate - 1] |= 128U;
+	utils_memory_copy((pad[0U] + pos), buf, bitlen);
+	pad[0U][pos + bitlen] = HKDS_KECCAK_KMAC_DOMAIN_ID;
+	pad[0U][rate - 1U] |= 128U;
 
-	utils_memory_copy((pad[1] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[2] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[3] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[4] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[5] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[6] + pos), (pad[0] + pos), (size_t)rate - pos);
-	utils_memory_copy((pad[7] + pos), (pad[0] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[1U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[2U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[3U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[4U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[5U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[6U] + pos), (pad[0U] + pos), (size_t)rate - pos);
+	utils_memory_copy((pad[7U] + pos), (pad[0U] + pos), (size_t)rate - pos);
 
-	kmacx8_fast_absorb(state, pad[0], pad[1], pad[2], pad[3], pad[4], pad[5], pad[6], pad[7], (size_t)rate);
+	kmacx8_fast_absorb(state, pad[0U], pad[1U], pad[2U], pad[3U], pad[4U], pad[5U], pad[6U], pad[7U], (size_t)rate);
 
 	if (outlen > (size_t)rate)
 	{
@@ -5454,20 +4864,20 @@ static void kmacx8_finalize(__m512i state[HKDS_KECCAK_STATE_SIZE], hkds_keccak_r
 		outlen -= BLKCNT * (size_t)rate;
 	}
 
-	if (outlen != 0)
+	if (outlen != 0U)
 	{
-		hkds_keccakx8_squeezeblocks(state, rate, tmps[0], tmps[1], tmps[2], tmps[3], tmps[4], tmps[5], tmps[6], tmps[7], 1);
+		hkds_keccakx8_squeezeblocks(state, rate, tmps[0U], tmps[1U], tmps[2U], tmps[3U], tmps[4U], tmps[5U], tmps[6U], tmps[7U], 1);
 
-		for (i = 0; i < outlen; ++i)
+		for (i = 0U; i < outlen; ++i)
 		{
-			out0[i] = tmps[0][i];
-			out1[i] = tmps[1][i];
-			out2[i] = tmps[2][i];
-			out3[i] = tmps[3][i];
-			out4[i] = tmps[4][i];
-			out5[i] = tmps[5][i];
-			out6[i] = tmps[6][i];
-			out7[i] = tmps[7][i];
+			out0[i] = tmps[0U][i];
+			out1[i] = tmps[1U][i];
+			out2[i] = tmps[2U][i];
+			out3[i] = tmps[3U][i];
+			out4[i] = tmps[4U][i];
+			out5[i] = tmps[5U][i];
+			out6[i] = tmps[6U][i];
+			out7[i] = tmps[7U][i];
 		}
 	}
 }
@@ -5483,45 +4893,45 @@ void hkds_kmac_128x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3,
 	const uint8_t* msg4, const uint8_t* msg5, const uint8_t* msg6, const uint8_t* msg7, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(key4 != NULL);
-	assert(key5 != NULL);
-	assert(key6 != NULL);
-	assert(key7 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(msg4 != NULL);
-	assert(msg5 != NULL);
-	assert(msg6 != NULL);
-	assert(msg7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(key4 != NULL);
+	HKDS_ASSERT(key5 != NULL);
+	HKDS_ASSERT(key6 != NULL);
+	HKDS_ASSERT(key7 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(msg4 != NULL);
+	HKDS_ASSERT(msg5 != NULL);
+	HKDS_ASSERT(msg6 != NULL);
+	HKDS_ASSERT(msg7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const HKDS_ALIGN(64) uint8_t name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx8_customize(state, hkds_keccak_rate_128, key0, key1, key2, key3, key4, key5, key6, key7, keylen,
 		cst0, cst1, cst2, cst3, cst4, cst5, cst6, cst7, cstlen, name, sizeof(name));
 	kmacx8_finalize(state, hkds_keccak_rate_128, msg0, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msglen,
 		out0, out1, out2, out3, out4, out5, out6, out7, outlen);
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_kmac_128x4(out0, out1, out2, out3, outlen, key0, key1, key2, key3, keylen,
 		cst0, cst1, cst2, cst3, cstlen, msg0, msg1, msg2, msg3, msglen);
@@ -5551,45 +4961,45 @@ void hkds_kmac_256x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3,
 	const uint8_t* msg4, const uint8_t* msg5, const uint8_t* msg6, const uint8_t* msg7, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(key4 != NULL);
-	assert(key5 != NULL);
-	assert(key6 != NULL);
-	assert(key7 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(msg4 != NULL);
-	assert(msg5 != NULL);
-	assert(msg6 != NULL);
-	assert(msg7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(key4 != NULL);
+	HKDS_ASSERT(key5 != NULL);
+	HKDS_ASSERT(key6 != NULL);
+	HKDS_ASSERT(key7 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(msg4 != NULL);
+	HKDS_ASSERT(msg5 != NULL);
+	HKDS_ASSERT(msg6 != NULL);
+	HKDS_ASSERT(msg7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const HKDS_ALIGN(64) uint8_t name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx8_customize(state, hkds_keccak_rate_256, key0, key1, key2, key3, key4, key5, key6, key7, keylen,
 		cst0, cst1, cst2, cst3, cst4, cst5, cst6, cst7, cstlen, name, sizeof(name));
 	kmacx8_finalize(state, hkds_keccak_rate_256, msg0, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msglen,
 		out0, out1, out2, out3, out4, out5, out6, out7, outlen);
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_kmac_256x4(out0, out1, out2, out3, outlen, key0, key1, key2, key3, keylen,
 		cst0, cst1, cst2, cst3, cstlen, msg0, msg1, msg2, msg3, msglen);
@@ -5619,45 +5029,45 @@ void hkds_kmac_512x8(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3,
 	const uint8_t* msg0, const uint8_t* msg1, const uint8_t* msg2, const uint8_t* msg3,
 	const uint8_t* msg4, const uint8_t* msg5, const uint8_t* msg6, const uint8_t* msg7, size_t msglen)
 {
-	assert(key0 != NULL);
-	assert(key1 != NULL);
-	assert(key2 != NULL);
-	assert(key3 != NULL);
-	assert(key4 != NULL);
-	assert(key5 != NULL);
-	assert(key6 != NULL);
-	assert(key7 != NULL);
-	assert(msg0 != NULL);
-	assert(msg1 != NULL);
-	assert(msg2 != NULL);
-	assert(msg3 != NULL);
-	assert(msg4 != NULL);
-	assert(msg5 != NULL);
-	assert(msg6 != NULL);
-	assert(msg7 != NULL);
-	assert(out0 != NULL);
-	assert(out1 != NULL);
-	assert(out2 != NULL);
-	assert(out3 != NULL);
-	assert(out4 != NULL);
-	assert(out5 != NULL);
-	assert(out6 != NULL);
-	assert(out7 != NULL);
-	assert(keylen != 0);
-	assert(msglen != 0);
-	assert(outlen != 0);
+	HKDS_ASSERT(key0 != NULL);
+	HKDS_ASSERT(key1 != NULL);
+	HKDS_ASSERT(key2 != NULL);
+	HKDS_ASSERT(key3 != NULL);
+	HKDS_ASSERT(key4 != NULL);
+	HKDS_ASSERT(key5 != NULL);
+	HKDS_ASSERT(key6 != NULL);
+	HKDS_ASSERT(key7 != NULL);
+	HKDS_ASSERT(msg0 != NULL);
+	HKDS_ASSERT(msg1 != NULL);
+	HKDS_ASSERT(msg2 != NULL);
+	HKDS_ASSERT(msg3 != NULL);
+	HKDS_ASSERT(msg4 != NULL);
+	HKDS_ASSERT(msg5 != NULL);
+	HKDS_ASSERT(msg6 != NULL);
+	HKDS_ASSERT(msg7 != NULL);
+	HKDS_ASSERT(out0 != NULL);
+	HKDS_ASSERT(out1 != NULL);
+	HKDS_ASSERT(out2 != NULL);
+	HKDS_ASSERT(out3 != NULL);
+	HKDS_ASSERT(out4 != NULL);
+	HKDS_ASSERT(out5 != NULL);
+	HKDS_ASSERT(out6 != NULL);
+	HKDS_ASSERT(out7 != NULL);
+	HKDS_ASSERT(keylen != 0U);
+	HKDS_ASSERT(msglen != 0U);
+	HKDS_ASSERT(outlen != 0U);
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
-	__m512i state[HKDS_KECCAK_STATE_SIZE] = { 0 };
-	const uint8_t name[] = { 0x4B, 0x4D, 0x41, 0x43 };
+	HKDS_ALIGN(64) __m512i state[HKDS_KECCAK_STATE_SIZE] = { 0U };
+	const HKDS_ALIGN(64) uint8_t name[] = { 0x4BU, 0x4DU, 0x41U, 0x43U };
 
 	kmacx8_customize(state, hkds_keccak_rate_512, key0, key1, key2, key3, key4, key5, key6, key7, keylen,
 		cst0, cst1, cst2, cst3, cst4, cst5, cst6, cst7, cstlen, name, sizeof(name));
 	kmacx8_finalize(state, hkds_keccak_rate_512, msg0, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msglen,
 		out0, out1, out2, out3, out4, out5, out6, out7, outlen);
 
-#elif defined(SYSTEM_HAS_AVX2)
+#elif defined(HKDS_SYSTEM_HAS_AVX2)
 
 	hkds_kmac_512x4(out0, out1, out2, out3, outlen, key0, key1, key2, key3, keylen,
 		cst0, cst1, cst2, cst3, cstlen, msg0, msg1, msg2, msg3, msglen);

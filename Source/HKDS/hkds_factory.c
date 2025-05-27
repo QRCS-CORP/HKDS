@@ -42,7 +42,7 @@ void hkds_factory_serialize_error_message(uint8_t* output, const hkds_error_mess
 
 hkds_packet_header hkds_factory_extract_packet_header(const uint8_t* input)
 {
-	hkds_packet_header hdr = { 0 };
+	hkds_packet_header hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_HEADER_SIZE);
 
@@ -51,7 +51,7 @@ hkds_packet_header hkds_factory_extract_packet_header(const uint8_t* input)
 
 hkds_client_message_request hkds_factory_extract_client_message(const uint8_t* input)
 {
-	hkds_client_message_request hdr = { 0 };
+	hkds_client_message_request hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_CLIENT_MESSAGE_REQUEST_SIZE);
 
@@ -60,7 +60,7 @@ hkds_client_message_request hkds_factory_extract_client_message(const uint8_t* i
 
 hkds_client_token_request hkds_factory_extract_client_token(const uint8_t* input)
 {
-	hkds_client_token_request hdr = { 0 };
+	hkds_client_token_request hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_CLIENT_TOKEN_REQUEST_SIZE);
 
@@ -69,7 +69,7 @@ hkds_client_token_request hkds_factory_extract_client_token(const uint8_t* input
 
 hkds_server_message_response hkds_factory_extract_server_message(const uint8_t* input)
 {
-	hkds_server_message_response hdr = { 0 };
+	hkds_server_message_response hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_SERVER_MESSAGE_RESPONSE_SIZE);
 
@@ -78,7 +78,7 @@ hkds_server_message_response hkds_factory_extract_server_message(const uint8_t* 
 
 hkds_server_token_response hkds_factory_extract_server_token(const uint8_t* input)
 {
-	hkds_server_token_response hdr = { 0 };
+	hkds_server_token_response hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_SERVER_TOKEN_RESPONSE_SIZE);
 
@@ -87,7 +87,7 @@ hkds_server_token_response hkds_factory_extract_server_token(const uint8_t* inpu
 
 hkds_administrative_message hkds_factory_extract_administrative_message(const uint8_t* input)
 {
-	hkds_administrative_message hdr = { 0 };
+	hkds_administrative_message hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_ADMIN_MESSAGE_SIZE);
 
@@ -96,7 +96,7 @@ hkds_administrative_message hkds_factory_extract_administrative_message(const ui
 
 hkds_error_message hkds_factory_extract_error_message(const uint8_t* input)
 {
-	hkds_error_message hdr = { 0 };
+	hkds_error_message hdr = { 0U };
 
 	utils_memory_copy((uint8_t*)&hdr, input, HKDS_ERROR_MESSAGE_SIZE);
 
@@ -107,7 +107,7 @@ hkds_error_message hkds_factory_extract_error_message(const uint8_t* input)
 
 hkds_client_message_request hkds_factory_create_client_message_request(const uint8_t* message, const uint8_t* ksn, const uint8_t* tag)
 {
-	hkds_client_message_request hdr = { 0 };
+	hkds_client_message_request hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{
@@ -131,11 +131,11 @@ hkds_client_message_request hkds_factory_create_client_message_request(const uin
 
 hkds_client_token_request hkds_factory_create_client_token_request(const uint8_t* ksn)
 {
-	hkds_client_token_request hdr = { 0 };
+	hkds_client_token_request hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{
-		.sequence = 0x01,
+		.sequence = 0x01U,
 		.flag = packet_token_request,
 		.length = HKDS_CLIENT_TOKEN_REQUEST_SIZE,
 		.protocol = HKDS_PROTOCOL_TYPE
@@ -149,11 +149,11 @@ hkds_client_token_request hkds_factory_create_client_token_request(const uint8_t
 
 hkds_server_message_response hkds_factory_create_server_message_response(const uint8_t* message)
 {
-	hkds_server_message_response hdr = { 0 };
+	hkds_server_message_response hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{
-		.sequence = 0x02,
+		.sequence = 0x02U,
 		.flag = packet_message_response,
 		.length = HKDS_SERVER_MESSAGE_RESPONSE_SIZE,
 		.protocol = HKDS_PROTOCOL_TYPE
@@ -167,11 +167,11 @@ hkds_server_message_response hkds_factory_create_server_message_response(const u
 
 hkds_server_token_response hkds_factory_create_server_token_reponse(const uint8_t* etok)
 {
-	hkds_server_token_response hdr = { 0 };
+	hkds_server_token_response hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{
-		.sequence = 0x02,
+		.sequence = 0x02U,
 		.flag = packet_token_response,
 		.length = HKDS_SERVER_TOKEN_RESPONSE_SIZE,
 		.protocol = HKDS_PROTOCOL_TYPE
@@ -185,11 +185,11 @@ hkds_server_token_response hkds_factory_create_server_token_reponse(const uint8_
 
 hkds_administrative_message hkds_factory_create_administrative_message(const uint8_t* message)
 {
-	hkds_administrative_message hdr = { 0 };
+	hkds_administrative_message hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{
-		.sequence = 0x01,
+		.sequence = 0x01U,
 		.flag = packet_administrative_message,
 		.length = HKDS_ADMIN_MESSAGE_SIZE,
 		.protocol = HKDS_PROTOCOL_TYPE
@@ -203,7 +203,7 @@ hkds_administrative_message hkds_factory_create_administrative_message(const uin
 
 hkds_error_message hkds_factory_create_error_message(const uint8_t* message, hkds_error_type err)
 {
-	hkds_error_message hdr = { 0 };
+	hkds_error_message hdr = { 0U };
 
 	hkds_packet_header hdp =
 	{

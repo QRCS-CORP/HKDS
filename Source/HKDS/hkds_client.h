@@ -83,9 +83,9 @@
  */
 HKDS_EXPORT_API typedef struct
 {
-    uint8_t edk[HKDS_EDK_SIZE];
-    uint8_t ksn[HKDS_KSN_SIZE];
-    uint8_t tkc[HKDS_CACHE_SIZE][HKDS_MESSAGE_SIZE];
+    HKDS_SIMD_ALIGN uint8_t edk[HKDS_EDK_SIZE];
+    HKDS_SIMD_ALIGN uint8_t ksn[HKDS_KSN_SIZE];
+    HKDS_SIMD_ALIGN uint8_t tkc[HKDS_CACHE_SIZE][HKDS_MESSAGE_SIZE];
     bool cache_empty;
 } hkds_client_state;
 

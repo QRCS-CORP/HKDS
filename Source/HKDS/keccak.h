@@ -55,7 +55,7 @@
 * \code
 * #define MSGLEN 200
 * uint8_t msg[MSGLEN] = {...};
-* uint8_t hash[HKDS_SHA3_512_HASH_SIZE] = { 0 };
+* uint8_t hash[HKDS_SHA3_512_HASH_SIZE] = { 0U };
 * hkds_keccak_state ctx;
 *
 * hkds_sha3_initialize(ctx.state);
@@ -73,7 +73,7 @@
 * uint8_t key[HKDS_KMAC_256_KEY_SIZE] = {...};
 * uint8_t cust[...] = {...};
 * hkds_keccak_state ctx;
-* uint8_t code[HKDS_KMAC_256_MAC_SIZE] = { 0 };
+* uint8_t code[HKDS_KMAC_256_MAC_SIZE] = { 0U };
 *
 * hkds_kmac_initialize(&ctx, hkds_keccak_rate_256, key, sizeof(key), cust, sizeof(cust));
 * 	hkds_kmac_update(&ctx, hkds_keccak_rate_256, msg, MSGLEN);
@@ -84,7 +84,7 @@
 * cSHAKE-512 pseudo-random generation using long-form api \n
 * \code
 *
-* uint8_t output[64] = { 0 };
+* uint8_t output[64] = { 0U };
 * uint8_t key[HKDS_KMAC_512_KEY_SIZE] = {...};
 * uint8_t cust[...] = {...};
 * uint8_t name[...] = {...};
@@ -121,139 +121,139 @@
 * \def HKDS_KECCAK_CSHAKE_DOMAIN_ID
 * \brief The cSHAKE domain id
 */
-#define HKDS_KECCAK_CSHAKE_DOMAIN_ID 0x04
+#define HKDS_KECCAK_CSHAKE_DOMAIN_ID 0x04U
 
 /*!
 * \def HKDS_KECCAK_KMAC_DOMAIN_ID
 * \brief The KMAC domain id
 */
-#define HKDS_KECCAK_KMAC_DOMAIN_ID 0x04
+#define HKDS_KECCAK_KMAC_DOMAIN_ID 0x04U
 
 /*!
 * \def HKDS_KECCAK_KPA_DOMAIN_ID
 * \brief The KPA domain id
 */
-#define HKDS_KECCAK_KPA_DOMAIN_ID 0x41
+#define HKDS_KECCAK_KPA_DOMAIN_ID 0x41U
 
 /*!
 * \def HKDS_KECCAK_PERMUTATION_ROUNDS
 * \brief The standard number of permutation rounds
 */
 #if defined(HKDS_KECCAK_HALF_ROUNDS)
-#	define HKDS_KECCAK_PERMUTATION_ROUNDS 12
+#	define HKDS_KECCAK_PERMUTATION_ROUNDS 12U
 #elif defined(HKDS_KECCAK_DOUBLE_ROUNDS)
-#	define HKDS_KECCAK_PERMUTATION_ROUNDS 48
+#	define HKDS_KECCAK_PERMUTATION_ROUNDS 48U
 #else
-#	define HKDS_KECCAK_PERMUTATION_ROUNDS 24
+#	define HKDS_KECCAK_PERMUTATION_ROUNDS 24U
 #endif
 
 /*!
 * \def HKDS_KECCAK_PERMUTATION_MAX_ROUNDS
 * \brief The maximum number of permutation rounds
 */
-#define HKDS_KECCAK_PERMUTATION_MAX_ROUNDS 48
+#define HKDS_KECCAK_PERMUTATION_MAX_ROUNDS 48U
 
 /*!
 * \def HKDS_KECCAK_PERMUTATION_MIN_ROUNDS
 * \brief The minimum number of permutation rounds
 */
-#define HKDS_KECCAK_PERMUTATION_MIN_ROUNDS 12
+#define HKDS_KECCAK_PERMUTATION_MIN_ROUNDS 12U
 
 /*!
 * \def HKDS_KECCAK_SHA3_DOMAIN_ID
 * \brief The SHA3 domain id
 */
-#define HKDS_KECCAK_SHA3_DOMAIN_ID 0x06
+#define HKDS_KECCAK_SHA3_DOMAIN_ID 0x06U
 
 /*!
 * \def HKDS_KECCAK_SHAKE_DOMAIN_ID
 * \brief The SHAKE domain id
 */
-#define HKDS_KECCAK_SHAKE_DOMAIN_ID 0x1F
+#define HKDS_KECCAK_SHAKE_DOMAIN_ID 0x1FU
 
 /*!
 * \def HKDS_KECCAK_STATE_BYTE_SIZE
 * \brief The Keccak state array byte size
 */
-#define HKDS_KECCAK_STATE_BYTE_SIZE 200
+#define HKDS_KECCAK_STATE_BYTE_SIZE 200U
 
 /*!
 * \def HKDS_KECCAK_128_RATE
 * \brief The 128-bit absorption rate
 */
-#define HKDS_KECCAK_128_RATE 168
+#define HKDS_KECCAK_128_RATE 168U
 
 /*!
 * \def HKDS_KECCAK_256_RATE
 * \brief The 256-bit absorption rate
 */
-#define HKDS_KECCAK_256_RATE 136
+#define HKDS_KECCAK_256_RATE 136U
 
 /*!
 * \def HKDS_KECCAK_512_RATE
 * \brief The 512 bit absorption rate
 */
-#define HKDS_KECCAK_512_RATE 72
+#define HKDS_KECCAK_512_RATE 72U
 
 /*!
 * \def HKDS_KECCAK_STATE_SIZE
 * \brief The Keccak SHA3 uint64 state array size
 */
-#define HKDS_KECCAK_STATE_SIZE 25
+#define HKDS_KECCAK_STATE_SIZE 25U
 
 /*!
 * \def HKDS_KECCAK_STATE_BYTE_SIZE
 * \brief The Keccak SHA3 state size in bytes
 */
-#define HKDS_KECCAK_STATE_BYTE_SIZE 200
+#define HKDS_KECCAK_STATE_BYTE_SIZE 200U
 
 /*!
 * \def HKDS_KMAC_256_KEY_SIZE
 * \brief The KMAC-256 key size in bytes
 */
-#define HKDS_KMAC_256_KEY_SIZE 32
+#define HKDS_KMAC_256_KEY_SIZE 32U
 
 /*!
 * \def HKDS_KMAC_512_KEY_SIZE
 * \brief The KMAC-512 key size in bytes
 */
-#define HKDS_KMAC_512_KEY_SIZE 64
+#define HKDS_KMAC_512_KEY_SIZE 64U
 
 /*!
 * \def HKDS_KECCAK_SCBKDF_DOMAIN_ID
 * \brief The SCBKDF domain id
 */
-#define HKDS_KECCAK_SCBKDF_DOMAIN_ID 0x42
+#define HKDS_KECCAK_SCBKDF_DOMAIN_ID 0x42U
 
 /*!
 * \def HKDS_SHA3_128_HASH_SIZE
 * \brief The HKDS_SHA3_128_HASH_SIZE hash size in bytes (16)
 */
-#define HKDS_SHA3_128_HASH_SIZE 16
+#define HKDS_SHA3_128_HASH_SIZE 16U
 
 /*!
 * \def HKDS_SHA3_256_HASH_SIZE
 * \brief The SHA-256 hash size in bytes (32)
 */
-#define HKDS_SHA3_256_HASH_SIZE 32
+#define HKDS_SHA3_256_HASH_SIZE 32U
 
 /*!
 * \def HKDS_SHA3_512_HASH_SIZE
 * \brief The SHA-512 hash size in bytes (64)
 */
-#define HKDS_SHA3_512_HASH_SIZE 64
+#define HKDS_SHA3_512_HASH_SIZE 64U
 
 /*!
 * \def HKDS_SHAKE_256_KEY_SIZE
 * \brief The SHAKE-256 key size in bytes
 */
-#define HKDS_SHAKE_256_KEY_SIZE 32
+#define HKDS_SHAKE_256_KEY_SIZE 32U
 
 /*!
 * \def HKDS_SHAKE512_KEY_SIZE
 * \brief The SHAKE-512 key size in bytes
 */
-#define HKDS_SHAKE512_KEY_SIZE 64
+#define HKDS_SHAKE512_KEY_SIZE 64U
 
 /* common */
 
@@ -263,9 +263,9 @@
 */
 HKDS_EXPORT_API typedef struct hkds_keccak_state
 {
-	uint64_t state[HKDS_KECCAK_STATE_SIZE];			/*!< The SHA3 state  */
-	uint8_t buffer[HKDS_KECCAK_STATE_BYTE_SIZE];		/*!< The message buffer  */
-	size_t position;								/*!< The buffer position  */
+	HKDS_SIMD_ALIGN uint64_t state[HKDS_KECCAK_STATE_SIZE];			/*!< The SHA3 state  */
+	HKDS_SIMD_ALIGN uint8_t buffer[HKDS_KECCAK_STATE_BYTE_SIZE];	/*!< The message buffer  */
+	size_t position;									/*!< The buffer position  */
 } hkds_keccak_state;
 
 /*!
@@ -274,7 +274,7 @@ HKDS_EXPORT_API typedef struct hkds_keccak_state
 */
 typedef enum hkds_keccak_rate
 {
-	hkds_keccak_rate_none = 0,						/*!< No bit rate was selected  */
+	hkds_keccak_rate_none = 0U,							/*!< No bit rate was selected  */
 	hkds_keccak_rate_128 = HKDS_KECCAK_128_RATE,		/*!< The Keccak 128-bit rate  */
 	hkds_keccak_rate_256 = HKDS_KECCAK_256_RATE,		/*!< The Keccak 256-bit rate  */
 	hkds_keccak_rate_512 = HKDS_KECCAK_512_RATE,		/*!< The Keccak 512-bit rate  */
@@ -291,34 +291,6 @@ typedef enum hkds_keccak_rate
 * \param rounds: The number of permutation rounds, the default is 24, maximum is 48
 */
 HKDS_EXPORT_API void hkds_keccak_absorb(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* message, size_t msglen, uint8_t domain, size_t rounds);
-
-/**
-* \brief Absorb the custom, and name arrays into the Keccak state
-*
-* \param ctx: [struct] The Keccak state structure
-* \param rate: The rate of absorption in bytes
-* \param custom: [const] The customization string
-* \param custlen: The byte length of the customization string
-* \param name: [const] The function name string
-* \param namelen: The byte length of the function name
-* \param rounds: The number of permutation rounds, the default is 24, maximum is 48
-*/
-HKDS_EXPORT_API void hkds_keccak_absorb_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* custom, size_t custlen, const uint8_t* name, size_t namelen, size_t rounds);
-
-/**
-* \brief Absorb the custom, name, and key arrays into the Keccak state.
-*
-* \param ctx: [struct] The Keccak state structure
-* \param rate: The rate of absorption in bytes
-* \param key: [const] The input key byte array
-* \param keylen: The number of key bytes to process
-* \param custom: [const] The customization string
-* \param custlen: The byte length of the customization string
-* \param name: [const] The function name string
-* \param namelen: The byte length of the function name
-* \param rounds: The number of permutation rounds, the default is 24, maximum is 48
-*/
-HKDS_EXPORT_API void hkds_keccak_absorb_key_custom(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uint8_t* key, size_t keylen, const uint8_t* custom, size_t custlen, const uint8_t* name, size_t namelen, size_t rounds);
 
 /**
 * \brief Dispose of the Keccak state.
@@ -343,35 +315,6 @@ HKDS_EXPORT_API void hkds_keccak_dispose(hkds_keccak_state* ctx);
 HKDS_EXPORT_API void hkds_keccak_finalize(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t* output, size_t outlen, uint8_t domain, size_t rounds);
 
 /**
-* \brief Absorb bytes into state incrementally
-*
-* \param ctx: The function state
-* \param rate: The rate of absorption in bytes
-* \param message: [const] The input message array
-* \param msglen: The number of message bytes
-*/
-HKDS_EXPORT_API void hkds_keccak_incremental_absorb(hkds_keccak_state* ctx, uint32_t rate, const uint8_t* message, size_t msglen);
-
-/**
-* \brief Finalize state added incrementally
-*
-* \param ctx: The function state
-* \param rate: The rate of absorption in bytes
-* \param domain: The function domain id
-*/
-HKDS_EXPORT_API void hkds_keccak_incremental_finalize(hkds_keccak_state* ctx, uint32_t rate, uint8_t domain);
-
-/**
-* \brief Extract an array of bytes from the Keccak state
-*
-* \param ctx: The function state
-* \param output: The output byte array
-* \param outlen: The number of output bytes to generate
-* \param rate: The rate of absorption in bytes
-*/
-HKDS_EXPORT_API void hkds_keccak_incremental_squeeze(hkds_keccak_state* ctx, size_t rate, uint8_t* output, size_t outlen);
-
-/**
 * \brief The Keccak permute function.
 * Internal function: Permutes the state array, can be used in external constructions.
 *
@@ -379,23 +322,6 @@ HKDS_EXPORT_API void hkds_keccak_incremental_squeeze(hkds_keccak_state* ctx, siz
 * \param rounds: The number of permutation rounds, the default and maximum is 24
 */
 HKDS_EXPORT_API void hkds_keccak_permute(hkds_keccak_state* ctx, size_t rounds);
-
-/**
-* \brief The compact Keccak permute function.
-* Internal function: Permutes the state array, can be used in external constructions.
-*
-* \param state: The state array; must be initialized
-* \param rounds: The number of permutation rounds, the default and maximum is 24
-*/
-HKDS_EXPORT_API void hkds_keccak_permute_p1600c(uint64_t* state, size_t rounds);
-
-/**
-* \brief The unrolled Keccak permute function.
-* Internal function: Permutes the state array, can be used in external constructions.
-*
-* \param state: The state array; must be initialized
-*/
-HKDS_EXPORT_API void hkds_keccak_permute_p1600u(uint64_t* state);
 
 /**
 * \brief The Keccak squeeze function.
@@ -592,7 +518,7 @@ HKDS_EXPORT_API void hkds_kmac_initialize(hkds_keccak_state* ctx, hkds_keccak_ra
 
 /* parallel Keccak x4 */
 
-#if defined(SYSTEM_HAS_AVX2)
+#if defined(HKDS_SYSTEM_HAS_AVX2)
 
 /**
 * \brief Absorb 4 Keccak instances simultaneously using SIMD instructions.
@@ -633,7 +559,7 @@ void hkds_keccakx4_squeezeblocks(__m256i state[HKDS_KECCAK_STATE_SIZE], hkds_kec
 
 /* parallel Keccak x8 */
 
-#if defined(SYSTEM_HAS_AVX512)
+#if defined(HKDS_SYSTEM_HAS_AVX512)
 
 /**
 * \brief Absorb 4 Keccak instances simultaneously using SIMD instructions.

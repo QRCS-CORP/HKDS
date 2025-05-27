@@ -1,7 +1,7 @@
 #include "testutils.h"
 #include <stdio.h>
 
-char qsctest_get_char()
+char hkdstest_get_char()
 {
 	char line[8] = { 0 };
 	char res;
@@ -17,7 +17,7 @@ char qsctest_get_char()
 }
 
 #if defined(SYSTEM_SOCKETS_WINDOWS)
-char qsctest_get_wait()
+char hkdstest_get_wait()
 {
 	char c;
 
@@ -26,7 +26,7 @@ char qsctest_get_wait()
 	return c;
 }
 #else
-char qsctest_get_wait()
+char hkdstest_get_wait()
 {
 	char c;
 
@@ -36,7 +36,7 @@ char qsctest_get_wait()
 }
 #endif
 
-void qsctest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
+void hkdstest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 {
 	uint8_t idx0;
 	uint8_t idx1;
@@ -59,7 +59,7 @@ void qsctest_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 	}
 }
 
-void qsctest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
+void hkdstest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 {
 	size_t i;
 
@@ -76,7 +76,7 @@ void qsctest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 
 		input += linelen;
 		inputlen -= linelen;
-		qsctest_print_safe("\n");
+		hkdstest_print_safe("\n");
 	}
 
 	if (inputlen != 0)
@@ -92,7 +92,7 @@ void qsctest_print_hex(const uint8_t* input, size_t inputlen, size_t linelen)
 	}
 }
 
-void qsctest_print_safe(const char* input)
+void hkdstest_print_safe(const char* input)
 {
 	if (input != NULL)
 	{
@@ -104,13 +104,13 @@ void qsctest_print_safe(const char* input)
 	}
 }
 
-void qsctest_print_line(const char* input)
+void hkdstest_print_line(const char* input)
 {
-	qsctest_print_safe(input);
-	qsctest_print_safe("\n");
+	hkdstest_print_safe(input);
+	hkdstest_print_safe("\n");
 }
 
-void qsctest_print_ulong(uint64_t digit)
+void hkdstest_print_ulong(uint64_t digit)
 {
 #if defined(_MSC_VER)
 	printf_s("%llu", digit);
@@ -119,7 +119,7 @@ void qsctest_print_ulong(uint64_t digit)
 #endif
 }
 
-void qsctest_print_double(double digit)
+void hkdstest_print_double(double digit)
 {
 #if defined(_MSC_VER)
 	printf_s("%.*lf", 3, digit);
@@ -128,15 +128,15 @@ void qsctest_print_double(double digit)
 #endif
 }
 
-bool qsctest_test_confirm(const char* message)
+bool hkdstest_test_confirm(const char* message)
 {
 	char ans;
 	bool res;
 
-	qsctest_print_line(message);
+	hkdstest_print_line(message);
 
 	res = false;
-	ans = qsctest_get_char();
+	ans = hkdstest_get_char();
 
 	if (ans == 'y' || ans == 'Y')
 	{

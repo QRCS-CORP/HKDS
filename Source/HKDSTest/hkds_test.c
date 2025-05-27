@@ -35,7 +35,7 @@ bool hkdstest_cycle_test()
 	uint8_t toke[HKDS_STK_SIZE + HKDS_TAG_SIZE] = { 0 };
 	bool res;
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 	res = true;
 
 	/* generate the master derivation key {BDK, BTK, MID} */
@@ -59,7 +59,7 @@ bool hkdstest_cycle_test()
 	/* client decrypts the token */
 	if (hkds_client_decrypt_token(&cs, toke, tokd) == false)
 	{
-		qsctest_print_line("hkds_cycle_test: token authentication failure! -HCT1");
+		hkdstest_print_line("hkds_cycle_test: token authentication failure! -HCT1");
 		res = false;
 	}
 
@@ -74,7 +74,7 @@ bool hkdstest_cycle_test()
 
 	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
-		qsctest_print_line("hkds_cycle_test: decryption authentication failure! -HCT2");
+		hkdstest_print_line("hkds_cycle_test: decryption authentication failure! -HCT2");
 		res = false;
 	}
 
@@ -104,23 +104,23 @@ bool hkdstest_kat_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("21EDC540F713649F38EDB3CB9E26336E", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
-	qsctest_hex_to_bin("EB519BE85D80BA42CD231AFD760AC67B238CC46114C28D75F6CBAB17D15F77CA", tokm, sizeof(tokm));
+	hkdstest_hex_to_bin("21EDC540F713649F38EDB3CB9E26336E", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("EB519BE85D80BA42CD231AFD760AC67B238CC46114C28D75F6CBAB17D15F77CA", tokm, sizeof(tokm));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("4422FD14DC32CF52765227782B7DF346", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
-	qsctest_hex_to_bin("8F576DA2168C4582CE02F0E75665FCFD720131C3AB78DE46B7BD1F059AFBCC7D"
+	hkdstest_hex_to_bin("4422FD14DC32CF52765227782B7DF346", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("8F576DA2168C4582CE02F0E75665FCFD720131C3AB78DE46B7BD1F059AFBCC7D"
 		"A83CF9F67FB17E3C3FB888F00A16AD2F", tokm, sizeof(tokm));
 #else
-	qsctest_hex_to_bin("8F8237E723C13AC5C07BDDE483F586DB", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("8F8237E723C13AC5C07BDDE483F586DB", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
-	qsctest_hex_to_bin("FB2C5048D1E3BBB7937F2069C8523F7C3900C306526BB273F708CE2177CE5848"
+	hkdstest_hex_to_bin("FB2C5048D1E3BBB7937F2069C8523F7C3900C306526BB273F708CE2177CE5848"
 		"D5C45B86B44FC2D4E705AA5AE49C85319202F600F4CAAE15CEC92AA29FD6D0CF"
 		"EF48CAFB113BF594D6A7FDFD5FECAE36", tokm, sizeof(tokm));
 #endif
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 
 	res = true;
 
@@ -146,14 +146,14 @@ bool hkdstest_kat_test()
 
 	if (utils_memory_are_equal(toke, tokm, sizeof(toke)) == false)
 	{
-		qsctest_print_line("hkds_kat_test: token does not match expected answer! -HKT1");
+		hkdstest_print_line("hkds_kat_test: token does not match expected answer! -HKT1");
 		res = false;
 	}
 
 	/* client decrypts the token */
 	if (hkds_client_decrypt_token(&cs, toke, tokd) == false)
 	{
-		qsctest_print_line("hkds_kat_test: token decryption failure! -HKT2");
+		hkdstest_print_line("hkds_kat_test: token decryption failure! -HKT2");
 		res = false;
 	}
 
@@ -165,7 +165,7 @@ bool hkdstest_kat_test()
 
 	if (utils_memory_are_equal(cpt, exp, sizeof(cpt)) == false)
 	{
-		qsctest_print_line("hkds_kat_test: ciphertext does not match expected answer! -HKT3");
+		hkdstest_print_line("hkds_kat_test: ciphertext does not match expected answer! -HKT3");
 		res = false;
 	}
 
@@ -174,7 +174,7 @@ bool hkdstest_kat_test()
 
 	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
-		qsctest_print_line("hkds_kat_test: message decryption failure! -HKT4");
+		hkdstest_print_line("hkds_kat_test: message decryption failure! -HKT4");
 		res = false;
 	}
 
@@ -203,18 +203,18 @@ bool hkdstest_katae_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("A0BFAB1B05D8005B0F8929A0DDF5BEF6510E048375C715319C3CCE6FA29D3C8F", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("A0BFAB1B05D8005B0F8929A0DDF5BEF6510E048375C715319C3CCE6FA29D3C8F", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("11A91FAE7C8019CF273EE74AB544631F0B3C56745578192379CD649EE591D488", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("11A91FAE7C8019CF273EE74AB544631F0B3C56745578192379CD649EE591D488", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("0D818095417A9AA6DB9555B491348F3C8513E6196A67EC992719B324E5F2E58B", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("0D818095417A9AA6DB9555B491348F3C8513E6196A67EC992719B324E5F2E58B", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 
 	res = true;
 
@@ -241,7 +241,7 @@ bool hkdstest_katae_test()
 	/* client decrypts the token */
 	if (hkds_client_decrypt_token(&cs, toke, tokd) == false)
 	{
-		qsctest_print_line("hkds_katae_test: token authentication failure! -HKA1");
+		hkdstest_print_line("hkds_katae_test: token authentication failure! -HKA1");
 		res = false;
 	}
 
@@ -253,20 +253,20 @@ bool hkdstest_katae_test()
 
 	if (utils_memory_are_equal(cpt, exp, sizeof(cpt)) == false)
 	{
-		qsctest_print_line("hkds_katae_test: ciphertext does not match expected answer! -HKA2");
+		hkdstest_print_line("hkds_katae_test: ciphertext does not match expected answer! -HKA2");
 		res = false;
 	}
 
 	/* server decrypts the message */
 	if (hkds_server_decrypt_verify_message(&ss, cpt, ad, sizeof(ad), dec) == false)
 	{
-		qsctest_print_line("hkds_katae_test: decryption authentication failure! -HKA3");
+		hkdstest_print_line("hkds_katae_test: decryption authentication failure! -HKA3");
 		res = false;
 	}
 
 	if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 	{
-		qsctest_print_line("hkds_katae_test: decrypted output does not match expected answer! -HKA4");
+		hkdstest_print_line("hkds_katae_test: decrypted output does not match expected answer! -HKA4");
 		res = false;
 	}
 
@@ -293,18 +293,18 @@ bool hkdstest_monte_carlo_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("A2968FF59E0D700AD418EB0387D9F5E7", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("A2968FF59E0D700AD418EB0387D9F5E7", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("5DA79EFD4C52DA29E08D14E05771130D", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("5DA79EFD4C52DA29E08D14E05771130D", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("84827779CF9765C50DED4582B8384324", exp, sizeof(exp));
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("84827779CF9765C50DED4582B8384324", exp, sizeof(exp));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 	res = true;
 
 	/* test master-key with known values */
@@ -335,7 +335,7 @@ bool hkdstest_monte_carlo_test()
 			/* client decrypts the token */
 			if (hkds_client_decrypt_token(&cs, toke, tokd) == false)
 			{
-				qsctest_print_line("monte_carlo_test: token authentication failure! -HMC1");
+				hkdstest_print_line("monte_carlo_test: token authentication failure! -HMC1");
 				res = false;
 				break;
 			}
@@ -352,7 +352,7 @@ bool hkdstest_monte_carlo_test()
 
 		if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 		{
-			qsctest_print_line("monte_carlo_test: decrypted output does not match expected answer! -HMC2");
+			hkdstest_print_line("monte_carlo_test: decrypted output does not match expected answer! -HMC2");
 			res = false;
 			break;
 		}
@@ -365,7 +365,7 @@ bool hkdstest_monte_carlo_test()
 
 	if (utils_memory_are_equal(exp, mres, sizeof(exp)) == false)
 	{
-		qsctest_print_line("monte_carlo_test: monte carlo output does not match expected answer! -HMC3");
+		hkdstest_print_line("monte_carlo_test: monte carlo output does not match expected answer! -HMC3");
 		res = false;
 	}
 
@@ -390,7 +390,7 @@ bool hkdstest_stress_test()
 	uint8_t toke[HKDS_STK_SIZE + HKDS_TAG_SIZE] = { 0 };
 	bool res;
 
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", msg, sizeof(msg));
 	res = true;
 
 	/* generate the master derivation key {BDK, BTK, MID} */
@@ -419,7 +419,7 @@ bool hkdstest_stress_test()
 			/* client decrypts the token */
 			if (hkds_client_decrypt_token(&cs, toke, tokd) == false)
 			{
-				qsctest_print_line("hkds_stress_test: token authentication failure! -HST1");
+				hkdstest_print_line("hkds_stress_test: token authentication failure! -HST1");
 				res = false;
 				break;
 			}
@@ -436,7 +436,7 @@ bool hkdstest_stress_test()
 
 		if (utils_memory_are_equal(msg, dec, sizeof(msg)) == false)
 		{
-			qsctest_print_line("hkds_stress_test: decrypted output does not match expected answer! -HST2");
+			hkdstest_print_line("hkds_stress_test: decrypted output does not match expected answer! -HST2");
 			res = false;
 			break;
 		}
@@ -474,11 +474,11 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
@@ -539,7 +539,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
 		{
-			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HSE1");
+			hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HSE1");
 			res = false;
 			break;
 		}
@@ -573,7 +573,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HSE2");
+			hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HSE2");
 			res = false;
 			break;
 		}
@@ -585,7 +585,7 @@ bool hkdstest_simd_encrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HSE3");
+			hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HSE3");
 			res = false;
 			break;
 		}
@@ -628,11 +628,11 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
@@ -704,7 +704,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 		{
 			if (utils_memory_are_equal(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
 			{
-				qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HPE1");
+				hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: parallel token encryption failure! -HPE1");
 				res = false;
 				break;
 			}
@@ -716,7 +716,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	{
 		if (hkds_client_decrypt_token(&csp[i], tokep1[i], tokdp[i]) == false)
 		{
-			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: token authentication failure! -HPE2");
+			hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: token authentication failure! -HPE2");
 			res = false;
 			break;
 		}
@@ -744,7 +744,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HPE3");
+			hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: sequential message decryption failure! -HPE3");
 			res = false;
 			break;
 		}
@@ -766,7 +766,7 @@ bool hkdstest_parallel_encrypt_equivalence_test()
 		{
 			if (utils_memory_are_equal(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
 			{
-				qsctest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HPE4");
+				hkdstest_print_line("hkds_parallel_encrypt_equivalence_test: parallel message decryption failure! -HPE4");
 				res = false;
 				break;
 			}
@@ -817,11 +817,11 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
@@ -882,7 +882,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(tokep1[i], tokep2[i], HKDS_STK_SIZE) == false)
 		{
-			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: parallel token encryption failure! -HSA1");
+			hkdstest_print_line("hkds_simd_authencrypt_equivalence_test: parallel token encryption failure! -HSA1");
 			res = false;
 			break;
 		}
@@ -893,7 +893,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	{
 		if (hkds_client_decrypt_token(&csp[i], tokep1[i], tokdp[i]) == false)
 		{
-			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: token authentication failure! -HSA2");
+			hkdstest_print_line("hkds_simd_authencrypt_equivalence_test: token authentication failure! -HSA2");
 			res = false;
 			break;
 		}
@@ -921,7 +921,7 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: sequential message decryption failure! -HSA3");
+			hkdstest_print_line("hkds_simd_authencrypt_equivalence_test: sequential message decryption failure! -HSA3");
 			res = false;
 			break;
 		}
@@ -933,14 +933,14 @@ bool hkdstest_simd_authencrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp2[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: parallel message decryption failure! -HSA4");
+			hkdstest_print_line("hkds_simd_authencrypt_equivalence_test: parallel message decryption failure! -HSA4");
 			res = false;
 			break;
 		}
 
 		if (valid[i] == false)
 		{
-			qsctest_print_line("hkds_simd_authencrypt_equivalence_test: parallel message validity check failure! -HSA5");
+			hkdstest_print_line("hkds_simd_authencrypt_equivalence_test: parallel message validity check failure! -HSA5");
 			res = false;
 			break;
 		}
@@ -992,11 +992,11 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	bool res;
 
 #if defined(HKDS_SHAKE_128)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F", key, sizeof(key));
 #elif defined(HKDS_SHAKE_256)
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F", key, sizeof(key));
 #else
-	qsctest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
+	hkdstest_hex_to_bin("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F"
 		"202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F", key, sizeof(key));
 #endif
 
@@ -1065,7 +1065,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 		{
 			if (utils_memory_are_equal(tokep1[i], tokep2[i][j], HKDS_STK_SIZE) == false)
 			{
-				qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel token encryption failure! -HAE1");
+				hkdstest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel token encryption failure! -HAE1");
 				res = false;
 				break;
 			}
@@ -1077,7 +1077,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	{
 		if (hkds_client_decrypt_token(&csp[i], tokep1[i], tokdp[i]) == false)
 		{
-			qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: token authentication failure! -HAE2");
+			hkdstest_print_line("hkds_parallel_authencrypt_equivalence_test: token authentication failure! -HAE2");
 			res = false;
 			break;
 		}
@@ -1105,7 +1105,7 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 	{
 		if (utils_memory_are_equal(msgp[i], decp1[i], HKDS_MESSAGE_SIZE) == false)
 		{
-			qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: sequential message decryption failure! -HAE3");
+			hkdstest_print_line("hkds_parallel_authencrypt_equivalence_test: sequential message decryption failure! -HAE3");
 			res = false;
 			break;
 		}
@@ -1130,14 +1130,14 @@ bool hkdstest_parallel_authencrypt_equivalence_test()
 		{
 			if (utils_memory_are_equal(msgp[i], decp2[i][j], HKDS_MESSAGE_SIZE) == false)
 			{
-				qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel message decryption failure! -HAE4");
+				hkdstest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel message decryption failure! -HAE4");
 				res = false;
 				break;
 			}
 
 			if (valid[i][j] == false)
 			{
-				qsctest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel message validity check failure! -HAE5");
+				hkdstest_print_line("hkds_parallel_authencrypt_equivalence_test: parallel message validity check failure! -HAE5");
 				res = false;
 				break;
 			}
@@ -1152,85 +1152,85 @@ void hkdstest_test_run()
 {
 	if (hkdstest_kat_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS KAT test.");
+		hkdstest_print_line("Success! Passed the HKDS KAT test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS KAT test.");
+		hkdstest_print_line("Failure! Failed the HKDS KAT test.");
 	}
 
 	if (hkdstest_katae_test() == true)
 	{
-		qsctest_print_line("Success! Passed the authenticated HKDS KAT test.");
+		hkdstest_print_line("Success! Passed the authenticated HKDS KAT test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the authenticated HKDS KAT test.");
+		hkdstest_print_line("Failure! Failed the authenticated HKDS KAT test.");
 	}
 
 	if (hkdstest_monte_carlo_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS monte carlo KAT test.");
+		hkdstest_print_line("Success! Passed the HKDS monte carlo KAT test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS monte carlo KAT test.");
+		hkdstest_print_line("Failure! Failed the HKDS monte carlo KAT test.");
 	}
 
 	if (hkdstest_cycle_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS cycle test.");
+		hkdstest_print_line("Success! Passed the HKDS cycle test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS cycle test.");
+		hkdstest_print_line("Failure! Failed the HKDS cycle test.");
 	}
 
 	if (hkdstest_stress_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS stress test.");
+		hkdstest_print_line("Success! Passed the HKDS stress test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS stress test.");
+		hkdstest_print_line("Failure! Failed the HKDS stress test.");
 	}
 
 	if (hkdstest_simd_encrypt_equivalence_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS SIMD encryption equivalence test.");
+		hkdstest_print_line("Success! Passed the HKDS SIMD encryption equivalence test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS SIMD encryption equivalence test.");
+		hkdstest_print_line("Failure! Failed the HKDS SIMD encryption equivalence test.");
 	}
 
 	if (hkdstest_simd_authencrypt_equivalence_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS SIMD authentication and encryption equivalence test.");
+		hkdstest_print_line("Success! Passed the HKDS SIMD authentication and encryption equivalence test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS SIMD authentication and encryption equivalence test.");
+		hkdstest_print_line("Failure! Failed the HKDS SIMD authentication and encryption equivalence test.");
 	}
 
 #if defined(SYSTEM_OPENMP)
 
 	if (hkdstest_parallel_encrypt_equivalence_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS parallel encryption equivalence test.");
+		hkdstest_print_line("Success! Passed the HKDS parallel encryption equivalence test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS parallel encryption equivalence test.");
+		hkdstest_print_line("Failure! Failed the HKDS parallel encryption equivalence test.");
 	}
 
 	if (hkdstest_parallel_authencrypt_equivalence_test() == true)
 	{
-		qsctest_print_line("Success! Passed the HKDS parallel authentication and encryption equivalence test.");
+		hkdstest_print_line("Success! Passed the HKDS parallel authentication and encryption equivalence test.");
 	}
 	else
 	{
-		qsctest_print_line("Failure! Failed the HKDS parallel authentication and encryption equivalence test.");
+		hkdstest_print_line("Failure! Failed the HKDS parallel authentication and encryption equivalence test.");
 	}
 
 #endif
