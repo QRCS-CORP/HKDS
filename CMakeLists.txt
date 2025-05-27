@@ -24,8 +24,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Source files
-file(GLOB_RECURSE HKDS_SOURCES "src/*.c")
-file(GLOB_RECURSE HKDS_HEADERS "include/*.h")
+file(GLOB_RECURSE HKDS_SOURCES "Source/HKDS/*.c")
+file(GLOB_RECURSE HKDS_HEADERS "Source/HKDS//*.h")
 
 # Add library target
 add_library(hkds STATIC ${HKDS_SOURCES} ${HKDS_HEADERS})
@@ -44,4 +44,4 @@ install(DIRECTORY include/ DESTINATION include)
 
 # Testing support
 enable_testing()
-# add_subdirectory(tests)
+add_subdirectory(HKDSTest)
