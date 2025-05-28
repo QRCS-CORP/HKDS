@@ -41,30 +41,6 @@
 #define HKDS_UTILS_H
 
 #include "common.h"
-#include <time.h>
-#if defined(HKDS_SYSTEM_OS_WINDOWS)
-#	include <Windows.h>
-#   if defined(HKDS_SYSTEM_COMPILER_MSC)
-#	    pragma comment(lib, "advapi32.lib")
-#   endif
-#else
-#	include <sys/types.h>
-#	include <sys/stat.h>
-#	include <errno.h>
-#	include <fcntl.h>
-#	include <limits.h>
-#	include <stdlib.h>
-#	include <stdio.h>
-#	include <sys/types.h>
-#	include <unistd.h>
-#	if !defined(O_NOCTTY)
-#		define O_NOCTTY 0
-#	endif
-#endif
-
-#if defined(__OpenBSD__) || defined(__CloudABI__) || defined(__wasi__)
-#	define HAVE_SAFE_ARC4RANDOM
-#endif
 
 /**
 * \internal

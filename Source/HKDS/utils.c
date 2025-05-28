@@ -3,16 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-/* bogus winbase.h error */
-HKDS_SYSTEM_CONDITION_IGNORE(5105)
+#include <time.h>
 
 #if defined(HKDS_SYSTEM_OS_WINDOWS)
-#	if defined(HKDS_SYSTEM_COMPILER_MSC)
-#		pragma comment(lib, "Bcrypt.lib")
-#	endif
 #  include <Windows.h>
 #  include <bcrypt.h>
+#	if defined(HKDS_SYSTEM_COMPILER_MSC)
+#		pragma comment(lib, "Bcrypt.lib")
+#	    pragma comment(lib, "advapi32.lib")
+#	endif
 #	if defined(HKDS_SYSTEM_ARCH_IX86)
 #		include <intrin.h>
 #		pragma intrinsic(__cpuid)
@@ -20,8 +19,15 @@ HKDS_SYSTEM_CONDITION_IGNORE(5105)
 #		include <processthreadsapi.h>
 #	endif
 #elif defined(HKDS_SYSTEM_OS_POSIX)
+#	if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+#		include <cpuid.h>
+#	endif
 #	include <unistd.h>
+#	include <sys/stat.h>
 #	include <sys/types.h>
+#	if !defined(O_NOCTTY)
+#		define O_NOCTTY 0
+#	endif
 #	if defined(HKDS_SYSTEM_OS_BSD) || defined(HKDS_SYSTEM_OS_APPLE)
 #		include <errno.h>
 #		include <stdlib.h>
@@ -41,6 +47,11 @@ HKDS_SYSTEM_CONDITION_IGNORE(5105)
 #		include <sys/systemcfg.h>
 #	endif
 #endif
+
+#if defined(__OpenBSD__) || defined(__CloudABI__) || defined(__wasi__)
+#	define HAVE_SAFE_ARC4RANDOM
+#endif
+
 /*!
  * \def HKDS_CPUIDEX_SERIAL_SIZE
  * \brief The CPU serial number length (in bytes).
@@ -646,7 +657,7 @@ static void utils_bus_info(utils_cpu_features* features)
 
 	utils_cpu_info(info, 0x00000000UL);
 
-	if (info[0U] >= 0x00000016UL)
+	if (info[0U] >= 0x00000016L)
 	{
 		utils_memory_clear(info, sizeof(info));
 		utils_cpu_info(info, 0x00000016UL);
@@ -654,20 +665,6 @@ static void utils_bus_info(utils_cpu_features* features)
 		features->freqmax = info[1U];
 		features->freqref = info[2U];
 	}
-}
-
-static void utils_cpu_cache(utils_cpu_features* features)
-{
-	HKDS_ASSERT(features != NULL);
-
-	int32_t info[4U] = { 0U };
-
-	utils_cpu_info(info, 0x80000006UL);
-
-	features->l1cache = utils_read_bits(info[2], 0, 8);
-	features->l1cacheline = utils_read_bits(info[2], 0, 11);
-	features->l2associative = utils_read_bits(info[2], 12, 4);
-	features->l2cache = utils_read_bits(info[2], 16, 16);
 }
 
 static uint32_t utils_cpu_count()
@@ -1010,6 +1007,20 @@ static void utils_bsd_topology(utils_cpu_features* features)
 
 #elif defined(HKDS_SYSTEM_OS_POSIX)
 
+static void utils_cpu_cache(utils_cpu_features* features)
+{
+	HKDS_ASSERT(features != NULL);
+
+	int32_t info[4U] = { 0U };
+
+	utils_cpu_info(info, 0x80000006UL);
+
+	features->l1cache = utils_read_bits(info[2], 0, 8);
+	features->l1cacheline = utils_read_bits(info[2], 0, 11);
+	features->l2associative = utils_read_bits(info[2], 12, 4);
+	features->l2cache = utils_read_bits(info[2], 16, 16);
+}
+
 static void utils_posix_topology(utils_cpu_features* features)
 {
 #	if defined(HKDS_SYSTEM_ARCH_IX86) && defined(HKDS_SYSTEM_COMPILER_GCC)
@@ -1081,6 +1092,20 @@ static void utils_posix_topology(utils_cpu_features* features)
 }
 
 #elif defined(HKDS_SYSTEM_OS_WINDOWS)
+
+static void utils_cpu_cache(utils_cpu_features* features)
+{
+	HKDS_ASSERT(features != NULL);
+
+	int32_t info[4U] = { 0U };
+
+	utils_cpu_info(info, 0x80000006UL);
+
+	features->l1cache = utils_read_bits(info[2], 0, 8);
+	features->l1cacheline = utils_read_bits(info[2], 0, 11);
+	features->l2associative = utils_read_bits(info[2], 12, 4);
+	features->l2cache = utils_read_bits(info[2], 16, 16);
+}
 
 static void utils_windows_topology(utils_cpu_features* features)
 {
@@ -1409,7 +1434,6 @@ static bool utils_equal512(const uint8_t* a, const uint8_t* b)
     return (eq64 == 0xFFU);
 }
 #endif
-
 
 void utils_memory_aligned_free(void* block)
 {
@@ -1784,7 +1808,6 @@ static void utils_xorv128(const uint8_t value, uint8_t* output)
 	_mm_storeu_si128((__m128i*)output, _mm_xor_si128(_mm_loadu_si128((const __m128i*) & v), _mm_loadu_si128((const __m128i*)output)));
 }
 #endif
-
 
 uint32_t utils_integer_be8to32(const uint8_t* input)
 {
