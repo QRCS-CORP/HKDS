@@ -251,7 +251,7 @@ HKDS_EXPORT_API void hkds_server_encrypt_token_x8(hkds_server_x8_state* state,
  * \param edk [out] A 2D array where the embedded device keys will be stored.
  */
 HKDS_EXPORT_API void hkds_server_generate_edk_x8(const hkds_server_x8_state* state, 
-    const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
+    uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
     uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE]);
 
 /**

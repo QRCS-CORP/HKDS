@@ -276,7 +276,7 @@ static void hkds_server_generate_transaction_key_x8(hkds_server_x8_state* state,
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE])
 {
 	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
 	uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
 	uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
@@ -330,7 +330,7 @@ static void hkds_server_generate_transaction_authkey_x8(hkds_server_x8_state* st
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_MESSAGE_SIZE + HKDS_TAG_SIZE])
 {
 	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
 	uint8_t skey[HKDS_CACHX8_DEPTH][HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
 	uint8_t tok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE] = { 0U };
@@ -397,7 +397,7 @@ void hkds_server_decrypt_message_x8(hkds_server_x8_state* state,
 void hkds_server_encrypt_token_x8(hkds_server_x8_state* state, uint8_t etok[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE + HKDS_TAG_SIZE])
 {
 	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE] = { 0U };
-	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE] = { 0U };
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE] = { 0U };
 	uint8_t tms[HKDS_TMS_SIZE] = { 0U };
 	uint8_t tmpk[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_EDK_SIZE] = { 0U };
@@ -513,7 +513,7 @@ void hkds_server_decrypt_verify_message_x8(hkds_server_x8_state* state,
 }
 
 void hkds_server_generate_edk_x8(const hkds_server_x8_state* state,
-	const uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
+	uint8_t did[HKDS_CACHX8_DEPTH][HKDS_DID_SIZE],
 	uint8_t edk[HKDS_CACHX8_DEPTH][HKDS_EDK_SIZE])
 {
 	uint8_t dkey[HKDS_CACHX8_DEPTH][HKDS_BDK_SIZE + HKDS_DID_SIZE] = { 0U };
