@@ -70,6 +70,7 @@ static void utils_le32to8(uint8_t* output, uint32_t value)
 	output[2U] = (uint8_t)(value >> 16) & 0xFFU;
 	output[3U] = (uint8_t)(value >> 24) & 0xFFU;
 }
+
 void utils_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 {
 	HKDS_ASSERT(hexstr != NULL);
@@ -122,7 +123,6 @@ void utils_print_safe(const char* input)
 #endif
 	}
 }
-
 
 bool utils_seed_generate(uint8_t* output, size_t length)
 {

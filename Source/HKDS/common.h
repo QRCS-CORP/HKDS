@@ -588,20 +588,6 @@ HKDS_CPLUSPLUS_ENABLED_START
 #	endif
 #endif
 
-/*!
-* \def HKDS_ALIGN(x)
-* \brief Macro for aligning data to 'x' bytes using GCC/Clang.
-*/
-#if !defined(HKDS_ALIGN)
-#	if defined(__GNUC__) || defined(__clang__)
-#		define HKDS_ALIGN(x)  __attribute__((aligned(x)))
-#	elif defined(_MSC_VER)
-#		define HKDS_ALIGN(x)  __declspec(align(x))
-#	else
-#		define HKDS_ALIGN(x)
-#	endif
-#endif
-
 #if defined(__SIZEOF_INT128__) && defined(HKDS_SYSTEM_IS_X64) && !defined(__xlc__) && !defined(uint128_t)
   /*!
    * \def HKDS_SYSTEM_NATIVE_UINT128
@@ -933,6 +919,21 @@ HKDS_CPLUSPLUS_ENABLED_START
 
 #if defined(HKDS_SYSTEM_AVX_INTRINSICS) && defined(HKDS_SYSTEM_COMPILER_GCC) && defined(HKDS_ASM_ENABLED)
   // #define HKDS_GCC_ASM_ENABLED  /* Uncomment to enable GCC ASM processing */
+#endif
+
+
+/*!
+* \def HKDS_ALIGN(x)
+* \brief Macro for aligning data to 'x' bytes using GCC/Clang.
+*/
+#if !defined(HKDS_ALIGN)
+#	if defined(_MSC_VER)
+#		define HKDS_ALIGN(x) __declspec(align(x))
+#	elif defined(__GNUC__) || defined(__clang__)
+#		define HKDS_ALIGN(x) __attribute__((aligned(x)))
+#	else
+#		define HKDS_ALIGN(x)
+#	endif
 #endif
 
   /*!
