@@ -8,26 +8,41 @@ on:
 
 jobs:
   cppcheck:
-    name: Run Cppcheck
-    runs-on: ubuntu-latest
+    name: Run Cppcheck on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
     - name: Checkout source
       uses: actions/checkout@v4
 
-    - name: Install cppcheck
-      run: sudo apt-get update && sudo apt-get install -y cppcheck
+    - name: Install Cppcheck
+      shell: bash
+      run: |
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+          brew install cppcheck
+        elif [[ "$RUNNER_OS" == "Windows" ]]; then
+          choco install cppcheck -y
+        fi
 
-    - name: Run cppcheck
+    - name: List directory contents (debug)
+      run: ls -R
+
+    - name: Run Cppcheck
       run: |
         cppcheck --enable=all --inconclusive --std=c11 --force \
                  --suppress=missingIncludeSystem \
                  --inline-suppr \
-                 -I include/ \
-                 src/ 2> cppcheck-report.txt
+                 -I Source/HKDS \
+                 Source/HKDS 2> cppcheck-report.txt
 
     - name: Upload Cppcheck report
       uses: actions/upload-artifact@v4
       with:
-        name: cppcheck-report
+        name: cppcheck-${{ matrix.os }}
         path: cppcheck-report.txt
