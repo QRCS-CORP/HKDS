@@ -232,7 +232,7 @@ void hkds_server_initialize_state(hkds_server_state* state, hkds_master_key* mdk
 /* parallel x8 */
 
 static void hkds_server_generate_token_x8(const hkds_server_x8_state* state, 
-	const uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE], 
+	uint8_t ctok[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE], 
 	uint8_t token[HKDS_CACHX8_DEPTH][HKDS_STK_SIZE])
 {
 	uint8_t tkey[HKDS_CACHX8_DEPTH][HKDS_CTOK_SIZE + HKDS_STK_SIZE] = { 0U };
