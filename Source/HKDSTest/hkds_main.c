@@ -43,9 +43,7 @@ void print_title(void)
 
 int main(void)
 {
-	utils_cpu_features cfeat;
 	bool valid;
-	bool res;
 
 #if defined(HKDS_KECCAK_HALF_ROUNDS)
 	valid = true;
@@ -60,32 +58,6 @@ int main(void)
 #if !defined(HKDS_KECCAK_HALF_ROUNDS)
 		hkdstest_print_line("HKDS: Passed the internal symmetric primitive self-checks.");
 #endif
-
-		res = utils_cpu_features_set(&cfeat);
-
-		if (res == false)
-		{
-			hkdstest_print_line("The CPU type was not recognized on this system!");
-			hkdstest_print_line("Some features may be disabled.");
-		}
-
-		if (cfeat.avx512f == true)
-		{
-			hkdstest_print_line("AVX-512 intrinsics functions have been detected on this system.");
-		}
-		else if (cfeat.avx2 == true)
-		{
-			hkdstest_print_line("AVX2 intrinsics functions have been detected on this system.");
-		}
-		else if (cfeat.avx == true)
-		{
-			hkdstest_print_line("AVX intrinsics functions have been detected on this system.");
-		}
-		else
-		{
-			hkdstest_print_line("The AVX intrinsics functions have not been detected or are not enabled.");
-			hkdstest_print_line("For best performance, enable the maximum available AVX feature set in the project properties (AVX/AVX2/AVX512).");
-		}
 
 #if defined(HKDS_IS_X86)
 		hkdstest_print_line("The system is running in X86 mode; for best performance, compile as X64.");

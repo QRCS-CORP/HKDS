@@ -61,73 +61,6 @@
 #define UTILS_STRING_MAX_LEN 4096
 
 /*!
-* \def UTILS_CPUIDEX_SERIAL_SIZE
-* \brief The CPU serial number length
-*/
-#define UTILS_CPUIDEX_SERIAL_SIZE 12
-
-/*!
-* \def UTILS_CPUIDEX_VENDOR_SIZE
-* \brief The CPU vendor name length
-*/
-#if defined(HKDS_SYSTEM_OS_APPLE) && defined(HKDS_SYSTEM_COMPILER_GCC)
-#	define UTILS_CPUIDEX_VENDOR_SIZE 32
-#else
-#	define UTILS_CPUIDEX_VENDOR_SIZE 12
-#endif
-
-/*!
-* \enum utils_cpu_maker
-* \brief The detectable CPU architectures
-*/
-typedef enum utils_cpu_maker
-{
-    hkds_cpuid_unknown = 0,                  /*!< The CPU type is unknown  */
-    hkds_cpuid_amd = 1,                      /*!< The CPU type is AMD  */
-    hkds_cpuid_intel = 2,                    /*!< The CPU type is Intel */
-    hkds_cpuid_via = 3,                      /*!< The CPU type is VIA */
-    hkds_cpuid_hygion = 4,                   /*!< The CPU type is Hygion */
-} utils_cpu_maker;
-
-/*!
-* \struct utils_cpu_features
-* \brief Contains the CPU feature availability
-*/
-HKDS_EXPORT_API typedef struct utils_cpu_features
-{
-	bool adx;	                            	/*!< The ADX flag  */
-    bool aesni;	                            	/*!< The AESNI flag  */
-    bool pcmul;                             	/*!< The PCLMULQDQ flag */
-
-    bool armv7;                                 /*!< ARMv7 cpu flag */
-    bool neon;                                  /*!< Neon instructions flag */
-    bool sha256;                                /*!< SHA2-256 flag */
-    bool sha512;                                /*!< SHA2-512 flag */
-    bool sha3;                                  /*!< SHA3 flag */
-
-    bool avx;                               	/*!< The AVX flag */
-    bool avx2;                              	/*!< The AVX2 flag */
-    bool avx512f;                           	/*!< The AVX512F flag */
-    bool hyperthread;                       	/*!< The hyper-thread flag */
-    bool rdrand;                            	/*!< The RDRAND flag */
-    bool rdtcsp;                            	/*!< The RDTCSP flag */
-
-    uint32_t cacheline;                     	/*!< The number of cache lines */
-    uint32_t cores;                         	/*!< The number of cores */
-    uint32_t cpus;                          	/*!< The number of CPUs */
-    uint32_t freqbase;                      	/*!< The frequency base */
-    uint32_t freqmax;                       	/*!< The frequency maximum */
-    uint32_t freqref;                       	/*!< The frequency reference */
-    uint32_t l1cache;                       	/*!< The L1 cache size */
-    uint32_t l1cacheline;                   	/*!< The L1 cache line size */
-    uint32_t l2associative;                 	/*!< The L2 associative size */
-    uint32_t l2cache;                       	/*!< The L2 cache size */
-    char serial[UTILS_CPUIDEX_SERIAL_SIZE];   	/*!< The CPU serial number */
-    char vendor[UTILS_CPUIDEX_VENDOR_SIZE];   	/*!< The CPU vendor name */
-    utils_cpu_maker cputype;             	/*!< The CPU manufacturer */
-} utils_cpu_features;
-
-/*!
 * \def HKDS_CSP_SEED_MAX
 * \brief The maximum seed size that can be extracted from a single generate call
 */
@@ -143,16 +76,6 @@ HKDS_EXPORT_API typedef struct utils_cpu_features
 * \return Returns true for success
 */
 HKDS_EXPORT_API bool utils_seed_generate(uint8_t* output, size_t length);
-
-/* cpuid */
-
-/**
-* \brief Get a list of supported CPU features
-*
-* \param features: A utils_cpu_features structure
-* \return Returns true for success, false if CPU is not recognized
-*/
-HKDS_EXPORT_API bool utils_cpu_features_set(utils_cpu_features* const features);
 
 /* console functions */
 
