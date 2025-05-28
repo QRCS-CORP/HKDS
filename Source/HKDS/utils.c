@@ -61,16 +61,6 @@ HKDS_SYSTEM_CONDITION_IGNORE(5105)
 	#define HKDS_CPUIDEX_VENDOR_SIZE 12ULL
 #endif
 
-static void utils_le32to8(uint8_t* output, uint32_t value)
-{
-	HKDS_ASSERT(output != NULL);
-
-	output[0U] = (uint8_t)value & 0xFFU;
-	output[1U] = (uint8_t)(value >> 8) & 0xFFU;
-	output[2U] = (uint8_t)(value >> 16) & 0xFFU;
-	output[3U] = (uint8_t)(value >> 24) & 0xFFU;
-}
-
 void utils_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
 {
 	HKDS_ASSERT(hexstr != NULL);
@@ -599,6 +589,16 @@ static void utils_arm_features(utils_cpu_features* features)
 #	define XCR0_OPMASK 0x00000020UL
 #	define XCR0_ZMM_HI256 0x00000040UL
 #	define XCR0_HI16_ZMM 0x00000080UL
+
+static void utils_le32to8(uint8_t* output, uint32_t value)
+{
+	HKDS_ASSERT(output != NULL);
+
+	output[0U] = (uint8_t)value & 0xFFU;
+	output[1U] = (uint8_t)(value >> 8) & 0xFFU;
+	output[2U] = (uint8_t)(value >> 16) & 0xFFU;
+	output[3U] = (uint8_t)(value >> 24) & 0xFFU;
+}
 
 static void utils_cpu_info(int32_t info[4U], const uint32_t infotype)
 {

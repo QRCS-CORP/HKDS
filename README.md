@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml)
 [![Cppcheck](https://github.com/QRCS-CORP/HKDS/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/cppcheck.yml)
+[![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](https://github.com/QRCS-CORP/HKDS/security/policy)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
