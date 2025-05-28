@@ -1202,7 +1202,8 @@ int64_t utils_find_string(const char* source, const char* token)
 		{
 			if (source[i] == token[0U])
 			{
-				if (utils_memory_are_equal(source + i, token, tlen) == true)
+				/* safe cast: interpreting ASCII text as byte array for equality check */ 
+				if (utils_memory_are_equal((const uint8_t*)source + i, (const uint8_t*)token, tlen) == true)
 				{
 					pos = i;
 					break;
@@ -1517,6 +1518,8 @@ bool utils_memory_are_equal_128(const uint8_t* a, const uint8_t* b)
 
 	uint8_t mctr;
 
+	mctr = 0;
+
 	for (size_t i = 0U; i < 16U; ++i)
 	{
 		mctr |= (a[i] ^ b[i]);
@@ -1541,6 +1544,8 @@ bool utils_memory_are_equal_256(const uint8_t* a, const uint8_t* b)
 #else
 
 	uint8_t mctr;
+
+	mctr = 0;
 
 	for (size_t i = 0U; i < 32U; ++i)
 	{
@@ -1573,6 +1578,8 @@ bool utils_memory_are_equal_512(const uint8_t* a, const uint8_t* b)
 #else
 
 	uint8_t mctr;
+
+	mctr = 0;
 
 	for (size_t i = 0U; i < 64U; ++i)
 	{
