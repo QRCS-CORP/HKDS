@@ -1630,6 +1630,10 @@ static bool hkds_selftest_sha3_test(void)
 	{
 		res = false;
 	}
+	else if (shake_512_kat() == false)
+	{
+		res = false;
+	}
 	else if (kmac_128_kat() == false)
 	{
 		res = false;
