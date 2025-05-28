@@ -83,15 +83,12 @@ void hkds_message_queue_pop(hkds_message_queue_state* ctx, uint8_t* output, size
 	HKDS_ASSERT(output != NULL);
 	HKDS_ASSERT(outlen != 0U);
 
-	uint64_t tag;
-
 	if (ctx->state.position != 0U)
 	{
 		if (!hkds_message_queue_empty(ctx) && outlen <= ctx->state.width)
 		{
 			utils_memory_copy(output, ctx->state.queue[0U], outlen);
 			utils_memory_clear(ctx->state.queue[0U], ctx->state.width);
-			tag = ctx->state.tags[ctx->state.position - 1U];
 
 			if (ctx->state.count > 1U)
 			{
