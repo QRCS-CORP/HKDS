@@ -499,6 +499,7 @@ void* utils_memory_aligned_alloc(int32_t align, size_t length)
 	HKDS_ASSERT(align != 0);
 	HKDS_ASSERT(length != 0U);
 
+	(void)align;
 	void* ret;
 
 	ret = NULL;
