@@ -20,10 +20,10 @@
 #include "hkds_benchmark.h"
 #include "hkds_test.h"
 #include "testutils.h"
-#include "../HKDS/common.h"
-#include "../HKDS/utils.h"
-#include "../HKDS/hkds_config.h"
-#include "../HKDS/hkds_selftest.h"
+#include "hkdscommon.h"
+#include "utils.h"
+#include "hkds_config.h"
+#include "hkds_selftest.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -32,9 +32,9 @@ void print_title(void)
 	hkdstest_print_line("******************************************************");
 	hkdstest_print_line("* HKDS: Heirarchal symmetric Key Distribution System *");
 	hkdstest_print_line("*                                                    *");
-	hkdstest_print_line("* Release:   v1.0.0.2b (A2)                          *");
+	hkdstest_print_line("* Release:   v1.0.0.2c (A2)                          *");
 	hkdstest_print_line("* License:   Copyrighted and Patent pending          *");
-	hkdstest_print_line("* Date:      May 27 2025                             *");
+	hkdstest_print_line("* Date:      May 31 2025                             *");
 	hkdstest_print_line("* Author:    John G. Underhill                       *");
 	hkdstest_print_line("* Contact:   john.underhill@protonmail.com           *");
 	hkdstest_print_line("******************************************************");

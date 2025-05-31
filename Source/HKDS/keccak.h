@@ -265,7 +265,7 @@ HKDS_EXPORT_API typedef struct hkds_keccak_state
 {
 	HKDS_SIMD_ALIGN uint64_t state[HKDS_KECCAK_STATE_SIZE];			/*!< The SHA3 state  */
 	HKDS_SIMD_ALIGN uint8_t buffer[HKDS_KECCAK_STATE_BYTE_SIZE];	/*!< The message buffer  */
-	size_t position;									/*!< The buffer position  */
+	size_t position;												/*!< The buffer position  */
 } hkds_keccak_state;
 
 /*!

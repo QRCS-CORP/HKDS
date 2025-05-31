@@ -1,9 +1,9 @@
 #include "hkds_benchmark.h"
 #include "testutils.h"
-#include "../HKDS/hkds_client.h"
-#include "../HKDS/keccak.h"
-#include "../HKDS/hkds_server.h"
-#include "../HKDS/utils.h"
+#include "hkds_client.h"
+#include "keccak.h"
+#include "hkds_server.h"
+#include "utils.h"
 
 /* bs*sc = 1GB */
 #define BUFFER_SIZE 1024

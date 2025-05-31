@@ -1,8 +1,8 @@
 #include "hkds_test.h"
 #include "testutils.h"
-#include "../HKDS/hkds_client.h"
-#include "../HKDS/hkds_server.h"
-#include "../HKDS/utils.h"
+#include "hkds_client.h"
+#include "hkds_server.h"
+#include "utils.h"
 
 #define HKDSTEST_CYCLES_COUNT 1000
 

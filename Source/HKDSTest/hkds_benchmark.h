@@ -40,7 +40,7 @@
 #ifndef HKDSTEST_BENCHMARK_H
 #define HKDSTEST_BENCHMARK_H
 
-#include "common.h"
+#include "hkdscommon.h"
 
 /**
  * \file hkds_benchmark.h

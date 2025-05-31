@@ -672,31 +672,31 @@ HKDS_CPLUSPLUS_ENABLED_START
  * \def HKDS_SYSTEM_MAX_PATH
  * \brief The maximum path length supported by the system.
  */
-#define HKDS_SYSTEM_MAX_PATH 260ULL
+#define HKDS_SYSTEM_MAX_PATH 260U
 
 /*!
  * \def HKDS_SYSTEM_SECMEMALLOC_DEFAULT
  * \brief Default secure memory buffer allocation size (in bytes).
  */
-#define HKDS_SYSTEM_SECMEMALLOC_DEFAULT 4096ULL
+#define HKDS_SYSTEM_SECMEMALLOC_DEFAULT 4096U
 
 /*!
  * \def HKDS_SYSTEM_SECMEMALLOC_MIN
  * \brief Minimum secure memory allocation size (in bytes).
  */
-#define HKDS_SYSTEM_SECMEMALLOC_MIN 16ULL
+#define HKDS_SYSTEM_SECMEMALLOC_MIN 16U
 
 /*!
  * \def HKDS_SYSTEM_SECMEMALLOC_MAX
  * \brief Maximum secure memory allocation size (in bytes).
  */
-#define HKDS_SYSTEM_SECMEMALLOC_MAX 128ULL
+#define HKDS_SYSTEM_SECMEMALLOC_MAX 128U
 
 /*!
  * \def HKDS_SYSTEM_SECMEMALLOC_MAXKB
  * \brief Maximum secure memory allocation in kilobytes.
  */
-#define HKDS_SYSTEM_SECMEMALLOC_MAXKB 512ULL
+#define HKDS_SYSTEM_SECMEMALLOC_MAXKB 512U
 
 #if defined(_WIN32)
   /*!
@@ -959,13 +959,13 @@ HKDS_CPLUSPLUS_ENABLED_START
    * \brief Alignment value for enabled intrinsic.
    */
 #if defined(HKDS_SYSTEM_HAS_AVX512)
-#  define HKDS_SIMD_ALIGNMENT 64
+#  define HKDS_SIMD_ALIGNMENT 64U
 #elif defined(HKDS_SYSTEM_HAS_AVX2)
-#  define HKDS_SIMD_ALIGNMENT 32
+#  define HKDS_SIMD_ALIGNMENT 32U
 #elif defined(HKDS_SYSTEM_HAS_AVX)
-#  define HKDS_SIMD_ALIGNMENT 16
+#  define HKDS_SIMD_ALIGNMENT 16U
 #else
-#  define HKDS_SIMD_ALIGNMENT 8
+#  define HKDS_SIMD_ALIGNMENT 8U
 #endif
 
   /*!
@@ -992,7 +992,7 @@ HKDS_CPLUSPLUS_ENABLED_START
  * \def HKDS_STATUS_SUCCESS
  * \brief Function return value indicating successful operation.
  */
-#define HKDS_STATUS_SUCCESS 0LL
+#define HKDS_STATUS_SUCCESS 0U
 
 /*!
  * \def HKDS_STATUS_FAILURE

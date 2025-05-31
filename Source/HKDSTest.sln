@@ -3,48 +3,39 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDSTest", "HKDSTest.vcxproj", "{753B7935-2555-478C-BB32-BA2D8ED18A7D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E951E07C-A97E-4603-8656-BEB4B18F532D} = {E951E07C-A97E-4603-8656-BEB4B18F532D}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDS", "..\HKDS\HKDS.vcxproj", "{E951E07C-A97E-4603-8656-BEB4B18F532D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85D38812-9882-4D2D-AB85-9CFEAAA7737D}"
 	ProjectSection(SolutionItems) = preProject
-		..\HKDS\QRCS-PL License.txt = ..\HKDS\QRCS-PL License.txt
+		QRCS-PL License.txt = QRCS-PL License.txt
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDS", "HKDS\HKDS.vcxproj", "{E951E07C-A97E-4603-8656-BEB4B18F532D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HKDSTest", "HKDSTest\HKDSTest.vcxproj", "{753B7935-2555-478C-BB32-BA2D8ED18A7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|ARM.ActiveCfg = Debug|Win32
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x64.ActiveCfg = Debug|x64
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x64.Build.0 = Debug|x64
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x86.ActiveCfg = Debug|Win32
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x86.Build.0 = Debug|Win32
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|ARM.ActiveCfg = Release|Win32
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x64.ActiveCfg = Release|x64
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x64.Build.0 = Release|x64
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x86.ActiveCfg = Release|Win32
-		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x86.Build.0 = Release|Win32
-		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Debug|ARM.ActiveCfg = Debug|Win32
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Debug|x64.ActiveCfg = Debug|x64
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Debug|x64.Build.0 = Debug|x64
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Debug|x86.ActiveCfg = Debug|Win32
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Debug|x86.Build.0 = Debug|Win32
-		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Release|ARM.ActiveCfg = Release|Win32
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Release|x64.ActiveCfg = Release|x64
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Release|x64.Build.0 = Release|x64
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Release|x86.ActiveCfg = Release|Win32
 		{E951E07C-A97E-4603-8656-BEB4B18F532D}.Release|x86.Build.0 = Release|Win32
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x64.ActiveCfg = Debug|x64
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x64.Build.0 = Debug|x64
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x86.ActiveCfg = Debug|Win32
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Debug|x86.Build.0 = Debug|Win32
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x64.ActiveCfg = Release|x64
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x64.Build.0 = Release|x64
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x86.ActiveCfg = Release|Win32
+		{753B7935-2555-478C-BB32-BA2D8ED18A7D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

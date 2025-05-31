@@ -42,7 +42,7 @@
 
 /* \cond */
 
-#include "common.h"
+#include "hkdscommon.h"
 
 /**
 * \internal

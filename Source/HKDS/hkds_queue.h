@@ -58,19 +58,19 @@
  * \def HKDS_MESSAGE_QUEUE_TAG_SIZE
  * \brief The recommended queue tag size.
  */
-#define HKDS_MESSAGE_QUEUE_TAG_SIZE 16
+#define HKDS_MESSAGE_QUEUE_TAG_SIZE 16U
 
 /*!
  * \def HKDS_QUEUE_ALIGNMENT
  * \brief The internal memory alignment constant.
  */
-#define HKDS_QUEUE_ALIGNMENT 64
+#define HKDS_QUEUE_ALIGNMENT 64U
 
 /*!
  * \def HKDS_QUEUE_MAX_DEPTH
  * \brief The maximum queue depth.
  */
-#define HKDS_QUEUE_MAX_DEPTH 64
+#define HKDS_QUEUE_MAX_DEPTH 64U
 
 /*!
  * \struct hkds_queue_state
