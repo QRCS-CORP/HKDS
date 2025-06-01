@@ -25,7 +25,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Source files
 file(GLOB_RECURSE HKDS_SOURCES "Source/HKDS/*.c")
-file(GLOB_RECURSE HKDS_HEADERS "Source/HKDS//*.h")
+file(GLOB_RECURSE HKDS_HEADERS "Source/HKDS/*.h")
 
 # Add library target
 add_library(hkds STATIC ${HKDS_SOURCES} ${HKDS_HEADERS})
