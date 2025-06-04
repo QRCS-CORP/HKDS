@@ -1,0 +1,8 @@
+---
+# Exclude all files/folders by default
+exclude_paths:
+  - "**/*"
+
+# Re‐include only the Source folder (and its contents)
+include_paths:
+  - "Source/**"
