@@ -52,6 +52,67 @@ The project is organized into several modules:
 - **Benchmark Module (`hkds_benchmark.h`/`.c`):** Provides performance benchmarking for cryptographic primitives and protocol operations.
 - **Test Module (`hkds_test.h`/`.c`):** Contains comprehensive tests for functional correctness and performance.
 
+## Compilation
+
+### Prerequisites
+
+- **CMake**: 3.15 or newer
+- **Windows**: Visual Studio 2022 or newer
+- **macOS**: Clang via Xcode or Homebrew
+- **Ubuntu**: GCC or Clang  
+
+### Building HKDS and HKDSTest
+
+#### Windows (MSVC)
+
+Use the Visual Studio solution to create the HKDS library and test project HKDSTest.
+Extract the files, and open the HKDSTest project. 
+The HKDS library has a default location in a folder parallel to the HKDSTest folder. 
+The HKDSTest additional files folder is set to: **$(SolutionDir)..\HKDS\HKDS**, if this is not the location of the library files, change it by going to HKDSTest project properties **Configuration Properties->C/C++->General->Additional Include Directories** and set the library files location.  
+Ensure that the **HKDSTest->References** property contains a reference to the HKDS library. HKDS supports every AVX instruction family (AVX/AVX2/AVX-512).   
+Set the HKDS library and the HKDSTest project to the same AVX family setting in **Configuration Properties->C/C++->All Options->Enable Enhanced Instruction Set**.  
+Set both HKDS and HKDSTest to the same instruction set in Debug and Release Solution Configurations.  
+Compile the HKDS library (right-click and choose build), then set the HKDSTest project as the startup project (right-click Set as Startup Project), and run the project.
+
+#### MacOS / Ubuntu (Eclipse)
+
+The HKDS library and HKDSTest project have been tested using the Eclipse IDE on Ubuntu and MacOS.  
+In the Eclipse folder there are subfolders for Ubuntu and MacOS that contain the **.project**, **.cproject**, and **.settings** Eclipse files.  Copy those files directly into the folders containing the code files, ex. in the **Eclipse\Ubuntu\HKDS** folder, and do the same for the HKDSTest project.  
+Create a new project for HKDS, select C/C++ project, and then **Create an empty project** with the same name as the folder with the files, ex. HKDSTest.  
+Eclipse should load the project with all of the settings into the project view window. The same proceedure is true for **MacOS and Ubuntu**, but some settings are different (GCC/Clang), so choose the project files that correspond to the operating system.  
+The default projects use minimal flags, but are set to use AVX2, AES-NI, and RDRand by default.
+
+Sample flag sets and their meanings:  
+-**AVX Support**: -msse2 -mavx -maes -mpclmul -mrdrnd -mbmi2  
+-**msse2**        # baseline for x86_64  
+-**mavx**         # 256-bit FP/SIMD  
+-**maes**         # AES-NI (128-bit AES rounds)  
+-**mpclmul**      # PCLMUL (carry-less multiply)  
+-**mrdrnd**       # RDRAND (hardware RNG)  
+-**mbmi2**        # BMI2 (PEXT/PDEP, bit-manipulation)  
+
+-**AVX2 Support**: -msse2 -mavx -mavx2 -mpclmul -maes -mrdrnd -mbmi2  
+-**msse2**        # baseline for x86_64  
+-**mavx**         # AVX baseline  
+-**mavx2**        # 256-bit integer + FP SIMD  
+-**mpclmul**      # PCLMUL (carry-less multiply for AES-GCM, GHASH, etc.)  
+-**maes**         # AES-NI (128-bit AES rounds)  
+-**mrdrnd**       # RDRAND (hardware RNG)  
+-**mbmi2**        # BMI2 (PEXT/PDEP, bit-manipulation)  
+
+-**AVX-512 Support**: -msse2 -mavx -mavx2 -mavx512f -mavx512bw -mvaes -mpclmul -mrdrnd -mbmi2 -maes  
+-**msse2**        # baseline for x86_64  
+-**mavx**         # AVX baseline  
+-**mavx2**        # AVX2 baseline (implied by AVX-512 but explicit is safer)  
+-**mavx512f**     # 512-bit Foundation instructions  
+-**mavx512bw**    # 512-bit Byte/Word integer instructions  
+-**mvaes**        # Vector-AES (VAES) in 512-bit registers  
+-**mpclmul**      # PCLMUL (carry-less multiply for GF(2ⁿ))  
+-**mrdrnd**       # RDRAND (hardware RNG)  
+-**mbmi2**        # BMI2 (PEXT/PDEP, bit-manipulation)  
+-**maes**         # AES-NI (128-bit AES rounds; optional if VAES covers your AES use)  
+
+
 ## Conclusion
 
 Together, these modules form a complete solution for secure key management and message processing in transactional systems. The HKDS protocol, with its rigorous testing and performance benchmarks, ensures both security and operational efficiency in high-stakes environments. This documentation serves as a guide for understanding, using, and extending the HKDS protocol and its accompanying test suite.
