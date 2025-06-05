@@ -4,13 +4,12 @@
 [![CodeQL](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/qrcs-corp/hkds/badge)](https://www.codefactor.io/repository/github/qrcs-corp/hkds)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
-[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
-[![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/LICENSE)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](https://github.com/QRCS-CORP/HKDS/security/policy)
+[![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/LICENSE)
+[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/HKDS.svg)](https://github.com/QRCS-CORP/HKDS/commits/main)
-[![Language](https://img.shields.io/badge/language-C-blue.svg)](https://github.com/QRCS-CORP/HKDS)
-
+[![Custom: Beta](https://img.shields.io/static/v1?label=Security&message=HIGH&color=blue)](https://github.com/QRCS-CORP/HKDS)
 
 ## Introduction
 
