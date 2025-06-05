@@ -6,11 +6,11 @@
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](https://github.com/QRCS-CORP/HKDS/security/policy)
 [![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/LICENSE)
-![Language](https://img.shields.io/static/v1?label=Language&message=C%2017&color=blue)
+![Language](https://img.shields.io/static/v1?label=Language&message=C%2023&color=blue)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/HKDS.svg)](https://github.com/QRCS-CORP/HKDS/commits/main)
-![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=PCI%20DSS&color=blue)
+[![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=PCI%20DSS&color=blue)] (https://listings.pcisecuritystandards.org/pci_security/)
 ![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial&color=brightgreen)
 
 ## Introduction
