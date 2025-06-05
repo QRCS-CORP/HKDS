@@ -1,5 +1,7 @@
 # HKDS Protocol Project Documentation
 
+## Introduction
+
 [![Build Status](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/qrcs-corp/hkds/badge)](https://www.codefactor.io/repository/github/qrcs-corp/hkds)
@@ -13,7 +15,9 @@
 [![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=PCI%20DSS&color=blue)](https://listings.pcisecuritystandards.org/pci_security/)
 [![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial&color=brightgreen)](#)
 
-## Introduction
+**HKDS: A Hierarchical Key Derivation and Token Exchange Protocol for High-Security POS Systems**
+
+## Overview
 
 The HKDS Protocol Project implements a Hierarchical Key Derivation System (HKDS) designed to provide a robust and secure mechanism for key management and token exchange between client devices and a transaction processing server. Leveraging cryptographic primitives standardized by NIST (including SHA-3, SHAKE, and KMAC), the HKDS protocol is well-suited for high-security environments such as point-of-sale (POS) systems.
 
