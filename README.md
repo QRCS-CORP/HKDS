@@ -9,7 +9,7 @@
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/HKDS.svg)](https://github.com/QRCS-CORP/HKDS/commits/main)
-[![Custom: Beta](https://img.shields.io/static/v1?label=Coding Standard&message=High Security&color=blue)](https://github.com/QRCS-CORP/HKDS)
+[![Custom: Beta](https://img.shields.io/static/v1?label=Coding%20Standard&message=High%20Security&color=blue)](https://github.com/QRCS-CORP/HKDS)
 
 ## Introduction
 
