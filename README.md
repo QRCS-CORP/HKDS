@@ -10,7 +10,7 @@
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/HKDS.svg)](https://github.com/QRCS-CORP/HKDS/commits/main)
-[![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=PCI%20DSS&color=blue)] (https://listings.pcisecuritystandards.org/pci_security/)
+[![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=PCI%20DSS&color=blue)](https://listings.pcisecuritystandards.org/pci_security/)
 ![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial&color=brightgreen)
 
 ## Introduction
