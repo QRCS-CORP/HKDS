@@ -10,6 +10,10 @@
 [![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/LICENSE)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](https://github.com/QRCS-CORP/HKDS/security/policy)
 ![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/HKDS.svg)](https://github.com/QRCS-CORP/HKDS/commits/main)
+[![Codacy Grade](https://app.codacy.com/project/badge/Grade/<PROJECT_ID>)](https://www.codacy.com/gh/<USERNAME>/<REPO>/dashboard?utm_source=github.com&utm_medium=referral&utm_content=<USERNAME>/<REPO>&utm_campaign=Badge_Grade)
+[![Language](https://img.shields.io/badge/language-C-blue.svg)](https://github.com/QRCS-CORP/HKDS)
+
 
 ## Introduction
 
