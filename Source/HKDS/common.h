@@ -945,7 +945,10 @@ HKDS_CPLUSPLUS_ENABLED_START
 * \brief Macro for aligning data to 'x' bytes using GCC/Clang.
 */
 #if !defined(HKDS_ALIGN)
-#	if defined(_MSC_VER)
+/* If compiling in C23 or later, use the built-in 'alignas' keyword. */
+#   if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 202311L)
+#       define HKDS_SIMD_ALIGN(x) alignas(x)
+#	elif defined(_MSC_VER)
 #		define HKDS_ALIGN(x) __declspec(align(x))
 #	elif defined(__GNUC__) || defined(__clang__)
 #		define HKDS_ALIGN(x) __attribute__((aligned(x)))
@@ -972,7 +975,10 @@ HKDS_CPLUSPLUS_ENABLED_START
    * \def HKDS_SIMD_ALIGN
    * \brief Macro to align data on supported intrinsics size
    */
-#if defined(_MSC_VER)
+/* If compiling in C23 or later, use the built-in 'alignas' keyword. */
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 202311L)
+#  define HKDS_SIMD_ALIGN(x) alignas(x)
+#elif defined(_MSC_VER)
 #  define HKDS_SIMD_ALIGN __declspec(align(HKDS_SIMD_ALIGNMENT))
 #elif defined(__GNUC__) || defined(__clang__)
 #  define HKDS_SIMD_ALIGN _Alignas(HKDS_SIMD_ALIGNMENT)
@@ -1026,3 +1032,4 @@ HKDS_CPLUSPLUS_ENABLED_START
 HKDS_CPLUSPLUS_ENABLED_END
 
 #endif
+
