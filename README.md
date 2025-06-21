@@ -7,7 +7,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/qrcs-corp/hkds/badge)](https://www.codefactor.io/repository/github/qrcs-corp/hkds)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](https://github.com/QRCS-CORP/HKDS/security/policy)
-[![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/QRCS-PL%20License.txt)
+[![License: QRCS License](https://img.shields.io/badge/License-QRCS%20License-blue.svg)](https://github.com/QRCS-CORP/HKDS/blob/main/License.txt)
 [![Language](https://img.shields.io/static/v1?label=Language&message=C%2023&color=blue)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3220.pdf)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/HKDS/)
 [![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/HKDS)](https://github.com/QRCS-CORP/HKDS/releases/tag/2025-05-27)
