@@ -10,8 +10,12 @@ on:
 
 jobs:
   analyze:
-    name: CodeQL Analyze
-    runs-on: ubuntu-latest
+    name: CodeQL Static Analysis
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     permissions:
       actions: read
       contents: read
