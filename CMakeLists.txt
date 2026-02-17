@@ -29,7 +29,7 @@ file(GLOB_RECURSE HKDS_HEADERS "Source/HKDS/*.h")
 
 # Add library target
 add_library(hkds STATIC ${HKDS_SOURCES} ${HKDS_HEADERS})
-target_include_directories(hkds PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(hkds PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Enable warnings
 if(MSVC)
