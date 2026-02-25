@@ -239,6 +239,14 @@ HKDS_EXPORT_API void utils_memory_copy(void* output, const void* input, size_t l
 */
 HKDS_EXPORT_API void utils_memory_xor(uint8_t* output, const uint8_t* input, size_t length);
 
+/**
+* \brief Securely erase a region of memory
+*
+* \param output: A pointer to the memory block to erase
+* \param length: The number of bytes to erase
+*/
+HKDS_EXPORT_API void utils_memory_secure_erase(void* output, size_t length);
+
 /* integer functions */
 
 /**

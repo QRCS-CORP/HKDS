@@ -170,8 +170,9 @@ HKDS_EXPORT_API void hkds_server_generate_edk(const uint8_t* bdk, const uint8_t*
  * \param rng_generate [in] Pointer to the random generator function.
  * \param mdk [out] Pointer to the master key set structure where the keys will be stored.
  * \param kid [in] Pointer to the master key identity string.
+ * \return Returns true if the mdk is successful; otherwise, false.
  */
-HKDS_EXPORT_API void hkds_server_generate_mdk(bool (*rng_generate)(uint8_t*, size_t), hkds_master_key* mdk, const uint8_t* kid);
+HKDS_EXPORT_API bool hkds_server_generate_mdk(bool (*rng_generate)(uint8_t*, size_t), hkds_master_key* mdk, const uint8_t* kid);
 
 /**
  * \brief Initialize the HKDS server state.

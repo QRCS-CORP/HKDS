@@ -10,7 +10,7 @@ static void hkds_client_generate_transaction_key(hkds_client_state* state, uint8
 	idx = (size_t)utils_integer_be8to32(((uint8_t*)state->ksn + HKDS_DID_SIZE)) % HKDS_CACHE_SIZE;
 	/* copy the key and erase from cache memory */
 	utils_memory_copy(tkey, state->tkc[idx], HKDS_MESSAGE_SIZE);
-	utils_memory_clear(state->tkc[idx], HKDS_MESSAGE_SIZE);
+	utils_memory_secure_erase(state->tkc[idx], HKDS_MESSAGE_SIZE);
 	/* increment the index counter */
 	utils_integer_be8increment(((uint8_t*)state->ksn + HKDS_DID_SIZE), HKDS_TKC_SIZE);
 
@@ -29,6 +29,10 @@ static void hkds_client_get_tms(const hkds_client_state* state, uint8_t* tms)
 
 bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, uint8_t* token)
 {
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(etok != NULL);
+	HKDS_ASSERT(token != NULL);
+
 	uint8_t ctok[HKDS_CTOK_SIZE] = { 0U };
 	uint8_t mtk[HKDS_TAG_SIZE] = { 0U };
 	uint8_t tms[HKDS_TMS_SIZE] = { 0U };
@@ -36,55 +40,58 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 	uint32_t tkc;
 	bool res;
 
-	/* add the cache counter to customization string (tkc = transaction-counter / key-store size) */
-	tkc = utils_integer_be8to32(((uint8_t*)state->ksn + HKDS_DID_SIZE)) / HKDS_CACHE_SIZE;
-	utils_integer_be32to8(ctok, tkc);
-
-	/* add the mode algorithm name to customization string */
-	utils_memory_copy(((uint8_t*)ctok + HKDS_TKC_SIZE), hkds_formal_name, HKDS_NAME_SIZE);
-	/* add the device id to the customization string */
-	utils_memory_copy(((uint8_t*)ctok + HKDS_TKC_SIZE + HKDS_NAME_SIZE), state->ksn, HKDS_DID_SIZE);
-
 	res = false;
 
-	/* get the token mac key string */
-	hkds_client_get_tms(state, tms);
+	if (state != NULL && etok != NULL && token != NULL)
+	{
+		/* add the cache counter to customization string (tkc = transaction-counter / key-store size) */
+		tkc = utils_integer_be8to32(((uint8_t*)state->ksn + HKDS_DID_SIZE)) / HKDS_CACHE_SIZE;
+		utils_integer_be32to8(ctok, tkc);
 
-	/* M(tok, etok, tms) = kmac(m, k, c) */
+		/* add the mode algorithm name to customization string */
+		utils_memory_copy(((uint8_t*)ctok + HKDS_TKC_SIZE), hkds_formal_name, HKDS_NAME_SIZE);
+		/* add the device id to the customization string */
+		utils_memory_copy(((uint8_t*)ctok + HKDS_TKC_SIZE + HKDS_NAME_SIZE), state->ksn, HKDS_DID_SIZE);
+
+		/* get the token mac key string */
+		hkds_client_get_tms(state, tms);
+
+		/* M(tok, etok, tms) = kmac(m, k, c) */
 #if defined(HKDS_SHAKE_128)
-	hkds_kmac128_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
+		hkds_kmac128_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
 #elif defined(HKDS_SHAKE_256)
-	hkds_kmac256_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
+		hkds_kmac256_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
 #else
-	hkds_kmac512_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
+		hkds_kmac512_compute(mtk, HKDS_TAG_SIZE, etok, HKDS_STK_SIZE, state->edk, HKDS_EDK_SIZE, tms, HKDS_TMS_SIZE);
 #endif
 
-	/* compare the MAC generated with the one appended to the token message */
-	if (utils_integer_verify(etok + HKDS_STK_SIZE, mtk, HKDS_TAG_SIZE) == 0)
-	{
-		/* if the MAC check succeeds, decrypt the message */
-		res = true;
-	}
-
-	if (res == true)
-	{
-		/* combine ctok and edk to create the key */
-		utils_memory_copy(tmpk, ctok, HKDS_CTOK_SIZE);
-		utils_memory_copy(((uint8_t*)tmpk + HKDS_CTOK_SIZE), state->edk, HKDS_EDK_SIZE);
-
-		/* initialize shake with device key and custom string, and generate the key-stream */
-#if defined(HKDS_SHAKE_128)
-		hkds_shake128_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
-#elif defined(HKDS_SHAKE_256)
-		hkds_shake256_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
-#else
-		hkds_shake512_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
-#endif
-
-		/* decrypt the token */
-		for (size_t i = 0U; i < HKDS_STK_SIZE; ++i)
+		/* compare the MAC generated with the one appended to the token message */
+		if (utils_integer_verify(etok + HKDS_STK_SIZE, mtk, HKDS_TAG_SIZE) == 0)
 		{
-			token[i] ^= etok[i];
+			/* if the MAC check succeeds, decrypt the message */
+			res = true;
+		}
+
+		if (res == true)
+		{
+			/* combine ctok and edk to create the key */
+			utils_memory_copy(tmpk, ctok, HKDS_CTOK_SIZE);
+			utils_memory_copy(((uint8_t*)tmpk + HKDS_CTOK_SIZE), state->edk, HKDS_EDK_SIZE);
+
+			/* initialize shake with device key and custom string, and generate the key-stream */
+#if defined(HKDS_SHAKE_128)
+			hkds_shake128_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
+#elif defined(HKDS_SHAKE_256)
+			hkds_shake256_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
+#else
+			hkds_shake512_compute(token, HKDS_STK_SIZE, tmpk, sizeof(tmpk));
+#endif
+
+			/* decrypt the token */
+			for (size_t i = 0U; i < HKDS_STK_SIZE; ++i)
+			{
+				token[i] ^= etok[i];
+			}
 		}
 	}
 
@@ -93,22 +100,29 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 
 bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaintext, uint8_t* ciphertext)
 {
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(plaintext != NULL);
+	HKDS_ASSERT(ciphertext != NULL);
+
 	bool res;
 
 	res = false;
 
-	if (state->cache_empty == false)
+	if (state != NULL && plaintext != NULL && ciphertext != NULL)
 	{
-		/* extract the transaction key */
-		hkds_client_generate_transaction_key(state, ciphertext);
-
-		/* encrypt the message */
-		for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
+		if (state->cache_empty == false)
 		{
-			ciphertext[i] ^= plaintext[i];
-		}
+			/* extract the transaction key */
+			hkds_client_generate_transaction_key(state, ciphertext);
 
-		res = true;
+			/* encrypt the message */
+			for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
+			{
+				ciphertext[i] ^= plaintext[i];
+			}
+
+			res = true;
+		}
 	}
 
 	return res;
@@ -116,45 +130,59 @@ bool hkds_client_encrypt_message(hkds_client_state* state, const uint8_t* plaint
 
 bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const uint8_t* plaintext, const uint8_t* data, size_t datalen, uint8_t* ciphertext)
 {
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(plaintext != NULL);
+	HKDS_ASSERT(data != NULL);
+	HKDS_ASSERT(ciphertext != NULL);
+
 	uint8_t code[HKDS_TAG_SIZE] = { 0U };
 	uint8_t ctxt[HKDS_MESSAGE_SIZE] = { 0U };
 	uint8_t hkey[HKDS_MESSAGE_SIZE] = { 0U };
+	size_t idx;
 	bool res;
 
 	res = false;
 
-	/* extract the encryption key */
-	if (state->cache_empty == false)
+	if (state != NULL && plaintext != NULL && data != NULL && ciphertext != NULL)
 	{
-		/* extract the transaction key */
-		hkds_client_generate_transaction_key(state, ctxt);
+		idx = utils_integer_be8to32(state->ksn + HKDS_DID_SIZE) % HKDS_CACHE_SIZE;
 
-		/* encrypt the message */
-		for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
+		if (idx + 1U < HKDS_CACHE_SIZE && state->cache_empty == false)
 		{
-			ctxt[i] ^= plaintext[i];
-		}
-	}
+			/* extract the encryption key */
+			if (state->cache_empty == false)
+			{
+				/* extract the transaction key */
+				hkds_client_generate_transaction_key(state, ctxt);
 
-	if (state->cache_empty == false)
-	{
-		/* extract the MAC key */
-		hkds_client_generate_transaction_key(state, hkey);
+				/* encrypt the message */
+				for (size_t i = 0U; i < HKDS_MESSAGE_SIZE; ++i)
+				{
+					ctxt[i] ^= plaintext[i];
+				}
+			}
 
-		/* initialize KMAC and generate the MAC tag */
+			if (state->cache_empty == false)
+			{
+				/* extract the MAC key */
+				hkds_client_generate_transaction_key(state, hkey);
+
+				/* initialize KMAC and generate the MAC tag */
 #if defined(HKDS_SHAKE_128)
-		hkds_kmac128_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
+				hkds_kmac128_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
 #elif defined(HKDS_SHAKE_256)
-		hkds_kmac256_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
+				hkds_kmac256_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
 #else
-		hkds_kmac512_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
+				hkds_kmac512_compute(code, sizeof(code), ctxt, sizeof(ctxt), hkey, sizeof(hkey), data, datalen);
 #endif
 
-		/* copy cipher-text and MAC tag to cryptogram */
-		utils_memory_copy(ciphertext, ctxt, sizeof(ctxt));
-		utils_memory_copy((ciphertext + sizeof(ctxt)), code, sizeof(code));
+				/* copy cipher-text and MAC tag to cryptogram */
+				utils_memory_copy(ciphertext, ctxt, sizeof(ctxt));
+				utils_memory_copy((ciphertext + sizeof(ctxt)), code, sizeof(code));
 
-		res = true;
+				res = true;
+			}
+		}
 	}
 
 	return res;
@@ -162,42 +190,55 @@ bool hkds_client_encrypt_authenticate_message(hkds_client_state* state, const ui
 
 void hkds_client_generate_cache(hkds_client_state* state, const uint8_t* token)
 {
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(token != NULL);
+	
 	uint8_t skey[HKDS_CACHE_SIZE * HKDS_MESSAGE_SIZE] = { 0U };
 	uint8_t tmpk[HKDS_STK_SIZE + HKDS_EDK_SIZE] = { 0U };
 
-	/* combine the token and edk keys */
-	utils_memory_copy(tmpk, token, HKDS_STK_SIZE);
-	utils_memory_copy(((uint8_t*)tmpk + HKDS_STK_SIZE), state->edk, HKDS_EDK_SIZE);
+	if (state != NULL && token != NULL)
+	{
+		/* combine the token and edk keys */
+		utils_memory_copy(tmpk, token, HKDS_STK_SIZE);
+		utils_memory_copy(((uint8_t*)tmpk + HKDS_STK_SIZE), state->edk, HKDS_EDK_SIZE);
 
-	/* generate the transaction key-cache */
+		/* generate the transaction key-cache */
 #if defined(HKDS_SHAKE_128)
-	hkds_shake128_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
+		hkds_shake128_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
 #elif defined(HKDS_SHAKE_256)
-	hkds_shake256_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
+		hkds_shake256_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
 #else
-	hkds_shake512_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
+		hkds_shake512_compute(skey, sizeof(skey), tmpk, sizeof(tmpk));
 #endif
 
-	/* copy keys to the queue */
-	for (size_t i = 0U; i < HKDS_CACHE_SIZE; ++i)
-	{
-		utils_memory_copy(state->tkc[i], ((uint8_t*)skey + (i * HKDS_MESSAGE_SIZE)), HKDS_MESSAGE_SIZE);
-	}
+		/* copy keys to the queue */
+		for (size_t i = 0U; i < HKDS_CACHE_SIZE; ++i)
+		{
+			utils_memory_copy(state->tkc[i], ((uint8_t*)skey + (i * HKDS_MESSAGE_SIZE)), HKDS_MESSAGE_SIZE);
+		}
 
-	state->cache_empty = false;
+		state->cache_empty = false;
+	}
 }
 
 void hkds_client_initialize_state(hkds_client_state* state, const uint8_t* edk, const uint8_t* did)
 {
-	/* copy the edk and ksn, and clear the key-cache members */
-	utils_memory_copy(state->edk, edk, HKDS_EDK_SIZE);
-	utils_memory_copy(state->ksn, did, HKDS_DID_SIZE);
-	utils_memory_clear(((uint8_t*)state->ksn + HKDS_DID_SIZE), HKDS_TKC_SIZE);
-
-	for (size_t i = 0; i < HKDS_CACHE_SIZE; ++i)
+	HKDS_ASSERT(state != NULL);
+	HKDS_ASSERT(edk != NULL);
+	HKDS_ASSERT(did != NULL);
+	
+	if (state != NULL && edk != NULL && did != NULL)
 	{
-		utils_memory_clear(state->tkc[i], HKDS_MESSAGE_SIZE);
-	}
+		/* copy the edk and ksn, and clear the key-cache members */
+		utils_memory_copy(state->edk, edk, HKDS_EDK_SIZE);
+		utils_memory_copy(state->ksn, did, HKDS_DID_SIZE);
+		utils_memory_clear(((uint8_t*)state->ksn + HKDS_DID_SIZE), HKDS_TKC_SIZE);
 
-	state->cache_empty = true;
+		for (size_t i = 0; i < HKDS_CACHE_SIZE; ++i)
+		{
+			utils_memory_clear(state->tkc[i], HKDS_MESSAGE_SIZE);
+		}
+
+		state->cache_empty = true;
+	}
 }

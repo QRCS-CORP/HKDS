@@ -32,9 +32,9 @@ void print_title(void)
 	hkdstest_print_line("******************************************************");
 	hkdstest_print_line("* HKDS: Heirarchal symmetric Key Distribution System *");
 	hkdstest_print_line("*                                                    *");
-	hkdstest_print_line("* Release:   v1.0.0.2c (A2)                          *");
+	hkdstest_print_line("* Release:   v1.0.0.3a (A3)                          *");
 	hkdstest_print_line("* License:   Copyrighted and Patent pending          *");
-	hkdstest_print_line("* Date:      May 31 2025                             *");
+	hkdstest_print_line("* Date:      February 25 2026                        *");
 	hkdstest_print_line("* Author:    John G. Underhill                       *");
 	hkdstest_print_line("* Contact:   contact@qrcscorp.ca					  *");
 	hkdstest_print_line("******************************************************");

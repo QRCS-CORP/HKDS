@@ -2,10 +2,14 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 #include <time.h>
 
 #if defined(HKDS_SYSTEM_OS_WINDOWS)
+#	if !defined(WIN32_LEAN_AND_MEAN)
+#		define WIN32_LEAN_AND_MEAN
+#	endif
 #	if defined(HKDS_SYSTEM_COMPILER_MSC)
 #		pragma comment(lib, "Bcrypt.lib")
 #	endif
@@ -41,6 +45,20 @@
 	 * \brief The CPU vendor name length.
 	 */
 	#define HKDS_CPUIDEX_VENDOR_SIZE 12ULL
+#endif
+
+#if defined(_MSC_VER)
+#  include <intrin.h>
+#  pragma intrinsic(_ReadWriteBarrier)
+#  define HKDS_COMPILER_BARRIER() _ReadWriteBarrier()
+#elif defined(__GNUC__) || defined(__clang__)
+#  define HKDS_COMPILER_BARRIER() __asm__ __volatile__("" : : : "memory")
+#else
+#  define HKDS_COMPILER_BARRIER() do { } while (0)
+#endif
+
+#if defined(HKDS_HAVE_EXPLICIT_BZERO)
+	void explicit_bzero(void* s, size_t n);
 #endif
 
 void utils_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
@@ -204,9 +222,9 @@ bool utils_seed_generate(uint8_t* output, size_t length)
 #endif
 	}
 
-	if (!res)
+	if (res == false)
 	{
-		utils_memory_clear(output, length);
+		utils_memory_secure_erase(output, length);
 	}
 
 	return res;
@@ -324,6 +342,34 @@ void utils_string_to_lowercase(char* source)
 	}
 }
 
+void utils_memory_secure_erase(void* output, size_t length)
+{
+	if (output != NULL && length != 0U)
+	{
+#if defined(__STDC_LIB_EXT1__)
+		/* C11 Annex K: specified not to be removed by optimization */
+		(void)memset_s(output, length, 0, length);
+#elif defined(_WIN32) || defined(_WIN64)
+		/* windows: documented to be non-optimizable by the compiler */
+		SecureZeroMemory(output, length);
+#elif defined(HKDS_HAVE_EXPLICIT_BZERO)
+		/* BSD / some libcs */
+		explicit_bzero(output, length);
+#else
+		/* portable fallback: volatile writes are observable side effects */
+		volatile unsigned char* p = (volatile unsigned char*)output;
+
+		while (length != 0U)
+		{
+			--length;
+			*p++ = 0U;
+		}
+
+		/* prevent reordering around the wipe */
+		HKDS_COMPILER_BARRIER();
+#endif
+	}
+}
 
 #if defined(HKDS_SYSTEM_HAS_AVX)
 static void utils_clear128(void* output)

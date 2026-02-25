@@ -487,6 +487,12 @@ HKDS_CPLUSPLUS_ENABLED_START
     Sockets and Other System Macros
 ==============================================================================*/
 
+#if defined(__OpenBSD__) || defined(__FreeBSD__) || \
+    defined(__NetBSD__) || defined(__APPLE__) || \
+    (defined(__GLIBC__) && (__GLIBC__ >= 2 && __GLIBC_MINOR__ >= 25))
+#   define HKDS_HAVE_EXPLICIT_BZERO 1
+#endif
+
 #if defined(_WIN64) || defined(_WIN32) || defined(__CYGWIN__)
   /*!
    * \def HKDS_SYSTEM_SOCKETS_WINDOWS

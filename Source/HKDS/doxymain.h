@@ -117,8 +117,9 @@
  * QRCS-PL private License. See license file for details.
  * All rights reserved by QRCS Corporation, copyrighted and patents pending.
  * 
+ * \version 1.0.0.3a
  * \author John G. Underhill
- * \date 2025-02-10
+ * \date 2026-02-23
  */
 
 #endif
