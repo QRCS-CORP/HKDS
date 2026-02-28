@@ -6,7 +6,7 @@
 #define KPA_LEAF_HASH512 64
 
 /* keccak round constants */
-static const HKDS_SIMD_ALIGN uint64_t KECCAK_ROUND_CONSTANTS[HKDS_KECCAK_PERMUTATION_MAX_ROUNDS] =
+static const uint64_t KECCAK_ROUND_CONSTANTS[HKDS_KECCAK_PERMUTATION_MAX_ROUNDS] =
 {
 	0x0000000000000001ULL, 0x0000000000008082ULL, 0x800000000000808AULL, 0x8000000080008000ULL,
 	0x000000000000808BULL, 0x0000000080000001ULL, 0x8000000080008081ULL, 0x8000000000008009ULL,
@@ -691,7 +691,7 @@ void hkds_keccak_absorb(hkds_keccak_state* ctx, hkds_keccak_rate rate, const uin
 	HKDS_ASSERT(ctx != NULL);
 	HKDS_ASSERT(message != NULL);
 
-	HKDS_SIMD_ALIGN uint8_t msg[HKDS_KECCAK_STATE_BYTE_SIZE];
+	uint8_t msg[HKDS_KECCAK_STATE_BYTE_SIZE];
 
 	if (ctx != NULL && message != NULL)
 	{
@@ -821,7 +821,7 @@ void hkds_keccak_finalize(hkds_keccak_state* ctx, hkds_keccak_rate rate, uint8_t
 	HKDS_ASSERT(output != NULL);
 
 	uint8_t buf[sizeof(size_t) + 1U] = { 0U };
-	HKDS_SIMD_ALIGN uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
+	uint8_t pad[HKDS_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	size_t bitlen;
 
 	if (ctx != NULL && output != NULL)
@@ -1274,7 +1274,7 @@ void hkds_shake128_compute(uint8_t* output, size_t outlen, const uint8_t* key, s
 	HKDS_ASSERT(output != NULL);
 	HKDS_ASSERT(key != NULL);
 
-	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_128_RATE] = { 0U };
+	uint8_t hash[HKDS_KECCAK_128_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_128_RATE;
 	hkds_keccak_state ctx;
 
@@ -1300,7 +1300,7 @@ void hkds_shake256_compute(uint8_t* output, size_t outlen, const uint8_t* key, s
 	HKDS_ASSERT(output != NULL);
 	HKDS_ASSERT(key != NULL);
 
-	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_256_RATE] = { 0U };
+	uint8_t hash[HKDS_KECCAK_256_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_256_RATE;
 	hkds_keccak_state ctx;
 
@@ -1326,7 +1326,7 @@ void hkds_shake512_compute(uint8_t* output, size_t outlen, const uint8_t* key, s
 	HKDS_ASSERT(output != NULL);
 	HKDS_ASSERT(key != NULL);
 
-	HKDS_SIMD_ALIGN uint8_t hash[HKDS_KECCAK_512_RATE] = { 0U };
+	uint8_t hash[HKDS_KECCAK_512_RATE] = { 0U };
 	const size_t nblocks = outlen / HKDS_KECCAK_512_RATE;
 	hkds_keccak_state ctx;
 
