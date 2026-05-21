@@ -639,11 +639,11 @@ void hkds_server_decrypt_message_x64(hkds_server_x8_state state[HKDS_PARALLEL_DE
 	HKDS_ASSERT(ciphertext != NULL);
 	HKDS_ASSERT(plaintext != NULL);
 
-	int32_t i;
-
 	if (state != NULL && ciphertext != NULL && plaintext != NULL)
 	{
-#pragma omp parallel for shared(state, ciphertext, plaintext, i)
+		int32_t i;
+
+#pragma omp parallel for
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
 			hkds_server_decrypt_message_x8(&state[i], ciphertext[i], plaintext[i]);
@@ -663,11 +663,11 @@ void hkds_server_decrypt_verify_message_x64(hkds_server_x8_state state[HKDS_PARA
 	HKDS_ASSERT(plaintext != NULL);
 	HKDS_ASSERT(valid != NULL);
 
-	int32_t i;
-
 	if (state != NULL && ciphertext != NULL && data != NULL && plaintext != NULL && valid != NULL)
 	{
-#pragma omp parallel for shared(state, ciphertext, data, datalen, plaintext, valid, i)
+		int32_t i;
+
+#pragma omp parallel for
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
 			hkds_server_decrypt_verify_message_x8(&state[i], ciphertext[i], data[i], datalen, plaintext[i], valid[i]);
@@ -681,11 +681,11 @@ void hkds_server_encrypt_token_x64(hkds_server_x8_state state[HKDS_PARALLEL_DEPT
 	HKDS_ASSERT(state != NULL);
 	HKDS_ASSERT(etok != NULL);
 
-	int32_t i;
-
 	if (state != NULL && etok != NULL)
 	{
-#pragma omp parallel for shared(state, etok, i)
+		int32_t i;
+
+#pragma omp parallel for
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
 			hkds_server_encrypt_token_x8(&state[i], etok[i]);
@@ -701,11 +701,11 @@ void hkds_server_generate_edk_x64(const hkds_server_x8_state state[HKDS_PARALLEL
 	HKDS_ASSERT(did != NULL);
 	HKDS_ASSERT(edk != NULL);
 
-	int32_t i;
-
 	if (state != NULL && did != NULL && edk != NULL)
 	{
-#pragma omp parallel for shared(state, did, edk, i)
+		int32_t i;
+
+#pragma omp parallel for
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
 			hkds_server_generate_edk_x8(&state[i], did[i], edk[i]);
@@ -721,11 +721,11 @@ void hkds_server_initialize_state_x64(hkds_server_x8_state state[HKDS_PARALLEL_D
 	HKDS_ASSERT(mdk != NULL);
 	HKDS_ASSERT(ksn != NULL);
 
-	int32_t i;
-
 	if (state != NULL && mdk != NULL && ksn != NULL)
 	{
-#pragma omp parallel for shared(state, mdk, ksn, i)
+		int32_t i;
+
+#pragma omp parallel for
 		for (i = 0; i < HKDS_PARALLEL_DEPTH; ++i)
 		{
 			hkds_server_initialize_state_x8(&state[i], &mdk[i], ksn[i]);

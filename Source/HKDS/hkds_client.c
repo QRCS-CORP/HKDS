@@ -93,6 +93,10 @@ bool hkds_client_decrypt_token(hkds_client_state* state, const uint8_t* etok, ui
 				token[i] ^= etok[i];
 			}
 		}
+		else
+		{
+			utils_memory_secure_erase(token, HKDS_STK_SIZE);
+		}
 	}
 
 	return res;
