@@ -1,4 +1,4 @@
-# HKDS — Hierarchical Key Derivation System
+# HKDS: Hierarchical Key Derivation System
 
 [![Build Status](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/HKDS/actions/workflows/codeql-analysis.yml)
